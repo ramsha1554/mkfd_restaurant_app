@@ -64,8 +64,34 @@ Living status, decisions and open questions — updated at the end of every phas
 
 ---
 
-## Phase 1 — Auth & Session — Planned
-Splash → Welcome → phone entry + country selector → 6-digit OTP with 60s resend → placeholder "signed in" + logout; `ApiClient` + interceptors + storage + `AuthRepository` + `AuthNotifier`.
+## Phase 1 — Auth & Session — ✅ Done
+
+**Scope:** `ApiEndpoints`, `ApiClient` (+ `uploadFile`) with logging + `QueuedInterceptor` (single refresh, queue, `onSessionExpired`, OTP/refresh excluded), `AuthStorageService` (`flutter_secure_storage` + `shared_preferences`), `ApiResponse`/`PaginationMeta`/`User`/`AuthData` (`freezed` + `JsonKey(_id)`), `AuthRepository` (`requestOtp`/`verifyOtp`/`refreshToken`/`logout`/`getMe` — defensive top-level vs `data` nesting, role `customer`, dev code `000000`), `AuthNotifier`/`AuthState` (`StateNotifier`, immutable `copyWith(clearX)`, `mounted` checks, `restoreSession` on cold start, `onSessionExpired` wiring, logout invalidates), root auth listener (`lib/main.dart:24` resets stack to sign-in), Welcome → phone entry (country selector `+44` default, E.164, validation) → 6-digit OTP (`OtpFields`, 60s timer, debug code shown only in `kDebugMode` via `SnackBar`) → placeholder `SignedInView` with logout.
+
+**Files added / changed:**
+- `lib/data/api/api_client.dart` — one `Dio` 15s, logging + auth `QueuedInterceptor`, envelope `ApiException`/`NetworkException`, `uploadFile(path, fieldName, file, extraFields)`
+- `lib/data/api/api_endpoints.dart` — auth + user endpoints
+- `lib/data/models/api_response.dart`, `pagination_meta.dart` (+ `.freezed/.g.dart`), `user.dart` (+ `.freezed/.g.dart`), `auth_data.dart` (+ `.freezed/.g.dart`)
+- `lib/data/services/auth_storage_service.dart` — tokens secure, prefs for `userId/phone/isVerified/isNewUser`, `clearAll`
+- `lib/data/repositories/auth_repository.dart` — pure, no UI/Riverpod
+- `lib/core/di/locator.dart` — `AuthStorageService` → `ApiClient` → `AuthRepository` (order per §4)
+- `lib/ui/features/auth/providers/auth_state.dart`, `auth_provider.dart` — `final authProvider = StateNotifierProvider<AuthNotifier, AuthState>`
+- `lib/ui/features/auth/views/welcome_view.dart`, `phone_entry_view.dart`, `otp_view.dart`, `signed_in_view.dart`
+- `lib/ui/features/auth/widgets/country_selector.dart`, `otp_fields.dart`
+- `lib/ui/features/splash/views/splash_view.dart` — `ConsumerStateful`, `restoreSession` + `900ms` (`AppDurations.slowest+medium`) bootstrap, routes to `WelcomeView`/`SignedInView`, secondary unauth listener via `navigatorKey`
+- `lib/main.dart` — `ProviderScope`, `setupLocator()` before `runApp`, root `ref.listen(authProvider)` resets to `WelcomeView` on `authenticated→unauthenticated`
+- `test/widget_test.dart` — `AuthState.copyWith`, `AppFormat`, `AppConfig`, `Welcome` branding (4 tests)
+
+**Decisions:**
+- Role `customer` + dev OTP `000000` per developer 2026-09-22 clarification; interceptor still excludes OTP/refresh generically.
+- Tokens defensive: verify `data` may be `Map` or nested `data.data`, `accessToken` may be `access_token` or top-level — handled in `ApiClient._refresh` + `AuthRepository.verifyOtp` with fallback map lookups.
+- `Splash` delay `AppDurations.slowest + AppDurations.medium` (900ms) + `AppDurations.fast` (200ms) — no raw `Duration(milliseconds` outside `core/animations` (grep clean).
+- `flutter_secure_storage` + `shared_preferences` both wrapped, `clearAll` on logout/sessionExpired; logout clears remote best-effort then local.
+- `welcome` uses `slideRightFadeRoute` (linear flow), `SignedInView` uses placeholder + `SecondaryButton` logout + `PrimaryButton` stub.
+
+**Open questions carried (§9):** P2 `POST /restaurants` shape + `address.country`, P4 orders list/pickup/reject/single GET, P5 socket payloads + room event, P6 push `type` + Firebase project, P8 PATCH fields, P9 earnings. **P1 closed.**
+
+**Verification:** see Phase 1 report.
 
 ## Phase 2 — Restaurant Registration & Compliance Documents — Planned
 
