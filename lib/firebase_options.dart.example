@@ -1,0 +1,7 @@
+// Copy to lib/firebase_options.dart after running lutterfire configure.
+// Real file is gitignored — never commit.
+// Example placeholder:
+// import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
+// abstract final class DefaultFirebaseOptions {
+//   static FirebaseOptions get currentPlatform => throw UnimplementedError('Run flutterfire configure');
+// }
