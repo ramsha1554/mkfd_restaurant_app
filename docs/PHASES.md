@@ -110,3 +110,10 @@ Living status, decisions and open questions — updated at the end of every phas
 ## Phase 9 — Earnings — Planned
 
 ## Phase 10 — Production-Readiness Audit & Release Prep — Planned
+
+## Phase 0.5-A � Tokens & Theme
+- Files changed: pubspec.yaml, assets/fonts/*, lib/ui/core/theme/app_colors.dart, lib/ui/core/theme/app_text_styles.dart, lib/ui/core/theme/app_theme.dart
+- Decisions: Replaced tokens with MK Foods standard; removed google_fonts; added DM Sans/BricolageGrotesque bundled fonts; statusColor replaced by statusMeta returning (label, fg, bg); theme rebuilt to Material 3 per spec.
+- Old?new style-name mapping: heading?h1/h2/display as appropriate (AppTextStyles.heading removed), bodyLarge removed ? use button/body/cardTitle per context, bodySmall removed ? use bodySecondary/caption, displaySecondary/headingSecondary/bodyHint/bodySmallHint/captionPrimary removed (use color overrides), cardFill removed (use cardBackground).
+- Status: Done
+

@@ -1,87 +1,150 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
-/// Exactly seven named text styles using Nunito Sans via google_fonts.
-/// No screen may write `TextStyle(fontSize: …)` directly.
+/// Text styles per MK Foods UI standards.
 abstract final class AppTextStyles {
-  static TextStyle get _base => GoogleFonts.nunitoSans(
+  static const String _headingFont = 'BricolageGrotesque';
+  static const String _bodyFont = 'DM Sans';
+
+  static TextStyle get _headingBase => const TextStyle(
+        fontFamily: _headingFont,
+        fontFamilyFallback: ['DM Sans'],
+        fontVariations: [FontVariation('wght', 700)],
+        color: AppColors.textPrimary,
+      );
+
+  static TextStyle get _bodyBase => const TextStyle(
+        fontFamily: _bodyFont,
         color: AppColors.textPrimary,
       );
 
   /// 28pt — display / large hero numbers
-  static TextStyle get display => _base.copyWith(
+  static TextStyle get display => _headingBase.copyWith(
         fontSize: 28,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w700,
         height: 1.2,
-        letterSpacing: -0.5,
+        letterSpacing: -0.4,
       );
 
   /// 22pt — screen title
-  static TextStyle get heading => _base.copyWith(
+  static TextStyle get h1 => _headingBase.copyWith(
         fontSize: 22,
         fontWeight: FontWeight.w700,
         height: 1.25,
+        letterSpacing: -0.7,
       );
 
   /// 18pt — section title / card title
-  static TextStyle get title => _base.copyWith(
+  static TextStyle get h2 => _headingBase.copyWith(
         fontSize: 18,
         fontWeight: FontWeight.w700,
-        height: 1.35,
+        height: 1.3,
+        letterSpacing: -0.5,
       );
 
-  /// 16pt — body large / button label
-  static TextStyle get bodyLarge => _base.copyWith(
+  /// 16pt — title
+  static TextStyle get title => _headingBase.copyWith(
         fontSize: 16,
-        fontWeight: FontWeight.w600,
-        height: 1.5,
-      );
-
-  /// 14pt — body regular
-  static TextStyle get body => _base.copyWith(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-        height: 1.5,
-      );
-
-  /// 13pt — body small / secondary info
-  static TextStyle get bodySmall => _base.copyWith(
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        height: 1.45,
-        color: AppColors.textSecondary,
-      );
-
-  /// 11pt — eyebrow / badge / caption
-  static TextStyle get caption => _base.copyWith(
-        fontSize: 11,
         fontWeight: FontWeight.w700,
         height: 1.3,
-        letterSpacing: 0.6,
+        letterSpacing: -0.1,
       );
 
-  // Convenience variants — still count as the seven base styles,
-  // just colour/weight overrides.
+  /// 16pt — card title
+  static TextStyle get cardTitle => _bodyBase.copyWith(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        height: 1.3,
+        letterSpacing: -0.4,
+      );
 
-  static TextStyle get displaySecondary => display.copyWith(
+  /// 14pt — body
+  static TextStyle get body => _bodyBase.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        height: 1.4,
+        letterSpacing: -0.35,
+      );
+
+  /// 12pt — body secondary
+  static TextStyle get bodySecondary => _bodyBase.copyWith(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        height: 1.4,
+        letterSpacing: -0.2,
         color: AppColors.textSecondary,
       );
 
-  static TextStyle get headingSecondary => heading.copyWith(
+  /// 12pt — caption
+  static TextStyle get caption => _bodyBase.copyWith(
+        fontSize: 12,
+        fontWeight: FontWeight.w500,
+        height: 1.3,
+        letterSpacing: -0.2,
         color: AppColors.textSecondary,
       );
 
-  static TextStyle get bodyHint => body.copyWith(
-        color: AppColors.textHint,
+  /// 14pt — price
+  static TextStyle get price => _bodyBase.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.35,
       );
 
-  static TextStyle get bodySmallHint => bodySmall.copyWith(
-        color: AppColors.textHint,
-      );
-
-  static TextStyle get captionPrimary => caption.copyWith(
+  /// 14pt — price accent
+  static TextStyle get priceAccent => _bodyBase.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.35,
         color: AppColors.primary,
+      );
+
+  /// 11pt — eyebrow
+  static TextStyle get eyebrow => _bodyBase.copyWith(
+        fontSize: 11,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.1,
+        color: AppColors.textSecondary,
+      );
+
+  /// 11pt — badge
+  static TextStyle get badge => _bodyBase.copyWith(
+        fontSize: 11,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.1,
+      );
+
+  /// 12pt — section label
+  static TextStyle get sectionLabel => _bodyBase.copyWith(
+        fontSize: 12,
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.2,
+      );
+
+  /// 16pt — button
+  static TextStyle get button => _bodyBase.copyWith(
+        fontSize: 16,
+        fontWeight: FontWeight.w700,
+        height: 1.2,
+        letterSpacing: 0,
+      );
+
+  /// 18pt — price large
+  static TextStyle get priceLarge => _bodyBase.copyWith(
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+        height: 1.3,
+        letterSpacing: 0,
+      );
+
+  /// 22pt — otp digit
+  static TextStyle get otpDigit => _bodyBase.copyWith(
+        fontSize: 22,
+        fontWeight: FontWeight.w700,
+        height: 1.25,
+        letterSpacing: -0.7,
       );
 
   const AppTextStyles._();
