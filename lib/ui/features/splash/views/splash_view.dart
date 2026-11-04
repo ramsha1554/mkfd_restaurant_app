@@ -5,8 +5,6 @@ import '../../../../core/animations/app_animations.dart';
 import '../../../../core/animations/app_durations.dart';
 import '../../../../core/utils/navigation.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_spacing.dart';
-import '../../../core/theme/app_text_styles.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../auth/providers/auth_state.dart';
 import '../../auth/views/signed_in_view.dart';
@@ -62,72 +60,15 @@ class _SplashViewState extends ConsumerState<SplashView> {
     });
 
     return Scaffold(
-      backgroundColor: AppColors.surface,
+      backgroundColor: AppColors.background,
       body: Center(
-        child: Padding(
-          padding: AppSpacing.screenPaddingAll,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FadeIn(
-                child: Container(
-                  width: 96,
-                  height: 96,
-                  decoration: const BoxDecoration(
-                    color: AppColors.primary,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.restaurant_rounded,
-                    size: 48,
-                    color: AppColors.surface,
-                  ),
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xxl),
-              SlideIn.fromBottom(
-                child: Column(
-                  children: [
-                    Text(
-                      'MK Foods',
-                      style: AppTextStyles.display.copyWith(
-                        color: AppColors.textPrimary,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    Text(
-                      'Restaurant',
-                      style: AppTextStyles.display.copyWith(
-                        color: AppColors.primary,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: AppSpacing.sm),
-                    Text(
-                      'Milton Keynes • Restaurant Owner',
-                      style: AppTextStyles.bodySmall,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: AppSpacing.xxxl),
-              const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
-                  color: AppColors.primary,
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              Text(
-                'Preparing your kitchen…',
-                style: AppTextStyles.bodySmall.copyWith(
-                  color: AppColors.textHint,
-                ),
-              ),
-            ],
+        child: AppFadeIn(
+          duration: const Duration(milliseconds: 600),
+          child: Image.asset(
+            'assets/images/MK-Tour-Logo.png',
+            width: 96,
+            height: 96,
+            fit: BoxFit.contain,
           ),
         ),
       ),

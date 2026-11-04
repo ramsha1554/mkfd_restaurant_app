@@ -6,41 +6,28 @@ import '../../../../core/animations/app_animations.dart';
 import '../../../../core/utils/navigation.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
-import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../core/widgets/app_bottom_sheet.dart';
 import '../../../core/widgets/app_snackbar.dart';
+import '../../../core/widgets/primary_button.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/country_selector.dart';
 import 'otp_view.dart';
 
-enum AuthMode { login, signup }
-
 class PhoneEntryView extends ConsumerStatefulWidget {
-  final AuthMode initialMode;
-
-  const PhoneEntryView({
-    super.key,
-    this.initialMode = AuthMode.signup,
-  });
+  const PhoneEntryView({super.key});
 
   @override
   ConsumerState<PhoneEntryView> createState() => _PhoneEntryViewState();
 }
 
 class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
-  late AuthMode _mode;
   CountryCode _country = kCountryCodes.firstWhere(
     (c) => c.name == 'United Kingdom',
     orElse: () => kCountryCodes.first,
   );
   final _phoneCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
-  @override
-  void initState() {
-    super.initState();
-    _mode = widget.initialMode;
-  }
 
   @override
   void dispose() {
@@ -63,81 +50,253 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-
+    final digits = _phoneCtrl.text.trim().replaceAll(RegExp(r'[^0-9]'), '');
+    if (digits.isEmpty) {
+      AppSnackbar.showError(context, 'Please enter your phone number');
+      return;
+    }
+    if (!_isValidPhone(digits)) {
+      AppSnackbar.showError(context, 'Please enter a valid mobile number');
+      return;
+    }
     final phone = _e164;
     await ref.read(authProvider.notifier).requestOtp(phone: phone);
-
     if (!mounted) return;
     final state = ref.read(authProvider);
     if (state.errorMessage != null) {
       AppSnackbar.showError(context, state.errorMessage!);
       return;
     }
-
     Navigator.of(context).push(
       slideRightFadeRoute(OtpView(phone: phone)),
     );
   }
 
-  void _toggleMode() {
-    setState(() {
-      _mode = _mode == AuthMode.signup ? AuthMode.login : AuthMode.signup;
-    });
+  void _openCountryPicker() {
+    showAppSheet(
+      context: context,
+      builder: (context) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: CountrySelector(
+          selected: _country,
+          onSelected: (c) {
+            setState(() => _country = c);
+          },
+        ),
+      ),
+    );
   }
-
-  String get _heading =>
-      _mode == AuthMode.signup ? 'Welcome to MK!' : 'Welcome back';
-
-  String get _subHeading => _mode == AuthMode.signup
-      ? 'Enter your mobile number to create your account'
-      : 'Enter your phone number to sign in to your account';
 
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
-
     ref.listen(authProvider, (prev, next) {
-      if (next.errorMessage != null &&
-          next.errorMessage != prev?.errorMessage) {
+      if (next.errorMessage != null && next.errorMessage != prev?.errorMessage) {
         AppSnackbar.showError(context, next.errorMessage!);
       }
     });
 
-    final safeBottom = MediaQuery.of(context).padding.bottom;
-
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_outlined),
-          onPressed: () => Navigator.of(context).pop(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: AppColors.cardBorder, width: 1),
+                          ),
+                          alignment: Alignment.center,
+                          child: Image.asset(
+                            'assets/images/MK-Tour-Logo.png',
+                            width: 40,
+                            height: 40,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    AppSlideIn(
+                      direction: AxisDirection.up,
+                      delay: const Duration(milliseconds: 200),
+                      child: RichText(
+                        text: TextSpan(
+                          style: AppTextStyles.h1,
+                          children: [
+                            const TextSpan(text: 'Your restaurant,\n'),
+                            TextSpan(
+                              text: 'right in your pocket',
+                              style: AppTextStyles.h1.copyWith(color: AppColors.primaryText),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Log in or sign up to manage your orders',
+                      style: AppTextStyles.bodySecondary,
+                    ),
+                    const SizedBox(height: 24),
+                    Container(
+                      height: 340,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.primaryLight,
+                        borderRadius: AppRadius.rLg,
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: Image.asset(
+                        'assets/images/rm.png',
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(color: AppColors.primaryLight),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+              ),
+              child: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('Welcome back!', style: AppTextStyles.h1),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Enter your mobile number to log in',
+                          style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                        ),
+                        const SizedBox(height: 16),
+                        Container(
+                          height: 52,
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: AppRadius.rMd,
+                            border: Border.all(color: AppColors.borderStrong, width: 1),
+                          ),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: _openCountryPicker,
+                                behavior: HitTestBehavior.opaque,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  child: Row(
+                                    children: [
+                                      Text(_country.flag, style: const TextStyle(fontSize: 20)),
+                                      const SizedBox(width: 6),
+                                      Text(
+                                        _country.dialCode,
+                                        style: AppTextStyles.body.copyWith(fontWeight: FontWeight.w700),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      const Icon(Icons.keyboard_arrow_down, size: 20, color: AppColors.textSecondary),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: 1,
+                                height: 28,
+                                color: AppColors.cardBorder,
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.phone_outlined, size: 20, color: AppColors.textSecondary),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _phoneCtrl,
+                                  keyboardType: TextInputType.phone,
+                                  textInputAction: TextInputAction.done,
+                                  style: AppTextStyles.body,
+                                  decoration: InputDecoration(
+                                    hintText: 'Mobile number',
+                                    hintStyle: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                                    border: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                    errorBorder: InputBorder.none,
+                                    focusedErrorBorder: InputBorder.none,
+                                    filled: false,
+                                    contentPadding: EdgeInsets.zero,
+                                  ),
+                                  onFieldSubmitted: (_) => _submit(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        AppPrimaryButton(
+                          label: 'Continue',
+                          trailingIcon: true,
+                          icon: Icons.arrow_forward,
+                          isLoading: auth.isLoading,
+                          onPressed: auth.isLoading ? null : _submit,
+                        ),
+                        const SizedBox(height: 16),
+                        RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            style: AppTextStyles.bodySecondary,
+                            children: [
+                              const TextSpan(text: 'By continuing, you agree to our '),
+                              TextSpan(
+                                text: 'Terms & Conditions',
+                                style: AppTextStyles.bodySecondary.copyWith(
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()..onTap = () {},
+                              ),
+                              const TextSpan(text: ' and '),
+                              TextSpan(
+                                text: 'Privacy Policy',
+                                style: AppTextStyles.bodySecondary.copyWith(
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()..onTap = () {},
+                              ),
+                              const TextSpan(text: '.'),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(
-            left: AppSpacing.screenPadding,
-            right: AppSpacing.screenPadding,
-            top: AppSpacing.screenPadding,
-            bottom: AppSpacing.xxl + safeBottom,
-          ),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SlideIn.fromBottom(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(_heading, style: AppTextStyles.heading),
-                      const SizedBox(height: AppSpacing.sm),
-                      Text(
-                        _subHeading,
-                        style: AppTextStyles.bodySmall,
-                      ),
+    );
+  }
+}
                     ],
                   ),
                 ),

@@ -5,12 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/navigation.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/app_snackbar.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../providers/auth_provider.dart';
-import '../widgets/otp_fields.dart';
+import '../widgets/otp_code_field.dart';
 import 'signed_in_view.dart';
 
 class OtpView extends ConsumerStatefulWidget {
@@ -68,7 +67,7 @@ class _OtpViewState extends ConsumerState<OtpView> {
 
   Future<void> _verify() async {
     if (_code.length != 6) {
-      AppSnackbar.showError(context, 'Enter the 6-digit code');
+      AppSnackbar.showError(context, 'Please enter the 6-digit code');
       return;
     }
     final ok = await ref
@@ -99,60 +98,68 @@ class _OtpViewState extends ConsumerState<OtpView> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.background,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_outlined),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
       body: SafeArea(
         child: Padding(
-          padding: AppSpacing.screenPaddingAll,
+          padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Enter code', style: AppTextStyles.heading),
-              const SizedBox(height: AppSpacing.sm),
-              Text(
-                'We sent a 6-digit code to ${widget.phone}',
-                style: AppTextStyles.bodySmall,
-              ),
-              const SizedBox(height: AppSpacing.sm),
-       
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Wrong number? ',
-                    style: AppTextStyles.bodySmall,
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.cardBorder, width: 1),
                   ),
+                  child: IconButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    icon: const Icon(Icons.arrow_back, size: 24, color: AppColors.textPrimary),
+                    splashRadius: 24,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Verify your number',
+                style: AppTextStyles.h1,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "We've sent a 6-digit code to",
+                style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(widget.phone, style: AppTextStyles.cardTitle),
+                  const SizedBox(width: 8),
                   GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.edit_outlined,
-                          size: 14,
-                          color: AppColors.primary,
-                        ),
-                        SizedBox(width: AppSpacing.xs),
-                        Text(
-                          'Change number',
-                          style: AppTextStyles.bodySmall.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      'Change ›',
+                      style: AppTextStyles.body.copyWith(
+                        color: AppColors.primaryText,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.xxl),
-              OtpFields(
+              const SizedBox(height: 24),
+              Text(
+                'Enter the 6-digit code',
+                style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              OtpCodeField(
                 enabled: !auth.isLoading,
                 onChanged: (v) => setState(() => _code = v),
                 onCompleted: (v) {
@@ -160,38 +167,46 @@ class _OtpViewState extends ConsumerState<OtpView> {
                   _verify();
                 },
               ),
-              const SizedBox(height: AppSpacing.xl),
+              const SizedBox(height: 24),
+              AppPrimaryButton(
+                label: 'Verify OTP',
+                isLoading: auth.isLoading,
+                onPressed: auth.isLoading ? null : _verify,
+              ),
+              const SizedBox(height: 16),
+              Center(
+                child: _canResend
+                    ? GestureDetector(
+                        onTap: _resend,
+                        child: Text(
+                          'Resend code',
+                          style: AppTextStyles.body.copyWith(
+                            color: AppColors.primaryText,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      )
+                    : Text(
+                        "Didn't receive the code? Resend in 0:${_seconds.toString().padLeft(2, '0')}",
+                        style: AppTextStyles.body.copyWith(color: AppColors.textSecondary),
+                      ),
+              ),
+              const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    _canResend
-                        ? 'Didn\'t receive the code?'
-                        : 'Resend in 00:${_seconds.toString().padLeft(2, '0')}',
-                    style: AppTextStyles.bodySmall,
-                  ),
-                  if (_canResend) ...[
-                    const SizedBox(width: AppSpacing.sm),
-                    GestureDetector(
-                      onTap: auth.isLoading ? null : _resend,
-                      child: Text(
-                        'Resend',
-                        style: AppTextStyles.bodySmall.copyWith(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                  const Icon(Icons.lock_outlined, size: 18, color: AppColors.textSecondary),
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      'Your information is secure with us. We never share your details with anyone.',
+                      style: AppTextStyles.bodySecondary,
+                      textAlign: TextAlign.center,
                     ),
-                  ],
+                  ),
                 ],
               ),
-              const Spacer(),
-              PrimaryButton(
-                label: 'Verify',
-                isLoading: auth.isLoading,
-                onPressed: _code.length == 6 && !auth.isLoading ? _verify : null,
-              ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: 16),
             ],
           ),
         ),
