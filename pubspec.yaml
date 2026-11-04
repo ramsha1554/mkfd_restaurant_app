@@ -27,21 +27,21 @@ dev_dependencies:
   freezed: ^2.0.0
   json_serializable: ^6.0.0
 
-  flutter:
-    uses-material-design: true
-    assets:
-      - assets/images/
-      - assets/audio/
-    fonts:
-      - family: DM Sans
-        fonts:
-          - asset: assets/fonts/DMSans-Regular.ttf
-            weight: 400
-          - asset: assets/fonts/DMSans-Medium.ttf
-            weight: 500
-          - asset: assets/fonts/DMSans-Bold.ttf
-            weight: 700
-      - family: BricolageGrotesque
-        fonts:
-          - asset: assets/fonts/BricolageGrotesque-Variable.ttf
-            weight: 700
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/audio/
+  fonts:
+    - family: DM Sans
+      fonts:
+        - asset: assets/fonts/DMSans-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/DMSans-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/DMSans-Bold.ttf
+          weight: 700
+    - family: BricolageGrotesque
+      fonts:
+        - asset: assets/fonts/BricolageGrotesque-Variable.ttf
+          weight: 700

@@ -1,85 +1,56 @@
 import 'package:flutter/material.dart';
-import '../../../core/animations/app_durations.dart';
+import 'package:flutter/services.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
-import '../theme/app_spacing.dart';
 import '../theme/app_text_styles.dart';
 
-/// Pill filter chip — only place where pill radius (999) is allowed.
-class AppChip extends StatelessWidget {
+class AppFilterChip extends StatelessWidget {
   final String label;
   final bool selected;
   final VoidCallback? onTap;
   final IconData? icon;
 
-  const AppChip({
+  const AppFilterChip({
     super.key,
     required this.label,
-    this.selected = false,
+    required this.selected,
     this.onTap,
     this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
+    final bg = selected ? AppColors.primaryLight : AppColors.cardBackground;
+    final fg = selected ? AppColors.primaryText : AppColors.textSecondary;
+    final weight = selected ? FontWeight.w700 : FontWeight.w500;
+
     return GestureDetector(
-      onTap: onTap,
+      onTap: () {
+        if (onTap != null) {
+          HapticFeedback.selectionClick();
+          onTap!();
+        }
+      },
       child: AnimatedContainer(
-        duration: AppDurations.fast,
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.lg,
-          vertical: AppSpacing.sm,
-        ),
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primaryLight : AppColors.cardFill,
+          color: bg,
           borderRadius: AppRadius.rPill,
-          border: Border.all(
-            color: selected ? AppColors.primary : AppColors.cardBorder,
-            width: 1,
-          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[
-              Icon(
-                icon,
-                size: 14,
-                color: selected ? AppColors.primary : AppColors.textSecondary,
-              ),
-              const SizedBox(width: AppSpacing.xs),
+              Icon(icon, size: 14, color: fg),
+              const SizedBox(width: 4),
             ],
             Text(
               label,
-              style: AppTextStyles.caption.copyWith(
-                color: selected ? AppColors.primary : AppColors.textSecondary,
-              ),
+              style: AppTextStyles.caption.copyWith(color: fg, fontWeight: weight),
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-/// Horizontal list of filter chips.
-class AppChipGroup extends StatelessWidget {
-  final List<Widget> children;
-  const AppChipGroup({super.key, required this.children});
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: AppSpacing.screenPaddingH,
-      child: Row(
-        children: [
-          for (var i = 0; i < children.length; i++) ...[
-            children[i],
-            if (i != children.length - 1)
-              const SizedBox(width: AppSpacing.sm),
-          ],
-        ],
       ),
     );
   }

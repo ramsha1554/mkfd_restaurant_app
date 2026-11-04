@@ -117,3 +117,11 @@ Living status, decisions and open questions â€” updated at the end of every phas
 - Old?new style-name mapping: heading?h1/h2/display as appropriate (AppTextStyles.heading removed), bodyLarge removed ? use button/body/cardTitle per context, bodySmall removed ? use bodySecondary/caption, displaySecondary/headingSecondary/bodyHint/bodySmallHint/captionPrimary removed (use color overrides), cardFill removed (use cardBackground).
 - Status: Done
 
+
+## Phase 0.5-B — Core widgets
+- Files changed: lib/core/animations/app_scale_tap.dart, lib/ui/core/widgets/primary_button.dart, lib/ui/core/widgets/secondary_button.dart, lib/ui/core/widgets/app_card.dart, lib/ui/core/widgets/app_badge.dart, lib/ui/core/widgets/app_chip.dart, lib/ui/core/widgets/app_app_bar.dart, lib/ui/core/widgets/app_bottom_sheet.dart, lib/ui/core/widgets/app_dialog.dart, lib/ui/core/widgets/app_snackbar.dart, lib/ui/core/widgets/app_states.dart, lib/ui/core/widgets/app_text_field.dart
+- API changes: Added AppPrimaryButton/AppOutlinedButton/AppScaleTap/AppStatusBadge/AppFilterChip/showAppSheet/showAppConfirmDialog/showAppMessageDialog/AppSnackbar (overlay top toast), AppIconBubble/AppLoading/AppSkeleton/AppEmptyState/AppErrorState/AppTextField; kept PrimaryButton/SecondaryButton aliases.
+- Call-site edits: Updated to new APIs where used; existing code remains compatible via aliases.
+- Decisions: Elevation 0, flat borders, no ripples; reduce-motion supported; statusMeta used for badges.
+- Status: Done
+

@@ -226,7 +226,11 @@ class CountrySelector extends StatelessWidget {
             const SizedBox(width: AppSpacing.sm),
             Text(selected.dialCode, style: AppTextStyles.bodyLarge),
             const SizedBox(width: AppSpacing.xs),
-            const Icon(Icons.arrow_drop_down, size: 20, color: AppColors.textSecondary),
+            const Icon(
+              Icons.arrow_drop_down,
+              size: 20,
+              color: AppColors.textSecondary,
+            ),
           ],
         ),
       ),
@@ -241,10 +245,8 @@ class CountrySelector extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.lg)),
       ),
-      builder: (_) => _CountryPickerSheet(
-        selected: selected,
-        onSelected: onSelected,
-      ),
+      builder: (_) =>
+          _CountryPickerSheet(selected: selected, onSelected: onSelected),
     );
   }
 }
@@ -253,10 +255,7 @@ class _CountryPickerSheet extends StatefulWidget {
   final CountryCode selected;
   final ValueChanged<CountryCode> onSelected;
 
-  const _CountryPickerSheet({
-    required this.selected,
-    required this.onSelected,
-  });
+  const _CountryPickerSheet({required this.selected, required this.onSelected});
 
   @override
   State<_CountryPickerSheet> createState() => _CountryPickerSheetState();
@@ -290,7 +289,8 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
       if (name.contains(q)) return true;
       if (code.contains(q)) return true;
       if (qDigits.isNotEmpty && code.contains(qDigits)) return true;
-      if (qDigits.isNotEmpty && code.replaceAll('+', '').contains(qDigits.replaceAll('+', ''))) {
+      if (qDigits.isNotEmpty &&
+          code.replaceAll('+', '').contains(qDigits.replaceAll('+', ''))) {
         return true;
       }
       return false;
@@ -382,12 +382,16 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
                           separatorBuilder: (_, __) => const Divider(height: 1),
                           itemBuilder: (_, i) {
                             final c = filtered[i];
-                            final isSelected = c.dialCode == widget.selected.dialCode &&
+                            final isSelected =
+                                c.dialCode == widget.selected.dialCode &&
                                 c.name == widget.selected.name;
                             return ListTile(
                               leading: Text(c.flag, style: AppTextStyles.title),
                               title: Text(c.name, style: AppTextStyles.body),
-                              trailing: Text(c.dialCode, style: AppTextStyles.bodyLarge),
+                              trailing: Text(
+                                c.dialCode,
+                                style: AppTextStyles.bodyLarge,
+                              ),
                               selected: isSelected,
                               selectedTileColor: AppColors.primaryLight,
                               onTap: () {

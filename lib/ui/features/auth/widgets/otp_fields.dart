@@ -24,8 +24,10 @@ class OtpFields extends StatefulWidget {
 }
 
 class _OtpFieldsState extends State<OtpFields> {
-  final List<TextEditingController> _ctrls =
-      List.generate(6, (_) => TextEditingController());
+  final List<TextEditingController> _ctrls = List.generate(
+    6,
+    (_) => TextEditingController(),
+  );
   final List<FocusNode> _nodes = List.generate(6, (_) => FocusNode());
 
   String get _code => _ctrls.map((c) => c.text).join();

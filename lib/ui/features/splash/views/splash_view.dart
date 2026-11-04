@@ -27,8 +27,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
   }
 
   Future<void> _bootstrap() async {
-    await Future<void>.delayed(
-        AppDurations.slowest + AppDurations.medium);
+    await Future<void>.delayed(AppDurations.slowest + AppDurations.medium);
     if (!mounted) return;
     await ref.read(authProvider.notifier).restoreSession();
     if (!mounted) return;
