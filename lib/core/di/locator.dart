@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../data/api/api_client.dart';
 import '../../data/repositories/auth_repository.dart';
+import '../../data/repositories/order_repository.dart';
 import '../../data/repositories/restaurant_repository.dart';
 import '../../data/services/auth_storage_service.dart';
 
@@ -24,5 +25,9 @@ Future<void> setupLocator() async {
 
   locator.registerSingleton<RestaurantRepository>(
     RestaurantRepository(apiClient),
+  );
+
+  locator.registerSingleton<OrderRepository>(
+    OrderRepository(apiClient),
   );
 }

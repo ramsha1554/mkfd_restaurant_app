@@ -34,5 +34,8 @@ abstract final class AppDurations {
   /// 15000ms — HTTP request timeout.
   static const Duration timeout = Duration(milliseconds: 15000);
 
+  /// 30000ms — active orders background refresh.
+  static const Duration poll = Duration(seconds: 30);
+
   const AppDurations._();
 }

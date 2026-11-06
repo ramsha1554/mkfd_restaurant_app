@@ -84,5 +84,28 @@ abstract final class AppFormat {
   /// Phone formatting — E.164 stored, display as spaced.
   static String phone(String? raw) => raw ?? '—';
 
+  /// Relative time for order cards — e.g. "just now", "3m ago", "2h ago".
+  static String timeAgo(String? iso) {
+    if (iso == null || iso.isEmpty) return '—';
+    try {
+      final d = DateTime.parse(iso).toLocal();
+      final diff = DateTime.now().difference(d);
+      if (diff.isNegative || diff.inMinutes < 1) return 'just now';
+      if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
+      if (diff.inHours < 24) return '${diff.inHours}h ago';
+      if (diff.inDays < 7) return '${diff.inDays}d ago';
+      return _date.format(d);
+    } catch (_) {
+      return '—';
+    }
+  }
+
+  /// First name for compact displays; returns `—` for empty input.
+  static String shortName(String? value) {
+    final name = value?.trim();
+    if (name == null || name.isEmpty) return '—';
+    return name.split(RegExp(r'\s+')).first;
+  }
+
   const AppFormat._();
 }

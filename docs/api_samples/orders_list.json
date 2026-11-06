@@ -1,0 +1,429 @@
+{
+  "success": true,
+  "message": "Success",
+  "data": [
+    {
+      "restaurant": "6a9fe51050d624f98fb42822",
+      "estimatedDeliveryTime": null,
+      "specialInstructions": "",
+      "pickupCode": "0000",
+      "rejectionReason": null,
+      "cancellationReason": null,
+      "acceptanceExpiresAt": null,
+      "paymentExpiresAt": null,
+      "idempotencyKey": null,
+      "actualDeliveryTime": "2026-11-06T08:56:50.511Z",
+      "_id": "6aed95c6f379a819300c05c9",
+      "orderNumber": "MK-261106-0003",
+      "customer": {
+        "_id": "6a796510b558e85c0f9fe434",
+        "phone": "+447700900101",
+        "name": "Sample Customer"
+      },
+      "driver": {
+        "_id": "6a9163f0f687ffc82382d8bb",
+        "phone": "+447700900201",
+        "name": "Sample Driver"
+      },
+      "items": [
+        {
+          "menuItem": "6ad8a877ad0773c64bb35f59",
+          "name": "Chole Bhature",
+          "price": 4.33,
+          "quantity": 1,
+          "itemTotal": 4.33
+        }
+      ],
+      "subtotal": 4.33,
+      "deliveryFee": 7,
+      "driverFee": 2.99,
+      "platformFee": 0.65,
+      "total": 11.33,
+      "paymentMethod": "cash",
+      "paymentStatus": "pending",
+      "status": "delivered",
+      "statusHistory": [
+        {
+          "status": "placed",
+          "timestamp": "2026-11-06T08:54:30.642Z",
+          "note": ""
+        },
+        {
+          "status": "confirmed",
+          "timestamp": "2026-11-06T08:55:14.378Z",
+          "note": ""
+        },
+        {
+          "status": "preparing",
+          "timestamp": "2026-11-06T08:56:13.355Z",
+          "note": ""
+        },
+        {
+          "status": "ready",
+          "timestamp": "2026-11-06T08:56:25.390Z",
+          "note": ""
+        },
+        {
+          "status": "arrived_at_restaurant",
+          "timestamp": "2026-11-06T08:56:31.078Z",
+          "note": "Driver arrived at restaurant (within 50m geofence)"
+        },
+        {
+          "status": "picked_up",
+          "timestamp": "2026-11-06T08:56:41.404Z",
+          "note": "Pickup verified by restaurant"
+        },
+        {
+          "status": "on_the_way",
+          "timestamp": "2026-11-06T08:56:46.628Z",
+          "note": "Driver started trip"
+        },
+        {
+          "status": "delivered",
+          "timestamp": "2026-11-06T08:56:50.510Z",
+          "note": ""
+        }
+      ],
+      "deliveryAddress": {
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.34741954877973,
+            19.88540598080453
+          ]
+        },
+        "label": "Home",
+        "fullAddress": "Madni Gate Main Road, Mondha, Chhatrapati Sambhajinagar, 431001, India"
+      },
+      "createdAt": "2026-11-06T08:54:30.645Z",
+      "updatedAt": "2026-11-06T08:56:50.512Z"
+    },
+    {
+      "restaurant": "6a9fe51050d624f98fb42822",
+      "estimatedDeliveryTime": null,
+      "specialInstructions": "",
+      "pickupCode": "0000",
+      "rejectionReason": null,
+      "cancellationReason": null,
+      "acceptanceExpiresAt": null,
+      "paymentExpiresAt": "2026-11-05T18:06:39.085Z",
+      "idempotencyKey": null,
+      "actualDeliveryTime": "2026-11-05T18:05:21.459Z",
+      "_id": "6aecc483f379a819300befd2",
+      "orderNumber": "MK-261105-0002",
+      "customer": {
+        "_id": "6a796510b558e85c0f9fe434",
+        "phone": "+447700900101",
+        "name": "Sample Customer"
+      },
+      "driver": {
+        "_id": "6a9163f0f687ffc82382d8bb",
+        "phone": "+447700900201",
+        "name": "Sample Driver"
+      },
+      "items": [
+        {
+          "menuItem": "6ad5a4efad0773c64bb334c9",
+          "name": "Mutton Biryani",
+          "price": 8.9,
+          "quantity": 1,
+          "itemTotal": 8.9
+        }
+      ],
+      "subtotal": 8.9,
+      "deliveryFee": 7,
+      "driverFee": 2.99,
+      "platformFee": 1.33,
+      "total": 15.9,
+      "paymentMethod": "payment_link",
+      "paymentStatus": "paid",
+      "status": "delivered",
+      "statusHistory": [
+        {
+          "status": "pending_payment",
+          "timestamp": "2026-11-05T18:01:39.085Z",
+          "note": ""
+        },
+        {
+          "status": "placed",
+          "timestamp": "2026-11-05T18:01:51.098Z",
+          "note": "Payment authorized by Stripe (held until restaurant accepts)"
+        },
+        {
+          "status": "confirmed",
+          "timestamp": "2026-11-05T18:02:24.736Z",
+          "note": ""
+        },
+        {
+          "status": "preparing",
+          "timestamp": "2026-11-05T18:03:49.816Z",
+          "note": ""
+        },
+        {
+          "status": "ready",
+          "timestamp": "2026-11-05T18:04:43.501Z",
+          "note": ""
+        },
+        {
+          "status": "arrived_at_restaurant",
+          "timestamp": "2026-11-05T18:05:01.690Z",
+          "note": "Driver arrived at restaurant (within 50m geofence)"
+        },
+        {
+          "status": "picked_up",
+          "timestamp": "2026-11-05T18:05:09.414Z",
+          "note": "Pickup verified by restaurant"
+        },
+        {
+          "status": "on_the_way",
+          "timestamp": "2026-11-05T18:05:17.209Z",
+          "note": "Driver started trip"
+        },
+        {
+          "status": "delivered",
+          "timestamp": "2026-11-05T18:05:21.459Z",
+          "note": ""
+        }
+      ],
+      "deliveryAddress": {
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.34741954877973,
+            19.88540598080453
+          ]
+        },
+        "label": "Home",
+        "fullAddress": "Madni Gate Main Road, Mondha, Chhatrapati Sambhajinagar, 431001, India"
+      },
+      "createdAt": "2026-11-05T18:01:39.089Z",
+      "updatedAt": "2026-11-05T18:05:21.461Z"
+    },
+    {
+      "restaurant": "6a9fe51050d624f98fb42822",
+      "estimatedDeliveryTime": null,
+      "specialInstructions": "",
+      "pickupCode": "0000",
+      "rejectionReason": null,
+      "cancellationReason": null,
+      "acceptanceExpiresAt": null,
+      "paymentExpiresAt": "2026-11-05T18:02:18.593Z",
+      "idempotencyKey": null,
+      "actualDeliveryTime": null,
+      "_id": "6aecc37ef379a819300beda0",
+      "orderNumber": "MK-261105-0001",
+      "customer": {
+        "_id": "6a796510b558e85c0f9fe434",
+        "phone": "+447700900101",
+        "name": "Sample Customer"
+      },
+      "driver": null,
+      "items": [
+        {
+          "menuItem": "6ad8a877ad0773c64bb35f59",
+          "name": "Chole Bhature",
+          "price": 4.33,
+          "quantity": 2,
+          "itemTotal": 8.66
+        },
+        {
+          "menuItem": "6ad5a4efad0773c64bb334c9",
+          "name": "Mutton Biryani",
+          "price": 8.9,
+          "quantity": 1,
+          "itemTotal": 8.9
+        }
+      ],
+      "subtotal": 17.56,
+      "deliveryFee": 7,
+      "driverFee": 2.99,
+      "platformFee": 2.63,
+      "total": 24.56,
+      "paymentMethod": "payment_link",
+      "paymentStatus": "paid",
+      "status": "confirmed",
+      "statusHistory": [
+        {
+          "status": "pending_payment",
+          "timestamp": "2026-11-05T17:57:18.593Z",
+          "note": ""
+        },
+        {
+          "status": "placed",
+          "timestamp": "2026-11-05T17:57:46.201Z",
+          "note": "Payment authorized by Stripe (held until restaurant accepts)"
+        },
+        {
+          "status": "confirmed",
+          "timestamp": "2026-11-05T18:00:17.543Z",
+          "note": ""
+        }
+      ],
+      "deliveryAddress": {
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.34741954877973,
+            19.88540598080453
+          ]
+        },
+        "label": "Home",
+        "fullAddress": "Madni Gate Main Road, Mondha, Chhatrapati Sambhajinagar, 431001, India"
+      },
+      "createdAt": "2026-11-05T17:57:18.601Z",
+      "updatedAt": "2026-11-05T18:00:19.988Z"
+    },
+    {
+      "restaurant": "6a9fe51050d624f98fb42822",
+      "estimatedDeliveryTime": null,
+      "specialInstructions": "",
+      "pickupCode": "0000",
+      "rejectionReason": null,
+      "cancellationReason": "Payment window expired",
+      "acceptanceExpiresAt": null,
+      "paymentExpiresAt": "2026-11-03T11:45:55.963Z",
+      "idempotencyKey": null,
+      "actualDeliveryTime": null,
+      "_id": "6ae9c84727b336abbaeee083",
+      "orderNumber": "MK-261103-0014",
+      "customer": {
+        "_id": "6ae8375e339183e4f317aaa9",
+        "phone": "+447700900102",
+        "name": "Sample Customer Two"
+      },
+      "driver": null,
+      "items": [
+        {
+          "menuItem": "6ad5a4efad0773c64bb334c9",
+          "name": "Mutton Biryani",
+          "price": 8.9,
+          "quantity": 2,
+          "itemTotal": 17.8
+        }
+      ],
+      "subtotal": 17.8,
+      "deliveryFee": 7,
+      "driverFee": 3.31,
+      "platformFee": 2.67,
+      "total": 24.8,
+      "paymentMethod": "payment_link",
+      "paymentStatus": "failed",
+      "status": "cancelled",
+      "statusHistory": [
+        {
+          "status": "pending_payment",
+          "timestamp": "2026-11-03T11:40:55.963Z",
+          "note": ""
+        },
+        {
+          "status": "cancelled",
+          "timestamp": "2026-11-03T11:46:26.224Z",
+          "note": "Payment window expired"
+        },
+        {
+          "status": "cancelled",
+          "timestamp": "2026-11-03T11:46:27.214Z",
+          "note": "Payment session expired"
+        },
+        {
+          "status": "cancelled",
+          "timestamp": "2026-11-03T11:46:27.746Z",
+          "note": "Payment session expired"
+        }
+      ],
+      "deliveryAddress": {
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.32899713143706,
+            19.880262653455407
+          ]
+        },
+        "label": "Home",
+        "fullAddress": "Nirala Bazar, Chhatrapati Sambhajinagar, 431001, India"
+      },
+      "createdAt": "2026-11-03T11:40:55.967Z",
+      "updatedAt": "2026-11-03T11:46:27.747Z"
+    },
+    {
+      "restaurant": "6a9fe51050d624f98fb42822",
+      "estimatedDeliveryTime": null,
+      "specialInstructions": "",
+      "pickupCode": "0000",
+      "rejectionReason": null,
+      "cancellationReason": "cancel",
+      "acceptanceExpiresAt": null,
+      "paymentExpiresAt": "2026-11-03T11:44:38.086Z",
+      "idempotencyKey": null,
+      "actualDeliveryTime": null,
+      "_id": "6ae9c7fa27b336abbaeedfe2",
+      "orderNumber": "MK-261103-0013",
+      "customer": {
+        "_id": "6ae8375e339183e4f317aaa9",
+        "phone": "+447700900102",
+        "name": "Sample Customer Two"
+      },
+      "driver": null,
+      "items": [
+        {
+          "menuItem": "6abe2a973b0809b9305d548f",
+          "name": "Masala Dosa",
+          "price": 3.8,
+          "quantity": 2,
+          "itemTotal": 7.6
+        }
+      ],
+      "subtotal": 7.6,
+      "deliveryFee": 7,
+      "driverFee": 3.31,
+      "platformFee": 1.14,
+      "total": 14.6,
+      "paymentMethod": "payment_link",
+      "paymentStatus": "failed",
+      "status": "cancelled",
+      "statusHistory": [
+        {
+          "status": "pending_payment",
+          "timestamp": "2026-11-03T11:39:38.086Z",
+          "note": ""
+        },
+        {
+          "status": "cancelled",
+          "timestamp": "2026-11-03T11:40:12.351Z",
+          "note": "cancel"
+        },
+        {
+          "status": "cancelled",
+          "timestamp": "2026-11-03T11:40:13.458Z",
+          "note": "Payment session expired"
+        },
+        {
+          "status": "cancelled",
+          "timestamp": "2026-11-03T11:40:13.667Z",
+          "note": "Payment session expired"
+        }
+      ],
+      "deliveryAddress": {
+        "location": {
+          "type": "Point",
+          "coordinates": [
+            75.32899713143706,
+            19.880262653455407
+          ]
+        },
+        "label": "Home",
+        "fullAddress": "Nirala Bazar, Chhatrapati Sambhajinagar, 431001, India"
+      },
+      "createdAt": "2026-11-03T11:39:38.089Z",
+      "updatedAt": "2026-11-03T11:40:13.667Z"
+    }
+  ],
+  "pagination": {
+    "total": 395,
+    "page": 1,
+    "limit": 10,
+    "pages": 40,
+    "hasNextPage": true,
+    "hasPrevPage": false
+  }
+}

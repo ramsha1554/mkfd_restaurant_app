@@ -25,6 +25,9 @@ mixin _$PaginationMeta {
   int? get limit => throw _privateConstructorUsedError;
   int? get total => throw _privateConstructorUsedError;
   int? get totalPages => throw _privateConstructorUsedError;
+  int? get pages => throw _privateConstructorUsedError;
+  bool? get hasNextPage => throw _privateConstructorUsedError;
+  bool? get hasPrevPage => throw _privateConstructorUsedError;
   int? get count => throw _privateConstructorUsedError;
 
   /// Serializes this PaginationMeta to a JSON map.
@@ -44,7 +47,16 @@ abstract class $PaginationMetaCopyWith<$Res> {
     $Res Function(PaginationMeta) then,
   ) = _$PaginationMetaCopyWithImpl<$Res, PaginationMeta>;
   @useResult
-  $Res call({int? page, int? limit, int? total, int? totalPages, int? count});
+  $Res call({
+    int? page,
+    int? limit,
+    int? total,
+    int? totalPages,
+    int? pages,
+    bool? hasNextPage,
+    bool? hasPrevPage,
+    int? count,
+  });
 }
 
 /// @nodoc
@@ -66,6 +78,9 @@ class _$PaginationMetaCopyWithImpl<$Res, $Val extends PaginationMeta>
     Object? limit = freezed,
     Object? total = freezed,
     Object? totalPages = freezed,
+    Object? pages = freezed,
+    Object? hasNextPage = freezed,
+    Object? hasPrevPage = freezed,
     Object? count = freezed,
   }) {
     return _then(
@@ -86,6 +101,18 @@ class _$PaginationMetaCopyWithImpl<$Res, $Val extends PaginationMeta>
                 ? _value.totalPages
                 : totalPages // ignore: cast_nullable_to_non_nullable
                       as int?,
+            pages: freezed == pages
+                ? _value.pages
+                : pages // ignore: cast_nullable_to_non_nullable
+                      as int?,
+            hasNextPage: freezed == hasNextPage
+                ? _value.hasNextPage
+                : hasNextPage // ignore: cast_nullable_to_non_nullable
+                      as bool?,
+            hasPrevPage: freezed == hasPrevPage
+                ? _value.hasPrevPage
+                : hasPrevPage // ignore: cast_nullable_to_non_nullable
+                      as bool?,
             count: freezed == count
                 ? _value.count
                 : count // ignore: cast_nullable_to_non_nullable
@@ -105,7 +132,16 @@ abstract class _$$PaginationMetaImplCopyWith<$Res>
   ) = __$$PaginationMetaImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? page, int? limit, int? total, int? totalPages, int? count});
+  $Res call({
+    int? page,
+    int? limit,
+    int? total,
+    int? totalPages,
+    int? pages,
+    bool? hasNextPage,
+    bool? hasPrevPage,
+    int? count,
+  });
 }
 
 /// @nodoc
@@ -126,6 +162,9 @@ class __$$PaginationMetaImplCopyWithImpl<$Res>
     Object? limit = freezed,
     Object? total = freezed,
     Object? totalPages = freezed,
+    Object? pages = freezed,
+    Object? hasNextPage = freezed,
+    Object? hasPrevPage = freezed,
     Object? count = freezed,
   }) {
     return _then(
@@ -146,6 +185,18 @@ class __$$PaginationMetaImplCopyWithImpl<$Res>
             ? _value.totalPages
             : totalPages // ignore: cast_nullable_to_non_nullable
                   as int?,
+        pages: freezed == pages
+            ? _value.pages
+            : pages // ignore: cast_nullable_to_non_nullable
+                  as int?,
+        hasNextPage: freezed == hasNextPage
+            ? _value.hasNextPage
+            : hasNextPage // ignore: cast_nullable_to_non_nullable
+                  as bool?,
+        hasPrevPage: freezed == hasPrevPage
+            ? _value.hasPrevPage
+            : hasPrevPage // ignore: cast_nullable_to_non_nullable
+                  as bool?,
         count: freezed == count
             ? _value.count
             : count // ignore: cast_nullable_to_non_nullable
@@ -163,6 +214,9 @@ class _$PaginationMetaImpl implements _PaginationMeta {
     this.limit,
     this.total,
     this.totalPages,
+    this.pages,
+    this.hasNextPage,
+    this.hasPrevPage,
     this.count,
   });
 
@@ -178,11 +232,17 @@ class _$PaginationMetaImpl implements _PaginationMeta {
   @override
   final int? totalPages;
   @override
+  final int? pages;
+  @override
+  final bool? hasNextPage;
+  @override
+  final bool? hasPrevPage;
+  @override
   final int? count;
 
   @override
   String toString() {
-    return 'PaginationMeta(page: $page, limit: $limit, total: $total, totalPages: $totalPages, count: $count)';
+    return 'PaginationMeta(page: $page, limit: $limit, total: $total, totalPages: $totalPages, pages: $pages, hasNextPage: $hasNextPage, hasPrevPage: $hasPrevPage, count: $count)';
   }
 
   @override
@@ -195,13 +255,27 @@ class _$PaginationMetaImpl implements _PaginationMeta {
             (identical(other.total, total) || other.total == total) &&
             (identical(other.totalPages, totalPages) ||
                 other.totalPages == totalPages) &&
+            (identical(other.pages, pages) || other.pages == pages) &&
+            (identical(other.hasNextPage, hasNextPage) ||
+                other.hasNextPage == hasNextPage) &&
+            (identical(other.hasPrevPage, hasPrevPage) ||
+                other.hasPrevPage == hasPrevPage) &&
             (identical(other.count, count) || other.count == count));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, page, limit, total, totalPages, count);
+  int get hashCode => Object.hash(
+    runtimeType,
+    page,
+    limit,
+    total,
+    totalPages,
+    pages,
+    hasNextPage,
+    hasPrevPage,
+    count,
+  );
 
   /// Create a copy of PaginationMeta
   /// with the given fields replaced by the non-null parameter values.
@@ -226,6 +300,9 @@ abstract class _PaginationMeta implements PaginationMeta {
     final int? limit,
     final int? total,
     final int? totalPages,
+    final int? pages,
+    final bool? hasNextPage,
+    final bool? hasPrevPage,
     final int? count,
   }) = _$PaginationMetaImpl;
 
@@ -240,6 +317,12 @@ abstract class _PaginationMeta implements PaginationMeta {
   int? get total;
   @override
   int? get totalPages;
+  @override
+  int? get pages;
+  @override
+  bool? get hasNextPage;
+  @override
+  bool? get hasPrevPage;
   @override
   int? get count;
 

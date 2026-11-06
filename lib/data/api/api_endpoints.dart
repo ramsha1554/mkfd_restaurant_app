@@ -15,5 +15,14 @@ abstract final class ApiEndpoints {
 
   static String restaurantStatus(String id) => '/restaurants/$id/status';
 
+  // Orders
+  static String restaurantOrders(String restaurantId) =>
+      '/restaurants/$restaurantId/orders';
+
+  static String orderConfirm(String orderId) => '/orders/$orderId/confirm';
+  static String orderPreparing(String orderId) => '/orders/$orderId/preparing';
+  static String orderReady(String orderId) => '/orders/$orderId/ready';
+  static String orderReject(String orderId) => '/orders/$orderId/reject';
+
   const ApiEndpoints._();
 }
