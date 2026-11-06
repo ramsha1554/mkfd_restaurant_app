@@ -3,7 +3,7 @@ abstract final class AppConfig {
   /// Base URL for REST — always read via `String.fromEnvironment`.
   static const String apiBaseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'https://supplier-prewar-corrosive.ngrok-free.dev/api/v1',
+    defaultValue: 'https://api.mktours.co.uk/food/api/v1',
   );
 
   /// Production URL — verify before release (§6).
