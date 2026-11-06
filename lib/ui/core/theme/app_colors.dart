@@ -59,6 +59,7 @@ abstract final class AppColors {
       'arrivedatrestaurant' => (label: 'Driver at restaurant', fg: primaryText, bg: surface),
       'driverwaiting' => (label: 'Driver waiting', fg: warningText, bg: warningBg),
       'pendingpayment' => (label: 'Awaiting Payment', fg: infoText, bg: infoBg),
+      'pending' => (label: 'Pending', fg: infoText, bg: infoBg),
       'rejected' => (label: 'Rejected', fg: errorText, bg: errorBg),
       'cancelled' => (label: 'Cancelled', fg: errorText, bg: errorBg),
       'expired' => (label: 'Expired', fg: errorText, bg: errorBg),

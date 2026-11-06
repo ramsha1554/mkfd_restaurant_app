@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_icons.dart';
 import '../theme/app_radius.dart';
+import '../theme/app_spacing.dart';
 import '../theme/app_text_styles.dart';
 import '../../../core/animations/app_durations.dart';
 
@@ -12,6 +14,7 @@ class AppPrimaryButton extends StatelessWidget {
   final IconData? icon;
   final bool trailingIcon;
   final double height;
+  final bool destructive;
 
   const AppPrimaryButton({
     super.key,
@@ -21,37 +24,43 @@ class AppPrimaryButton extends StatelessWidget {
     this.icon,
     this.trailingIcon = false,
     this.height = 52,
+    this.destructive = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final foreground =
+        destructive ? AppColors.onError : AppColors.onPrimary;
+    final background = destructive ? AppColors.error : AppColors.primary;
+    final pressed = destructive ? AppColors.errorText : AppColors.primaryDark;
+
     final child = isLoading
-        ? const SizedBox(
-            width: 20,
-            height: 20,
+        ? SizedBox(
+            width: AppIconSize.sm,
+            height: AppIconSize.sm,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              color: AppColors.onPrimary,
+              color: foreground,
             ),
           )
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               if (icon != null && !trailingIcon) ...[
-                Icon(icon, size: 20, color: AppColors.onPrimary),
-                const SizedBox(width: 8),
+                Icon(icon, size: AppIconSize.sm, color: foreground),
+                const SizedBox(width: AppSpacing.sm),
               ],
               Flexible(
                 child: Text(
                   label,
-                  style: AppTextStyles.button.copyWith(color: AppColors.onPrimary),
+                  style: AppTextStyles.button.copyWith(color: foreground),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                 ),
               ),
               if (icon != null && trailingIcon) ...[
-                const SizedBox(width: 8),
-                Icon(icon, size: 20, color: AppColors.onPrimary),
+                const SizedBox(width: AppSpacing.sm),
+                Icon(icon, size: AppIconSize.sm, color: foreground),
               ],
             ],
           );
@@ -62,8 +71,8 @@ class AppPrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: AppColors.onPrimary,
+          backgroundColor: background,
+          foregroundColor: foreground,
           disabledBackgroundColor: AppColors.cardBackground,
           disabledForegroundColor: AppColors.textSecondary,
           elevation: 0,
@@ -72,13 +81,11 @@ class AppPrimaryButton extends StatelessWidget {
           shape: const RoundedRectangleBorder(borderRadius: AppRadius.rMd),
         ).copyWith(
           backgroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.pressed)) {
-              return AppColors.primaryDark;
-            }
+            if (states.contains(WidgetState.pressed)) return pressed;
             if (states.contains(WidgetState.disabled)) {
               return AppColors.cardBackground;
             }
-            return AppColors.primary;
+            return background;
           }),
         ),
         child: AnimatedSwitcher(

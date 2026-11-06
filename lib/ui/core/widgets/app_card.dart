@@ -9,6 +9,8 @@ class AppCard extends StatelessWidget {
   final EdgeInsetsGeometry? margin;
   final VoidCallback? onTap;
   final bool dense;
+  final Color? borderColor;
+  final double borderWidth;
 
   const AppCard({
     super.key,
@@ -17,6 +19,8 @@ class AppCard extends StatelessWidget {
     this.margin,
     this.onTap,
     this.dense = false,
+    this.borderColor,
+    this.borderWidth = 1,
   });
 
   const AppCard.dense({
@@ -25,6 +29,8 @@ class AppCard extends StatelessWidget {
     this.padding,
     this.margin,
     this.onTap,
+    this.borderColor,
+    this.borderWidth = 1,
   }) : dense = true;
 
   @override
@@ -36,7 +42,10 @@ class AppCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: radius,
-        border: Border.all(color: AppColors.cardBorder, width: 1),
+        border: Border.all(
+          color: borderColor ?? AppColors.cardBorder,
+          width: borderWidth,
+        ),
       ),
       child: child,
     );
