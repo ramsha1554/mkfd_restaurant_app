@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_text_styles.dart';
+import '../../../core/animations/app_durations.dart';
 
 /// Full-width primary action
 class AppPrimaryButton extends StatelessWidget {
@@ -81,7 +82,7 @@ class AppPrimaryButton extends StatelessWidget {
           }),
         ),
         child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 100),
+          duration: AppDurations.fastest,
           child: child,
         ),
       ),

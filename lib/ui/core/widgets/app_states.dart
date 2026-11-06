@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_text_styles.dart';
+import '../../../core/animations/app_durations.dart';
 import 'primary_button.dart';
 
 class AppLoading extends StatelessWidget {
@@ -46,7 +47,7 @@ class _AppSkeletonState extends State<AppSkeleton>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1300),
+      duration: AppDurations.shimmer,
     )..repeat();
   }
 

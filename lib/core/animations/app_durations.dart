@@ -16,5 +16,23 @@ abstract final class AppDurations {
   /// standard interaction (see spec §5 Motion).
   static const Duration slowest = Duration(milliseconds: 600);
 
+  /// 120ms — OTP field resize animation.
+  static const Duration quick = Duration(milliseconds: 120);
+
+  /// 250ms — short entrance delay.
+  static const Duration short = Duration(milliseconds: 250);
+
+  /// 800ms — repeating pulse animation (blinking cursor).
+  static const Duration pulse = Duration(milliseconds: 800);
+
+  /// 1300ms — skeleton/shimmer cycle.
+  static const Duration shimmer = Duration(milliseconds: 1300);
+
+  /// 3900ms — snackbar auto-dismiss.
+  static const Duration snackbar = Duration(milliseconds: 3900);
+
+  /// 15000ms — HTTP request timeout.
+  static const Duration timeout = Duration(milliseconds: 15000);
+
   const AppDurations._();
 }

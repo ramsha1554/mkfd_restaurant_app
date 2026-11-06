@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../core/animations/app_animations.dart';
+import '../../../../core/animations/app_durations.dart';
 import '../../../../core/utils/navigation.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -23,7 +24,7 @@ class WelcomeView extends StatelessWidget {
               Column(
                 children: [
                   FadeIn(
-                    duration: const Duration(milliseconds: 600),
+                    duration: AppDurations.slowest,
                     child: Container(
                       width: 250,
                       height: 250,
@@ -59,7 +60,7 @@ class WelcomeView extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   SlideIn.fromBottom(
-                    delay: const Duration(milliseconds: 200),
+                    delay: AppDurations.fast,
                     child: Column(
                       children: [
                         Text(
@@ -88,7 +89,7 @@ class WelcomeView extends StatelessWidget {
               ),
               const Spacer(),
               SlideIn.fromBottom(
-                delay: const Duration(milliseconds: 250),
+                delay: AppDurations.short,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [

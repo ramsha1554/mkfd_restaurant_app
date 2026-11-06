@@ -276,7 +276,7 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
             text: 'Terms & Conditions',
             style: AppTextStyles.bodySecondary.copyWith(
               color: AppColors.primary,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
             recognizer: TapGestureRecognizer()..onTap = () {},
           ),
@@ -285,7 +285,7 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
             text: 'Privacy Policy',
             style: AppTextStyles.bodySecondary.copyWith(
               color: AppColors.primary,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
             recognizer: TapGestureRecognizer()..onTap = () {},
           ),

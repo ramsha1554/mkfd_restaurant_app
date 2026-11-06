@@ -137,27 +137,13 @@ abstract final class AppTheme {
           return AppColors.cardBorder;
         }),
       ),
-      dialogTheme: const DialogThemeData(
+      dialogTheme: DialogThemeData(
         backgroundColor: AppColors.surface,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: AppRadius.rLg),
-        titleTextStyle: TextStyle(
-          fontFamily: 'BricolageGrotesque',
-          fontFamilyFallback: ['DM Sans'],
-          fontVariations: [FontVariation('wght', 700)],
-          fontSize: 18,
-          height: 1.3,
-          letterSpacing: -0.5,
-          color: AppColors.textPrimary,
-        ),
-        contentTextStyle: TextStyle(
-          fontFamily: 'DM Sans',
-          fontSize: 14,
-          height: 1.4,
-          letterSpacing: -0.35,
-          color: AppColors.textPrimary,
-        ),
+        titleTextStyle: AppTextStyles.h2,
+        contentTextStyle: AppTextStyles.body,
         barrierColor: AppColors.scrim,
       ),
       bottomSheetTheme: const BottomSheetThemeData(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_text_styles.dart';
+import '../../../core/animations/app_durations.dart';
 
 class AppSnackbar {
   static OverlayEntry? _entry;
@@ -15,7 +16,7 @@ class AppSnackbar {
     IconData? icon,
     Color? iconBg,
     Color? iconFg,
-    Duration duration = const Duration(milliseconds: 3900),
+    Duration duration = AppDurations.snackbar,
   }) {
     final overlay = Overlay.of(context);
     _timer?.cancel();
@@ -127,7 +128,7 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 450),
+      duration: AppDurations.slow,
     );
     _offset = Tween<Offset>(
       begin: const Offset(0, -1.2),

@@ -1,11 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_text_styles.dart';
+import '../../../../core/animations/app_durations.dart';
 
 class OtpCodeField extends StatefulWidget {
   final ValueChanged<String> onChanged;
@@ -95,7 +94,7 @@ class _OtpCodeFieldState extends State<OtpCodeField> {
                   final borderColor = isFocused ? AppColors.primaryText : AppColors.cardBorder;
                   final borderWidth = isFocused ? 2.0 : 1.0;
                   return AnimatedContainer(
-                    duration: disableAnimations ? Duration.zero : const Duration(milliseconds: 120),
+                    duration: disableAnimations ? Duration.zero : AppDurations.quick,
                     width: 48,
                     height: 56,
                     decoration: BoxDecoration(
@@ -134,7 +133,7 @@ class _BlinkingCursorState extends State<_BlinkingCursor>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 800))..repeat(reverse: true);
+    _controller = AnimationController(vsync: this, duration: AppDurations.pulse)..repeat(reverse: true);
   }
 
   @override

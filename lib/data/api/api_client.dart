@@ -8,6 +8,7 @@ import '../../core/error/app_error.dart';
 import '../../core/utils/app_log.dart';
 import '../services/auth_storage_service.dart';
 import 'api_endpoints.dart';
+import '../../core/animations/app_durations.dart';
 
 class ApiClient {
   final Dio _dio;
@@ -21,9 +22,9 @@ class ApiClient {
       : _dio = Dio(
           BaseOptions(
             baseUrl: AppConfig.apiBaseUrl,
-            connectTimeout: const Duration(milliseconds: 15000),
-            receiveTimeout: const Duration(milliseconds: 15000),
-            sendTimeout: const Duration(milliseconds: 15000),
+            connectTimeout: AppDurations.timeout,
+            receiveTimeout: AppDurations.timeout,
+            sendTimeout: AppDurations.timeout,
             headers: {
               'Content-Type': 'application/json',
               'Accept': 'application/json',

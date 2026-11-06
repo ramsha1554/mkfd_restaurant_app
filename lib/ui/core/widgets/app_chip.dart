@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_text_styles.dart';
+import '../../../core/animations/app_durations.dart';
 
 class AppFilterChip extends StatelessWidget {
   final String label;
@@ -32,7 +33,7 @@ class AppFilterChip extends StatelessWidget {
         }
       },
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: AppDurations.fast,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
           color: bg,
