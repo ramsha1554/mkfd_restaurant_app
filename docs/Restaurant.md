@@ -53,12 +53,15 @@ Base URLs:
 
 ---
 
-## Orders (owner actions are all PATCH, no body except pickup verification)
+## Orders (owner actions are all PATCH, no body except reject and pickup verification)
 
-- `/orders/:id/confirm` (accept; backend then searches for a driver) · `/reject` (confirm whether it takes a reason — §9 P4) · `/preparing` · `/ready` · `/verify-pickup` `{code: "four digits"}`
-- Status machine: `placed → confirmed → preparing → ready → picked_up → on_the_way → delivered`, with two terminal branches: `rejected` (owner only, from `placed`) and `cancelled` (customer or admin). Illegal transition returns `400` with message like `Cannot transition from 'x' to 'y'.` — always surface that exact message.
-- Order fields for owner: `_id, orderNumber, status, createdAt, total (or totalAmount — read both), items: [{name (or menuItem.name), price, quantity}], customer: {name, phone}, paymentMethod (card|cash), driver / driverAssigned, deliveryAddress (a fullAddress string and/or street/city/postcode), specialInstructions`.
-- Before Phase 4: capture real sample of orders-list response; confirm exact pickup-verification flow and whether single-order GET-by-id exists for owner (§9 P4).
+- **Confirmed 2026-11-06** from `docs/api_samples/orders_list.json`: `GET /restaurants/:id/orders?page&limit&status` returns `{success, message, data: [order], pagination: {total, page, limit, pages, hasNextPage, hasPrevPage}}`; the sample used `limit=10` and `page=1`. `status` filtering and `limit` values above 10 still need confirmation.
+- `/orders/:id/confirm` (accept; backend then searches for a driver) · `/orders/:id/reject` body `{reason: <non-empty string>}` · `/orders/:id/preparing` · `/orders/:id/ready` · `/orders/:id/verify-pickup` (Phase 4B; confirm whether the body key is `code` or `pickupCode`).
+- Status machine: `placed → confirmed → preparing → ready → picked_up → on_the_way → delivered`, with `arrived_at_restaurant` between `ready` and `picked_up`, and terminal branches `rejected` (owner only, from `placed`) and `cancelled` (customer/admin). `pending_payment` can appear in history before `placed`. The sample also showed `cancelled` payment flows; tolerate `expired`/`failed` if returned. Illegal transitions return `400` with a message like `Cannot transition from 'x' to 'y'.` — always surface that exact message.
+- Order fields (confirmed by sample unless noted): `_id, orderNumber, restaurant (id), status, createdAt, updatedAt, actualDeliveryTime?, estimatedDeliveryTime?, pickupCode, rejectionReason?, cancellationReason?, acceptanceExpiresAt?, paymentExpiresAt?, idempotencyKey?, specialInstructions, items: [{menuItem (id string), name, price, quantity, itemTotal}], customer: {_id, name, phone}, driver: {_id, name, phone} | null, deliveryAddress: {label?, fullAddress, location: {type, coordinates}}, subtotal, deliveryFee, driverFee, platformFee, total, paymentMethod (card|cash|payment_link — keep unknown raw), paymentStatus (pending|paid|failed), statusHistory: [{status, timestamp, note}]`.
+- `commissionRate`, `commissionAmount`, `restaurantPayout`, `driverWaiting`, `driverArrived` were **not present** in the sample. The app derives payout client-side as `subtotal × 15%` (or `platformFee` when present) until the backend supplies explicit values. Confirm the real field names before showing payouts in production.
+- Never display, log or persist `pickupCode` — it is only used by the Phase 4B pickup-verification flow.
+- Single-order `GET /orders/:id` for owners is still unconfirmed; Phase 4A does not use it.
 
 ---
 

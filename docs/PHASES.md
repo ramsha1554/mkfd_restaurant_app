@@ -140,7 +140,53 @@ Living status, decisions and open questions — updated at the end of every phas
 
 **Verification:** see Phase 3 report.
 
-## Phase 4 — Orders (REST only) — Planned
+## Phase 4A — Orders (REST only) — ✅ Done
+
+## Phase 4B — Pickup verification & order detail — Planned
+
+**Phase 4A scope delivered:** owner order list backed by REST with a real active set (fan-out per status), server-side paginated history, live filter-chip counts, 30-second foreground polling, pull-to-refresh, optimistic per-status actions (accept, start preparing, mark ready, reject), reject-reason sheet, offline/stale banners, order-number badge on the Orders tab, and tests. Socket, push, sound, Live badge, order detail and pickup verification remain for Phase 4B/5.
+
+**Files added / changed:**
+- `lib/data/models/order.dart` (+ `.freezed.dart`, `.g.dart`) — `OrderModel`, `OrderStatus`, customer/driver/item/status-event/address models; defensive normaliser for alternate field names; `_id` → `id`
+- `lib/data/repositories/order_repository.dart` — active/history paging, confirm/preparing/ready/reject, per-order parse guard, exact API errors
+- `lib/data/api/api_endpoints.dart` — restaurant orders, confirm, preparing, ready, reject
+- `lib/data/models/pagination_meta.dart` — nullable `pages`/`hasNextPage`/`hasPrevPage` + `hasNext`
+- `lib/core/di/locator.dart` — registers `OrderRepository`
+- `lib/core/utils/app_format.dart` — `timeAgo`, `shortName`
+- `lib/core/animations/app_durations.dart` — `poll` (30s)
+- `lib/ui/core/theme/app_colors.dart` — legacy `pending` status mapping
+- `lib/ui/core/widgets/app_card.dart` — optional border colour/width
+- `lib/ui/core/widgets/primary_button.dart` — `destructive` variant
+- `lib/ui/core/widgets/app_info_banner.dart`, `app_offline_banner.dart` — new banners
+- `lib/ui/features/orders/models/order_filter.dart`, `utils/order_money.dart` — chip/status sets and money/driver derivation
+- `lib/ui/features/orders/providers/orders_state.dart`, `orders_provider.dart` — active/history state, counts, paging, polling guard, actions, `isStale`/`isOffline`
+- `lib/ui/features/orders/views/orders_tab_view.dart` — full Orders screen (replaces shell placeholder)
+- `lib/ui/features/orders/widgets/app_order_card.dart`, `order_filter_bar.dart`, `reject_order_sheet.dart`
+- `lib/ui/features/shell/views/app_shell.dart` — imports the new screen, Orders badge from `ordersProvider`
+- `lib/ui/features/shell/views/orders_tab_view.dart` — deleted
+- `lib/ui/features/shell/views/more_tab_view.dart` — invalidates `ordersProvider` on logout
+- `test/support/order_fixtures.dart`, `test/data/order_model_test.dart`, `test/ui/orders_provider_test.dart`, `test/ui/app_order_card_test.dart`, `test/ui/order_filter_bar_test.dart`, `test/ui/reject_order_sheet_test.dart`, `test/ui/app_info_banner_test.dart`, `test/ui/app_offline_banner_test.dart`, `test/ui/primary_button_test.dart`
+- `docs/api_samples/orders_list.json` — real sample (5 orders)
+- `docs/Restaurant.md`, `docs/UI_ADDITIONS.md` — contract and component notes
+
+**Decisions:**
+- The active set is seven parallel `status` queries (`placed`, `confirmed`, `preparing`, `ready`, `arrived_at_restaurant`, `picked_up`, `on_the_way`, limit 50). Individual failures keep previous data for those statuses and mark the list stale; all failing surfaces an error.
+- Chips map New=`placed`; Preparing=`confirmed`+`preparing`; Ready=`ready`+`arrived_at_restaurant`; Picked up=`picked_up`+`on_the_way`; History All / Delivered / Cancelled load pages of 25 (Cancelled merges `cancelled`+`rejected`). Any underlying truncated status renders `N+`.
+- Polling runs every 30s only while the Orders tab is selected and the app is foreground; resume, tab select, pull-to-refresh and successful actions refresh immediately. No sockets this phase.
+- Actions update optimistically, lock per order while in flight, roll back on failure and surface the exact API message. Reject sends the selected chip plus optional details as one `reason` string.
+- Cards show “Subtotal” for live orders and derived “Payout” for delivered orders; total/delivery/driver fees are never shown. Driver-waiting banners use `arrived_at_restaurant`/`driverWaiting`/`driverArrived`.
+- `isOffline` is set from `NetworkException` failures; the offline banner locks every card action while last-known orders remain visible.
+- `pickupCode` is never parsed into UI state, displayed or logged.
+
+**Open questions / assumptions:**
+- Confirm the reject body key is `reason` and the exact response shape.
+- Confirm `status` filtering and limits above 10 behave as assumed; the sample only proves the envelope/pagination and an unfiltered page.
+- `rejected`, `expired` and `failed` statuses were not in the sample; verify their display and history behaviour.
+- Commission/payout fields are absent from the sample; the app derives 15% client-side. Confirm server fields before production payouts.
+- `payment_link` and unknown payment methods are displayed as raw values; confirm intended copy.
+- Pickup verification (`verify-pickup`) and the single-order detail screen are Phase 4B; the body key may be `code` or `pickupCode`.
+
+**Verification:** see Phase 4A report.
 
 ## Phase 5 — Realtime & Alerts — Planned
 
