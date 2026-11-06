@@ -7,6 +7,7 @@ import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/order_repository.dart';
 import '../../data/repositories/restaurant_repository.dart';
 import '../../data/services/auth_storage_service.dart';
+import '../../data/services/phone_launcher.dart';
 
 final GetIt locator = GetIt.instance;
 
@@ -19,15 +20,13 @@ Future<void> setupLocator() async {
   final apiClient = ApiClient(storage);
   locator.registerSingleton<ApiClient>(apiClient);
 
-  locator.registerSingleton<AuthRepository>(
-    AuthRepository(apiClient, storage),
-  );
+  locator.registerLazySingleton<PhoneLauncher>(() => const UrlPhoneLauncher());
+
+  locator.registerSingleton<AuthRepository>(AuthRepository(apiClient, storage));
 
   locator.registerSingleton<RestaurantRepository>(
     RestaurantRepository(apiClient),
   );
 
-  locator.registerSingleton<OrderRepository>(
-    OrderRepository(apiClient),
-  );
+  locator.registerSingleton<OrderRepository>(OrderRepository(apiClient));
 }
