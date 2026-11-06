@@ -137,16 +137,6 @@ abstract final class AppTheme {
           return AppColors.cardBorder;
         }),
       ),
-      cardTheme: const CardThemeData(
-        color: AppColors.surface,
-        surfaceTintColor: Colors.transparent,
-        elevation: 0,
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        shape: RoundedRectangleBorder(
-          borderRadius: AppRadius.rMd,
-          side: BorderSide(color: AppColors.cardBorder, width: 1),
-        ),
-      ),
       dialogTheme: const DialogThemeData(
         backgroundColor: AppColors.surface,
         surfaceTintColor: Colors.transparent,
@@ -181,14 +171,9 @@ abstract final class AppTheme {
       snackBarTheme: SnackBarThemeData(
         backgroundColor: AppColors.surface,
         contentTextStyle: AppTextStyles.body,
-        shape: const RoundedRectangleBorder(borderRadius: AppRadius.rXxl),
+        shape: const RoundedRectangleBorder(borderRadius: AppRadius.rXl),
         behavior: SnackBarBehavior.floating,
         elevation: 0,
-      ),
-      dividerTheme: const DividerThemeData(
-        color: AppColors.divider,
-        thickness: 1,
-        space: 1,
       ),
       progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: AppColors.primary,

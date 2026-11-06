@@ -59,17 +59,3 @@ class AppCard extends StatelessWidget {
     return result;
   }
 }
-
-
-    return Container(
-      margin: margin,
-      padding: padding ?? AppSpacing.lgAll,
-      decoration: BoxDecoration(
-        color: color ?? AppColors.surface,
-        borderRadius: borderRadius ?? AppRadius.rMd,
-        border: Border.all(color: AppColors.cardBorder, width: 1),
-      ),
-      child: child,
-    );
-  }
-}

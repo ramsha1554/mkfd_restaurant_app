@@ -47,7 +47,7 @@ abstract final class AppColors {
 
   /// Returns (label, fg, bg) status meta per MK Foods standard.
   static ({String label, Color fg, Color bg}) statusMeta(String status) {
-    final s = status.toLowerCase().replace('_', '');
+    final s = status.toLowerCase().replaceAll('_', '');
     return switch (s) {
       'placed' => (label: 'Order Placed', fg: warningText, bg: warningBg),
       'confirmed' => (label: 'Confirmed', fg: infoText, bg: infoBg),
@@ -66,9 +66,6 @@ abstract final class AppColors {
       _ => (label: status, fg: textSecondary, bg: cardBackground),
     };
   }
-
-  const AppColors._();
-}
 
   const AppColors._();
 }

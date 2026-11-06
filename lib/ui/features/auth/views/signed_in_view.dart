@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/utils/navigation.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_radius.dart';
+import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../providers/auth_provider.dart';
@@ -36,15 +38,15 @@ class SignedInView extends ConsumerWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: AppSpacing.screenPaddingAll,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: AppSpacing.lgAll,
                 decoration: BoxDecoration(
                   color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: AppRadius.rMd,
                   border: Border.all(color: AppColors.cardBorder, width: 1),
                 ),
                 child: Column(
@@ -54,14 +56,9 @@ class SignedInView extends ConsumerWidget {
                       user?.name?.isNotEmpty == true ? user!.name! : 'Restaurant Owner',
                       style: AppTextStyles.cardTitle,
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: AppSpacing.xs),
                     Text(
                       user?.phone ?? auth.phone ?? '',
-                      style: AppTextStyles.bodySecondary,
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      user?.email ?? '',
                       style: AppTextStyles.bodySecondary,
                     ),
                   ],
@@ -79,68 +76,3 @@ class SignedInView extends ConsumerWidget {
     );
   }
 }
-                          ),
-                        ),
-                        const SizedBox(width: AppSpacing.md),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                user?.name ?? 'Restaurant owner',
-                                style: AppTextStyles.bodyLarge,
-                              ),
-                              Text(
-                                user?.phone ?? auth.phone ?? '—',
-                                style: AppTextStyles.bodySmall,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppSpacing.sm,
-                            vertical: AppSpacing.xs,
-                          ),
-                          decoration: const BoxDecoration(
-                            color: AppColors.success,
-                            borderRadius: AppRadius.rPill,
-                          ),
-                          child: Text(
-                            'VERIFIED',
-                            style: AppTextStyles.caption
-                                .copyWith(color: AppColors.surface),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    const Divider(height: 1),
-                    const SizedBox(height: AppSpacing.md),
-                    Text('You are signed in. Phase 1 placeholder — restaurant setup comes in Phase 2.',
-                        style: AppTextStyles.body),
-                  ],
-                ),
-              ),
-              const Spacer(),
-              SecondaryButton(
-                label: 'Logout',
-                icon: Icons.logout_outlined,
-                isLoading: auth.isLoading,
-                onPressed: auth.isLoading ? null : () => _logout(context, ref),
-              ),
-              const SizedBox(height: AppSpacing.md),
-              PrimaryButton(
-                label: 'Continue (placeholder)',
-                onPressed: () {},
-              ),
-              const SizedBox(height: AppSpacing.lg),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-

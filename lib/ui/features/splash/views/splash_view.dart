@@ -62,7 +62,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: Center(
-        child: AppFadeIn(
+        child: FadeIn(
           duration: const Duration(milliseconds: 600),
           child: Image.asset(
             'assets/images/MK-Tour-Logo.png',

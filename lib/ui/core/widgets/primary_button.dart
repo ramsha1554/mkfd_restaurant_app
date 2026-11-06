@@ -90,7 +90,3 @@ class AppPrimaryButton extends StatelessWidget {
 }
 
 typedef PrimaryButton = AppPrimaryButton;
-
-    return button;
-  }
-}

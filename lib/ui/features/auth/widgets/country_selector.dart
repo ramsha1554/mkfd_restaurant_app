@@ -224,7 +224,7 @@ class CountrySelector extends StatelessWidget {
           children: [
             Text(selected.flag, style: AppTextStyles.body),
             const SizedBox(width: AppSpacing.sm),
-            Text(selected.dialCode, style: AppTextStyles.bodyLarge),
+            Text(selected.dialCode, style: AppTextStyles.cardTitle),
             const SizedBox(width: AppSpacing.xs),
             const Icon(
               Icons.arrow_drop_down,
@@ -390,7 +390,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
                               title: Text(c.name, style: AppTextStyles.body),
                               trailing: Text(
                                 c.dialCode,
-                                style: AppTextStyles.bodyLarge,
+                                style: AppTextStyles.cardTitle,
                               ),
                               selected: isSelected,
                               selectedTileColor: AppColors.primaryLight,

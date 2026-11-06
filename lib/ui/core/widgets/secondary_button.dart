@@ -79,5 +79,3 @@ class AppOutlinedButton extends StatelessWidget {
 }
 
 typedef SecondaryButton = AppOutlinedButton;
-
-}

@@ -47,7 +47,7 @@ Future<T?> showAppSheet<T>({
                     children: [
                       if (title != null)
                         Expanded(
-                          child: Text(title!, style: AppTextStyles.h2),
+                          child: Text(title, style: AppTextStyles.h2),
                         )
                       else
                         const Spacer(),

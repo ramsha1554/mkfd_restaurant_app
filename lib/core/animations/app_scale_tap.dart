@@ -16,7 +16,7 @@ class AppScaleTap extends StatefulWidget {
     required this.child,
     this.onTap,
     this.scale = 0.97,
-    this.forwardDuration = AppDurations.instant,
+    this.forwardDuration = AppDurations.fastest,
     this.reverseDuration = AppDurations.fast,
     this.curve = AppCurves.state,
     this.pressedOpacity = 1.0,

@@ -166,7 +166,7 @@ class _ToastState extends State<_Toast> with SingleTickerProviderStateMixin {
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: AppRadius.rXxl,
+                borderRadius: AppRadius.rXl,
                 border: Border.all(color: AppColors.cardBorder, width: 1),
               ),
               child: Row(
