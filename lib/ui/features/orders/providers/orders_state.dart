@@ -52,6 +52,7 @@ class OrdersState {
   final Set<String> inFlightIds;
   final Set<String> truncatedStatuses;
   final bool isStale;
+  final bool isOffline;
   final DateTime? lastUpdated;
   final String? errorMessage;
 
@@ -64,6 +65,7 @@ class OrdersState {
     this.inFlightIds = const {},
     this.truncatedStatuses = const {},
     this.isStale = false,
+    this.isOffline = false,
     this.lastUpdated,
     this.errorMessage,
   });
@@ -117,6 +119,7 @@ class OrdersState {
     Set<String>? inFlightIds,
     Set<String>? truncatedStatuses,
     bool? isStale,
+    bool? isOffline,
     DateTime? lastUpdated,
     String? errorMessage,
     bool clearError = false,
@@ -131,6 +134,7 @@ class OrdersState {
       inFlightIds: inFlightIds ?? this.inFlightIds,
       truncatedStatuses: truncatedStatuses ?? this.truncatedStatuses,
       isStale: isStale ?? this.isStale,
+      isOffline: isOffline ?? this.isOffline,
       lastUpdated: lastUpdated ?? this.lastUpdated,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
     );

@@ -2,8 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/di/locator.dart';
 import '../../../../core/error/app_error.dart';
-import '../../../../core/utils/app_log.dart';
-import '../../../../data/models/order.dart';
+import '../../../../core/utils/app_log.dart';import '../../../../data/models/order.dart';
 import '../../../../data/models/pagination_meta.dart';
 import '../../../../data/repositories/order_repository.dart';
 import '../../shell/providers/restaurant_provider.dart';
@@ -24,6 +23,7 @@ final ordersProvider =
 
 class OrdersNotifier extends StateNotifier<OrdersState> {
   final OrderRepository _repo;
+  bool _refreshingActive = false;
 
   OrdersNotifier(this._repo) : super(const OrdersState());
 
@@ -64,6 +64,7 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
         errorMessage: AppError.message(active.error!),
         history: history,
         isStale: false,
+        isOffline: active.offline,
       );
       return;
     }
@@ -74,6 +75,7 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
       history: history,
       truncatedStatuses: truncated,
       isStale: active.anyFailed,
+      isOffline: active.offline,
       lastUpdated: active.allFailed ? state.lastUpdated : DateTime.now(),
       clearError: true,
     );
@@ -166,6 +168,7 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
       history: pages,
       truncatedStatuses: truncated,
       isStale: active.anyFailed || (history?.anyFailed ?? false),
+      isOffline: active.offline,
       lastUpdated: active.allFailed ? state.lastUpdated : DateTime.now(),
       clearError: true,
     );
@@ -174,27 +177,36 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
   }
 
   Future<void> refreshActive() async {
+    if (_refreshingActive) return;
     final id = state.restaurantId;
     if (id == null) return;
+    _refreshingActive = true;
 
-    final active = await _fetchActive(id);
-    if (!mounted) return;
+    try {
+      final active = await _fetchActive(id);
+      if (!mounted) return;
 
-    if (active.allFailed && state.activeOrders.isEmpty) {
+      if (active.allFailed && state.activeOrders.isEmpty) {
+        state = state.copyWith(
+          status: OrdersLoadStatus.error,
+          errorMessage: AppError.message(active.error!),
+          isOffline: active.offline,
+        );
+        return;
+      }
+
       state = state.copyWith(
-        status: OrdersLoadStatus.error,
-        errorMessage: AppError.message(active.error!),
+        activeOrders: active.orders,
+        truncatedStatuses:
+            _withActiveTruncation(state.truncatedStatuses, active),
+        isStale: active.anyFailed,
+        isOffline: active.offline,
+        lastUpdated: active.allFailed ? state.lastUpdated : DateTime.now(),
+        clearError: true,
       );
-      return;
+    } finally {
+      _refreshingActive = false;
     }
-
-    state = state.copyWith(
-      activeOrders: active.orders,
-      truncatedStatuses: _withActiveTruncation(state.truncatedStatuses, active),
-      isStale: active.anyFailed,
-      lastUpdated: active.allFailed ? state.lastUpdated : DateTime.now(),
-      clearError: true,
-    );
   }
 
   Future<String?> loadMore() async {
@@ -377,6 +389,7 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
             .toSet(),
         allFailed: true,
         anyFailed: true,
+        offline: failures.any((outcome) => outcome.error is NetworkException),
         error: failures.first.error,
       );
     }
@@ -410,6 +423,7 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
       truncated: truncated,
       allFailed: false,
       anyFailed: failures.isNotEmpty,
+      offline: failures.any((outcome) => outcome.error is NetworkException),
       error: failures.isNotEmpty ? failures.first.error : null,
     );
   }
@@ -576,6 +590,7 @@ class _ActiveFetchResult {
   final Set<String> truncated;
   final bool allFailed;
   final bool anyFailed;
+  final bool offline;
   final Object? error;
 
   const _ActiveFetchResult({
@@ -583,6 +598,7 @@ class _ActiveFetchResult {
     required this.truncated,
     required this.allFailed,
     required this.anyFailed,
+    required this.offline,
     this.error,
   });
 }
