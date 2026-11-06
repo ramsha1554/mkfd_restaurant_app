@@ -23,6 +23,8 @@ abstract final class ApiEndpoints {
   static String orderPreparing(String orderId) => '/orders/$orderId/preparing';
   static String orderReady(String orderId) => '/orders/$orderId/ready';
   static String orderReject(String orderId) => '/orders/$orderId/reject';
+  static String orderVerifyPickup(String orderId) =>
+      '/orders/$orderId/verify-pickup';
 
   const ApiEndpoints._();
 }

@@ -2,15 +2,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/di/locator.dart';
 import '../../../../core/error/app_error.dart';
-import '../../../../core/utils/app_log.dart';import '../../../../data/models/order.dart';
+import '../../../../core/utils/app_log.dart';
+import '../../../../data/models/order.dart';
 import '../../../../data/models/pagination_meta.dart';
 import '../../../../data/repositories/order_repository.dart';
 import '../../shell/providers/restaurant_provider.dart';
 import '../models/order_filter.dart';
 import 'orders_state.dart';
 
-final ordersProvider =
-    StateNotifierProvider<OrdersNotifier, OrdersState>((ref) {
+final ordersProvider = StateNotifierProvider<OrdersNotifier, OrdersState>((
+  ref,
+) {
   final notifier = OrdersNotifier(locator<OrderRepository>());
   final initial = ref.read(restaurantProvider).restaurant?.id;
   if (initial != null) notifier.setRestaurantId(initial);
@@ -55,7 +57,9 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
     if (!mounted) return;
 
     final history = Map<OrderFilter, OrdersHistoryPage>.from(state.history);
-    history[OrderFilter.all] = all.toPage(previous: state.history[OrderFilter.all]);
+    history[OrderFilter.all] = all.toPage(
+      previous: state.history[OrderFilter.all],
+    );
     final truncated = _withActiveTruncation(state.truncatedStatuses, active);
 
     if (active.allFailed && state.activeOrders.isEmpty) {
@@ -197,8 +201,10 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
 
       state = state.copyWith(
         activeOrders: active.orders,
-        truncatedStatuses:
-            _withActiveTruncation(state.truncatedStatuses, active),
+        truncatedStatuses: _withActiveTruncation(
+          state.truncatedStatuses,
+          active,
+        ),
         isStale: active.anyFailed,
         isOffline: active.offline,
         lastUpdated: active.allFailed ? state.lastUpdated : DateTime.now(),
@@ -213,10 +219,7 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
     final value = state.filter;
     if (value != OrderFilter.all && value != OrderFilter.delivered) return null;
     final page = state.history[value];
-    if (page == null ||
-        !page.isLoaded ||
-        !page.hasMore ||
-        page.isLoadingMore) {
+    if (page == null || !page.isLoaded || !page.hasMore || page.isLoadingMore) {
       return null;
     }
     final id = state.restaurantId;
@@ -238,10 +241,7 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
       state = state.copyWith(
         history: {
           ...state.history,
-          value: page.copyWith(
-            isLoadingMore: false,
-            errorMessage: message,
-          ),
+          value: page.copyWith(isLoadingMore: false, errorMessage: message),
         },
       );
       return message;
@@ -287,11 +287,14 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
       _runAction(orderId, () => _repo.markReady(orderId));
 
   Future<String?> reject(String orderId, String reason) => _runAction(
-        orderId,
-        () => _repo.reject(orderId, reason),
-        removeOnSuccess: true,
-        reloadHistory: OrderFilter.cancelled,
-      );
+    orderId,
+    () => _repo.reject(orderId, reason),
+    removeOnSuccess: true,
+    reloadHistory: OrderFilter.cancelled,
+  );
+
+  Future<String?> verifyPickup(String orderId, String pickupCode) =>
+      _runAction(orderId, () => _repo.verifyPickup(orderId, pickupCode));
 
   Future<String?> _runAction(
     String orderId,
@@ -300,9 +303,7 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
     OrderFilter? reloadHistory,
   }) async {
     if (state.inFlightIds.contains(orderId)) return null;
-    state = state.copyWith(
-      inFlightIds: {...state.inFlightIds, orderId},
-    );
+    state = state.copyWith(inFlightIds: {...state.inFlightIds, orderId});
 
     try {
       final updated = await action();
@@ -406,8 +407,7 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
       }
     }
 
-    final failedStatuses =
-        failures.map((outcome) => outcome.status).toSet();
+    final failedStatuses = failures.map((outcome) => outcome.status).toSet();
     for (final order in previous) {
       final status = order.rawStatus?.toLowerCase();
       if (status != null && failedStatuses.contains(status)) {
@@ -460,7 +460,8 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
     } catch (e) {
       return _HistoryFetchResult(
         orders: previous?.orders ?? const [],
-        pagination: previous?.pagination ??
+        pagination:
+            previous?.pagination ??
             PaginationMeta(page: page, limit: 25, count: 0),
         truncated: const {},
         anyFailed: true,
@@ -497,7 +498,8 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
     if (successes.isEmpty) {
       return _HistoryFetchResult(
         orders: previous?.orders ?? const [],
-        pagination: previous?.pagination ??
+        pagination:
+            previous?.pagination ??
             const PaginationMeta(page: 1, limit: 25, count: 0),
         truncated: const {},
         anyFailed: true,
@@ -520,8 +522,7 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
       }
     }
 
-    final failedStatuses =
-        failures.map((outcome) => outcome.status).toSet();
+    final failedStatuses = failures.map((outcome) => outcome.status).toSet();
     for (final order in previous?.orders ?? const <OrderModel>[]) {
       final status = order.rawStatus?.toLowerCase();
       if (status != null && failedStatuses.contains(status)) {
@@ -559,15 +560,19 @@ class OrdersNotifier extends StateNotifier<OrdersState> {
   }
 
   static String _orderKey(OrderModel order) {
-    return order.id ?? order.orderNumber ?? '${order.rawStatus}_${order.hashCode}';
+    return order.id ??
+        order.orderNumber ??
+        '${order.rawStatus}_${order.hashCode}';
   }
 
   static List<OrderModel> _sort(Iterable<OrderModel> orders) {
     final list = orders.toList();
     list.sort((a, b) {
-      final aDate = DateTime.tryParse(a.createdAt ?? '') ??
+      final aDate =
+          DateTime.tryParse(a.createdAt ?? '') ??
           DateTime.fromMillisecondsSinceEpoch(0);
-      final bDate = DateTime.tryParse(b.createdAt ?? '') ??
+      final bDate =
+          DateTime.tryParse(b.createdAt ?? '') ??
           DateTime.fromMillisecondsSinceEpoch(0);
       return bDate.compareTo(aDate);
     });

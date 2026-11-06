@@ -144,31 +144,30 @@ void main() {
 
     expect(error, isNull);
     expect(repo.confirmCalls, 1);
-    expect(
-      notifier.state.activeOrders.single.rawStatus,
-      'confirmed',
-    );
+    expect(notifier.state.activeOrders.single.rawStatus, 'confirmed');
     expect(notifier.state.inFlightIds, isEmpty);
   });
 
-  test('action failure returns the exact API message and unlocks the card',
-      () async {
-    repo.setPage(
-      status: 'placed',
-      orders: [orderFixture(id: 'new-1', status: 'placed')],
-    );
-    await load();
+  test(
+    'action failure returns the exact API message and unlocks the card',
+    () async {
+      repo.setPage(
+        status: 'placed',
+        orders: [orderFixture(id: 'new-1', status: 'placed')],
+      );
+      await load();
 
-    repo.actionError = const ApiException(
-      statusCode: 400,
-      message: 'Cannot confirm order in its current state',
-    );
-    final error = await notifier.accept('new-1');
+      repo.actionError = const ApiException(
+        statusCode: 400,
+        message: 'Cannot confirm order in its current state',
+      );
+      final error = await notifier.accept('new-1');
 
-    expect(error, 'Cannot confirm order in its current state');
-    expect(notifier.state.inFlightIds, isEmpty);
-    expect(notifier.state.activeOrders.single.rawStatus, 'placed');
-  });
+      expect(error, 'Cannot confirm order in its current state');
+      expect(notifier.state.inFlightIds, isEmpty);
+      expect(notifier.state.activeOrders.single.rawStatus, 'placed');
+    },
+  );
 
   test('only one action per order can be in flight', () async {
     repo.setPage(
@@ -223,10 +222,7 @@ void main() {
     await notifier.selectFilter(OrderFilter.cancelled);
 
     repo.actionResult = orderFixture(id: 'new-1', status: 'rejected');
-    repo.setPage(
-      status: 'rejected',
-      orders: [repo.actionResult!],
-    );
+    repo.setPage(status: 'rejected', orders: [repo.actionResult!]);
 
     final error = await notifier.reject('new-1', 'Too busy');
 
@@ -234,9 +230,97 @@ void main() {
     expect(repo.lastRejectReason, 'Too busy');
     expect(notifier.state.activeOrders, isEmpty);
     expect(
-      notifier.state.history[OrderFilter.cancelled]?.orders
-          .any((order) => order.id == 'new-1'),
+      notifier.state.history[OrderFilter.cancelled]?.orders.any(
+        (order) => order.id == 'new-1',
+      ),
       isTrue,
     );
+  });
+
+  test(
+    'verifyPickup submits the driver code and applies the response',
+    () async {
+      repo.setPage(
+        status: 'ready',
+        orders: [orderFixture(id: 'ready-1', status: 'ready')],
+      );
+      await load();
+
+      repo.actionResult = orderFixture(id: 'ready-1', status: 'picked_up');
+      final error = await notifier.verifyPickup('ready-1', '4321');
+
+      expect(error, isNull);
+      expect(repo.verifyPickupCalls, 1);
+      expect(repo.lastPickupCode, '4321');
+      expect(notifier.state.activeOrders.single.rawStatus, 'picked_up');
+      expect(notifier.state.inFlightIds, isEmpty);
+    },
+  );
+
+  test(
+    'verifyPickup refreshes active orders when no order is returned',
+    () async {
+      repo.setPage(
+        status: 'ready',
+        orders: [orderFixture(id: 'ready-1', status: 'ready')],
+      );
+      await load();
+
+      repo.setPage(status: 'ready', orders: const []);
+      repo.setPage(
+        status: 'picked_up',
+        orders: [orderFixture(id: 'ready-1', status: 'on_the_way')],
+      );
+      final fetchesBefore = repo.fetchCalls;
+
+      final error = await notifier.verifyPickup('ready-1', '0000');
+
+      expect(error, isNull);
+      expect(repo.fetchCalls, greaterThan(fetchesBefore));
+      expect(notifier.state.activeOrders.single.rawStatus, 'on_the_way');
+    },
+  );
+
+  test(
+    'verifyPickup returns the exact API message and keeps the order',
+    () async {
+      repo.setPage(
+        status: 'ready',
+        orders: [orderFixture(id: 'ready-1', status: 'ready')],
+      );
+      await load();
+
+      repo.actionError = const ApiException(
+        statusCode: 400,
+        message: 'Invalid pickup code',
+      );
+      final error = await notifier.verifyPickup('ready-1', '1111');
+
+      expect(error, 'Invalid pickup code');
+      expect(notifier.state.activeOrders.single.rawStatus, 'ready');
+      expect(notifier.state.inFlightIds, isEmpty);
+    },
+  );
+
+  test('only one verifyPickup can be in flight per order', () async {
+    repo.setPage(
+      status: 'ready',
+      orders: [orderFixture(id: 'ready-1', status: 'ready')],
+    );
+    await load();
+
+    repo.actionResult = orderFixture(id: 'ready-1', status: 'picked_up');
+    repo.actionGate = Completer<void>();
+
+    final first = notifier.verifyPickup('ready-1', '4321');
+    expect(notifier.state.inFlightIds, contains('ready-1'));
+
+    final second = await notifier.verifyPickup('ready-1', '9999');
+    expect(second, isNull);
+    expect(repo.verifyPickupCalls, 1);
+
+    repo.actionGate!.complete();
+    await first;
+    expect(notifier.state.inFlightIds, isEmpty);
   });
 }

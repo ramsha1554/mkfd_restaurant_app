@@ -57,7 +57,9 @@ class FakeOrderRepository implements OrderRepository {
   Completer<void>? actionGate;
   int fetchCalls = 0;
   int confirmCalls = 0;
+  int verifyPickupCalls = 0;
   String? lastRejectReason;
+  String? lastPickupCode;
 
   String key(String? status, int page) => '${status ?? 'all'}|$page';
 
@@ -69,7 +71,8 @@ class FakeOrderRepository implements OrderRepository {
   }) {
     pages[key(status, page)] = OrdersPage(
       orders: orders,
-      pagination: pagination ??
+      pagination:
+          pagination ??
           PaginationMeta(page: page, limit: 25, total: orders.length),
     );
   }
@@ -106,6 +109,13 @@ class FakeOrderRepository implements OrderRepository {
   @override
   Future<OrderModel?> reject(String orderId, String reason) async {
     lastRejectReason = reason;
+    return _action();
+  }
+
+  @override
+  Future<OrderModel?> verifyPickup(String orderId, String pickupCode) async {
+    verifyPickupCalls++;
+    lastPickupCode = pickupCode;
     return _action();
   }
 

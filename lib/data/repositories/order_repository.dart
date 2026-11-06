@@ -56,15 +56,16 @@ class OrderRepository {
   Future<OrderModel?> markReady(String orderId) =>
       _action(ApiEndpoints.orderReady(orderId));
 
-  Future<OrderModel?> reject(String orderId, String reason) => _action(
-        ApiEndpoints.orderReject(orderId),
-        data: {'reason': reason},
+  Future<OrderModel?> reject(String orderId, String reason) =>
+      _action(ApiEndpoints.orderReject(orderId), data: {'reason': reason});
+
+  Future<OrderModel?> verifyPickup(String orderId, String pickupCode) =>
+      _action(
+        ApiEndpoints.orderVerifyPickup(orderId),
+        data: {'pickupCode': pickupCode},
       );
 
-  Future<OrderModel?> _action(
-    String path, {
-    Map<String, dynamic>? data,
-  }) async {
+  Future<OrderModel?> _action(String path, {Map<String, dynamic>? data}) async {
     try {
       final envelope = await _client.patch(path, data: data);
       return _parseOrder(envelope['data']);
