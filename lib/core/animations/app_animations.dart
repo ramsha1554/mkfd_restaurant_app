@@ -55,6 +55,7 @@ class SlideIn extends StatefulWidget {
   final Duration duration;
   final Curve curve;
   final Offset beginOffset;
+  final Duration delay;
 
   const SlideIn({
     super.key,
@@ -62,6 +63,7 @@ class SlideIn extends StatefulWidget {
     this.duration = AppDurations.medium,
     this.curve = AppCurves.entrance,
     this.beginOffset = const Offset(0, 0.08),
+    this.delay = Duration.zero,
   });
 
   const SlideIn.fromBottom({
@@ -69,6 +71,7 @@ class SlideIn extends StatefulWidget {
     required this.child,
     this.duration = AppDurations.medium,
     this.curve = AppCurves.entrance,
+    this.delay = Duration.zero,
   }) : beginOffset = const Offset(0, 0.12);
 
   const SlideIn.fromRight({
@@ -76,6 +79,7 @@ class SlideIn extends StatefulWidget {
     required this.child,
     this.duration = AppDurations.medium,
     this.curve = AppCurves.entrance,
+    this.delay = Duration.zero,
   }) : beginOffset = const Offset(0.12, 0);
 
   @override
@@ -97,7 +101,9 @@ class _SlideInState extends State<SlideIn>
     _opacity = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _c, curve: widget.curve),
     );
-    _c.forward();
+    Future.delayed(widget.delay, () {
+      if (mounted) _c.forward();
+    });
   }
 
   @override

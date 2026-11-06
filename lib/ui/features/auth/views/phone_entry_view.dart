@@ -132,11 +132,11 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(_heading, style: AppTextStyles.heading),
+                      Text(_heading, style: AppTextStyles.h1),
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         _subHeading,
-                        style: AppTextStyles.bodySmall,
+                        style: AppTextStyles.bodySecondary,
                       ),
                     ],
                   ),
@@ -146,7 +146,7 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Phone number *', style: AppTextStyles.bodySmall),
+                      Text('Phone number *', style: AppTextStyles.bodySecondary),
                       const SizedBox(height: AppSpacing.sm),
                       Row(
                         children: [
@@ -159,7 +159,7 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
                             child: TextFormField(
                               controller: _phoneCtrl,
                               keyboardType: TextInputType.phone,
-                              style: AppTextStyles.bodyLarge,
+                              style: AppTextStyles.body,
                               decoration: const InputDecoration(
                                 hintText: '7700 900000',
                                 filled: true,
@@ -182,7 +182,7 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
                       const SizedBox(height: AppSpacing.sm),
                       Text(
                         'We will send a 6-digit code. Standard rates apply.',
-                        style: AppTextStyles.bodySmall
+                        style: AppTextStyles.bodySecondary
                             .copyWith(color: AppColors.textHint),
                       ),
                     ],
@@ -203,7 +203,7 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
                         borderRadius: AppRadius.rSm,
                       ),
                       padding: AppSpacing.mdAll,
-                      textStyle: AppTextStyles.bodyLarge
+                      textStyle: AppTextStyles.body
                           .copyWith(color: AppColors.surface),
                     ),
                     child: auth.isLoading
@@ -217,7 +217,7 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
                           )
                         : Text(
                             'Continue',
-                            style: AppTextStyles.bodyLarge
+                            style: AppTextStyles.body
                                 .copyWith(color: AppColors.surface),
                           ),
                   ),
@@ -240,17 +240,17 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
       child: RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
-          style: AppTextStyles.bodySmall,
+          style: AppTextStyles.bodySecondary,
           children: [
             TextSpan(
               text: isSignup
                   ? 'Already have an account? '
                   : 'Don\'t have an account? ',
-              style: AppTextStyles.bodySmall,
+              style: AppTextStyles.bodySecondary,
             ),
             TextSpan(
               text: isSignup ? 'Log in' : 'Create account',
-              style: AppTextStyles.bodySmall.copyWith(
+              style: AppTextStyles.bodySecondary.copyWith(
                 color: AppColors.primary,
                 fontWeight: FontWeight.w700,
               ),
@@ -266,7 +266,7 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: AppTextStyles.bodySmall.copyWith(
+        style: AppTextStyles.bodySecondary.copyWith(
           color: AppColors.textSecondary,
           height: 1.4,
         ),
@@ -274,7 +274,7 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
           const TextSpan(text: 'By continuing, you agree to our '),
           TextSpan(
             text: 'Terms & Conditions',
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.bodySecondary.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w600,
             ),
@@ -283,7 +283,7 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
           const TextSpan(text: ' and '),
           TextSpan(
             text: 'Privacy Policy',
-            style: AppTextStyles.bodySmall.copyWith(
+            style: AppTextStyles.bodySecondary.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w600,
             ),

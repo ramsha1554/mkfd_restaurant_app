@@ -22,7 +22,7 @@ class WelcomeView extends StatelessWidget {
               const Spacer(),
               Column(
                 children: [
-                  AppFadeIn(
+                  FadeIn(
                     duration: const Duration(milliseconds: 600),
                     child: Container(
                       width: 250,
@@ -58,8 +58,7 @@ class WelcomeView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  AppSlideIn(
-                    direction: AxisDirection.up,
+                  SlideIn.fromBottom(
                     delay: const Duration(milliseconds: 200),
                     child: Column(
                       children: [
@@ -88,8 +87,7 @@ class WelcomeView extends StatelessWidget {
                 ],
               ),
               const Spacer(),
-              AppSlideIn(
-                direction: AxisDirection.up,
+              SlideIn.fromBottom(
                 delay: const Duration(milliseconds: 250),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,

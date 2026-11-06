@@ -369,7 +369,7 @@ class _CountryPickerSheetState extends State<_CountryPickerSheet> {
                                 const SizedBox(height: AppSpacing.sm),
                                 Text(
                                   'No results for "$_query"',
-                                  style: AppTextStyles.bodySmall,
+                                  style: AppTextStyles.bodySecondary,
                                   textAlign: TextAlign.center,
                                 ),
                               ],
