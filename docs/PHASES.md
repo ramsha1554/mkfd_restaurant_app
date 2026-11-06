@@ -95,7 +95,50 @@ Living status, decisions and open questions — updated at the end of every phas
 
 ## Phase 2 — Restaurant Registration & Compliance Documents — Planned
 
-## Phase 3 — App Shell & Store Controls — Planned
+## Phase 3 — App Shell & Store Controls — ✅ Done
+
+**Scope delivered:** App shell with four-tab bottom navigation (Orders, Menu, Earnings, More), Orders screen with restaurant header + store open/Busy switch rows + pull-to-refresh + empty state, placeholders for the remaining tabs, restaurant data layer (`GET /restaurants/my-restaurant`, `PATCH /restaurants/:id/status`), post-login gate that routes approved owners to the shell and shows pending/rejected/no-restaurant/error states, logout from More + gate, and Phase 3 widget/provider tests. Live connection badge was built but is not shown until Phase 5.
+
+**Files added / changed:**
+- `lib/ui/core/widgets/app_bottom_nav.dart` — stroke icons, selected `primaryText` + 700 label, label 12/500 base, badge support, 48+ targets
+- `lib/ui/core/widgets/app_switch_row.dart` — title + caption, 44×24 switch, `locked` state, 48 min height, reduce-motion aware
+- `lib/ui/core/widgets/app_live_badge.dart` — tiny green `Live` / muted `Offline` badge with pulsing dot (built, not shown until Phase 5)
+- `lib/data/models/restaurant.dart` (+ `.freezed.dart`, `.g.dart`) — `RestaurantModel`, `RestaurantAddress`, `RestaurantLocation`; `_id` → `id`; nullable fields
+- `lib/data/repositories/restaurant_repository.dart` — fetch my restaurant (404 → none), defensive status PATCH parse
+- `lib/data/api/api_endpoints.dart` — `myRestaurant`, `restaurantStatus(id)`
+- `lib/core/di/locator.dart` — registers `RestaurantRepository`
+- `lib/ui/features/shell/providers/restaurant_state.dart`, `restaurant_provider.dart` — load/refresh, optimistic `setOpen`/`setBusy` with rollback
+- `lib/ui/features/shell/providers/shell_provider.dart` — selected tab index
+- `lib/ui/features/shell/views/app_shell.dart` — `IndexedStack`, bottom nav, back-to-Orders behaviour
+- `lib/ui/features/shell/views/orders_tab_view.dart` — header block, store controls card, pull-to-refresh, empty state, skeleton
+- `lib/ui/features/shell/views/menu_tab_view.dart`, `earnings_tab_view.dart`, `more_tab_view.dart` — Phase 4/7/8 placeholders; More has destructive logout confirm + app version
+- `lib/ui/features/shell/widgets/store_controls_card.dart` — Store open + Busy switches, divider, close-store confirmation, snackbar errors
+- `lib/ui/features/shell/views/restaurant_gate_view.dart` — approved → shell; none/pending/rejected/unknown/error placeholders; skeleton while loading; logout
+- `lib/core/constants/app_config.dart` — `appVersion = '1.0.0'` (no new dependency)
+- `lib/ui/features/splash/views/splash_view.dart` — routes to gate instead of the removed placeholder
+- `lib/ui/features/auth/views/otp_view.dart` — routes to gate after verification
+- `lib/ui/features/auth/views/signed_in_view.dart` — deleted (replaced by gate/shell)
+- `test/ui/app_bottom_nav_test.dart`, `app_switch_row_test.dart`, `app_live_badge_test.dart`, `restaurant_provider_test.dart` — Phase 3 tests
+- `test/widget_test.dart` — stale Welcome branding assertions updated to current copy; pumped entrance timers
+
+**Decisions:**
+- Gate treats `pending` / `rejected` as explicit placeholders; `none` (404) as “set up restaurant”; any other status as awaiting approval; only `approved` (case-insensitive) enters the shell. Phase 2 registration flows remain planned, so those placeholders are informational for now.
+- Turning “Store open” off asks for confirmation; turning Busy on/off does not. Both toggles update optimistically, lock while in flight, and roll back on failure with an `AppSnackbar`.
+- Pull-to-refresh reloads silently (keeps current dashboard on failure) and shows a snackbar; errors never replace a loaded restaurant with an error screen.
+- Shell tab index lives in `ShellNotifier`; `IndexedStack` preserves each tab, and system back on any tab returns to Orders before leaving the shell.
+- App version is a compile-time constant in `AppConfig`; `package_info_plus` is intentionally not added.
+- `docs/UI_STANDARDS.md` is referenced but missing from the repo; components were built from `design/SCREENS.md`, `design/stitch/` and existing tokens.
+- Snapped to the token scale: live badge padding 10×6 → 8×4, dot/gap 8/6 → 8/4; store-controls `AppCard` padding 14 → 12; nav labels use `AppTextStyles.caption` 12/500; switch row caption uses `AppTextStyles.bodySecondary`.
+- Phase 1 `splash_view.dart` and `otp_view.dart` were touched only to route to the new gate; `signed_in_view.dart` was removed.
+
+**Open questions / assumptions:**
+- `PATCH /restaurants/:id/status` response shape is still unconfirmed. The repository parses `data` as a restaurant when present; on an ack-only body it returns `null` and the notifier keeps the optimistic value. Confirm the real shape and whether Busy is auto-cleared server-side.
+- `GET /restaurants/my-restaurant` real sample not captured (no backend available this phase). Model follows the contract; nested `address`/`location` remain nullable.
+- `isBusy` is documented for both the restaurant and the status endpoint, so Busy is shown. Confirm every restaurant response actually includes it.
+- Status values beyond `pending` / `approved` / `rejected` are treated as awaiting approval.
+- `docs/UI_STANDARDS.md` must be restored or the reference removed from `AGENTS.md`.
+
+**Verification:** see Phase 3 report.
 
 ## Phase 4 — Orders (REST only) — Planned
 
@@ -111,14 +154,14 @@ Living status, decisions and open questions — updated at the end of every phas
 
 ## Phase 10 — Production-Readiness Audit & Release Prep — Planned
 
-## Phase 0.5-A � Tokens & Theme
+## Phase 0.5-A — Tokens & Theme
 - Files changed: pubspec.yaml, assets/fonts/*, lib/ui/core/theme/app_colors.dart, lib/ui/core/theme/app_text_styles.dart, lib/ui/core/theme/app_theme.dart
 - Decisions: Replaced tokens with MK Foods standard; removed google_fonts; added DM Sans/BricolageGrotesque bundled fonts; statusColor replaced by statusMeta returning (label, fg, bg); theme rebuilt to Material 3 per spec.
 - Old?new style-name mapping: heading?h1/h2/display as appropriate (AppTextStyles.heading removed), bodyLarge removed ? use button/body/cardTitle per context, bodySmall removed ? use bodySecondary/caption, displaySecondary/headingSecondary/bodyHint/bodySmallHint/captionPrimary removed (use color overrides), cardFill removed (use cardBackground).
 - Status: Done
 
 
-## Phase 0.5-B � Core widgets
+## Phase 0.5-B — Core widgets
 - Files changed: lib/core/animations/app_scale_tap.dart, lib/ui/core/widgets/primary_button.dart, lib/ui/core/widgets/secondary_button.dart, lib/ui/core/widgets/app_card.dart, lib/ui/core/widgets/app_badge.dart, lib/ui/core/widgets/app_chip.dart, lib/ui/core/widgets/app_app_bar.dart, lib/ui/core/widgets/app_bottom_sheet.dart, lib/ui/core/widgets/app_dialog.dart, lib/ui/core/widgets/app_snackbar.dart, lib/ui/core/widgets/app_states.dart, lib/ui/core/widgets/app_text_field.dart
 - API changes: Added AppPrimaryButton/AppOutlinedButton/AppScaleTap/AppStatusBadge/AppFilterChip/showAppSheet/showAppConfirmDialog/showAppMessageDialog/AppSnackbar (overlay top toast), AppIconBubble/AppLoading/AppSkeleton/AppEmptyState/AppErrorState/AppTextField; kept PrimaryButton/SecondaryButton aliases.
 - Call-site edits: Updated to new APIs where used; existing code remains compatible via aliases.
