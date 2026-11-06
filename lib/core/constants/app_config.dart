@@ -26,6 +26,7 @@ abstract final class AppConfig {
   }
 
   static const String appName = 'MK Foods Restaurant';
+  static const String appVersion = '1.0.0';
   static const String packageName = 'mk_food_restaurant';
   static const String bundleId = 'com.mokshasolutions.mkfoodsrestaurant';
   static const String logName = 'MKFoodsRestaurant';

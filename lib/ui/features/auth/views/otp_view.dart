@@ -8,9 +8,9 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/app_snackbar.dart';
 import '../../../core/widgets/primary_button.dart';
+import '../../shell/views/restaurant_gate_view.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/otp_code_field.dart';
-import 'signed_in_view.dart';
 
 class OtpView extends ConsumerStatefulWidget {
   final String phone;
@@ -76,7 +76,7 @@ class _OtpViewState extends ConsumerState<OtpView> {
     if (!mounted) return;
     if (ok) {
       Navigator.of(context).pushAndRemoveUntil(
-        slideRightFadeRoute(const SignedInView()),
+        slideRightFadeRoute(const RestaurantGateView()),
         (r) => false,
       );
     } else {

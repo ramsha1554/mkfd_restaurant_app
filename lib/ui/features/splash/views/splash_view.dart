@@ -7,8 +7,8 @@ import '../../../../core/utils/navigation.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../auth/providers/auth_state.dart';
-import '../../auth/views/signed_in_view.dart';
 import '../../auth/views/welcome_view.dart';
+import '../../shell/views/restaurant_gate_view.dart';
 
 class SplashView extends ConsumerStatefulWidget {
   const SplashView({super.key});
@@ -36,7 +36,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
 
     if (auth.status == AuthStatus.authenticated) {
       Navigator.of(context).pushAndRemoveUntil(
-        slideRightFadeRoute(const SignedInView()),
+        slideRightFadeRoute(const RestaurantGateView()),
         (r) => false,
       );
     } else {

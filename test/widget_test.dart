@@ -30,8 +30,9 @@ void main() {
 
   testWidgets('Welcome shows branding', (tester) async {
     await tester.pumpWidget(const MaterialApp(home: WelcomeView()));
-    expect(find.text('MK Foods'), findsOneWidget);
-    expect(find.text('Restaurant'), findsOneWidget);
-    expect(find.text('Get started'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 1));
+    expect(find.text('Run Your Kitchen'), findsOneWidget);
+    expect(find.text('From Your Pocket'), findsOneWidget);
+    expect(find.text('Get Started'), findsOneWidget);
   });
 }
