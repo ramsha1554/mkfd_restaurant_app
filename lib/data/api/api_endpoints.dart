@@ -10,5 +10,10 @@ abstract final class ApiEndpoints {
   static const String updateMe = '/users/me';
   static const String fcmToken = '/users/me/fcm-token';
 
+  // Restaurant
+  static const String myRestaurant = '/restaurants/my-restaurant';
+
+  static String restaurantStatus(String id) => '/restaurants/$id/status';
+
   const ApiEndpoints._();
 }
