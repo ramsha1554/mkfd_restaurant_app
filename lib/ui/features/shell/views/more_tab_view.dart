@@ -13,6 +13,7 @@ import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_dialog.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../auth/views/welcome_view.dart';
+import '../../orders/providers/orders_provider.dart';
 import '../providers/restaurant_provider.dart';
 import '../providers/shell_provider.dart';
 
@@ -31,6 +32,7 @@ class MoreTabView extends ConsumerWidget {
     if (confirmed != true || !context.mounted) return;
 
     ref.invalidate(restaurantProvider);
+    ref.invalidate(ordersProvider);
     ref.invalidate(shellProvider);
     await ref.read(authProvider.notifier).logout();
     if (!context.mounted) return;

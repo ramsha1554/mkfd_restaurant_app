@@ -5,12 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/animations/app_durations.dart';
 import '../../../../core/utils/app_format.dart';
+import '../../../../data/models/order.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/theme/app_radius.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/app_app_bar.dart';
+import '../../../core/widgets/app_bottom_sheet.dart';
 import '../../../core/widgets/app_info_banner.dart';
 import '../../../core/widgets/app_offline_banner.dart';
 import '../../../core/widgets/app_snackbar.dart';
@@ -24,6 +26,7 @@ import '../providers/orders_provider.dart';
 import '../providers/orders_state.dart';
 import '../widgets/app_order_card.dart';
 import '../widgets/order_filter_bar.dart';
+import '../widgets/reject_order_sheet.dart';
 
 class OrdersTabView extends ConsumerStatefulWidget {
   const OrdersTabView({super.key});
@@ -105,6 +108,19 @@ class _OrdersTabViewState extends ConsumerState<OrdersTabView>
     final error = await action();
     if (!mounted || error == null) return;
     AppSnackbar.showError(context, error);
+  }
+
+  Future<void> _reject(OrderModel order) async {
+    final id = order.id;
+    if (id == null || ref.read(ordersProvider).isOffline) return;
+    await showAppSheet<bool>(
+      context: context,
+      title: 'Reject this order?',
+      builder: (_) => RejectOrderSheet(
+        onReject: (reason) =>
+            ref.read(ordersProvider.notifier).reject(id, reason),
+      ),
+    );
   }
 
   @override
@@ -224,6 +240,8 @@ class _OrdersTabViewState extends ConsumerState<OrdersTabView>
                     onAccept: order.id == null
                         ? null
                         : () => _run(() => notifier.accept(order.id!)),
+                    onReject:
+                        order.id == null ? null : () => _reject(order),
                     onStartPreparing: order.id == null
                         ? null
                         : () =>
