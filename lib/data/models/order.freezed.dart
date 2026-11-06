@@ -1785,6 +1785,9 @@ OrderAddress _$OrderAddressFromJson(Map<String, dynamic> json) {
 mixin _$OrderAddress {
   String? get label => throw _privateConstructorUsedError;
   String? get fullAddress => throw _privateConstructorUsedError;
+  String? get street => throw _privateConstructorUsedError;
+  String? get city => throw _privateConstructorUsedError;
+  String? get postcode => throw _privateConstructorUsedError;
 
   /// Serializes this OrderAddress to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1803,7 +1806,13 @@ abstract class $OrderAddressCopyWith<$Res> {
     $Res Function(OrderAddress) then,
   ) = _$OrderAddressCopyWithImpl<$Res, OrderAddress>;
   @useResult
-  $Res call({String? label, String? fullAddress});
+  $Res call({
+    String? label,
+    String? fullAddress,
+    String? street,
+    String? city,
+    String? postcode,
+  });
 }
 
 /// @nodoc
@@ -1820,7 +1829,13 @@ class _$OrderAddressCopyWithImpl<$Res, $Val extends OrderAddress>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? label = freezed, Object? fullAddress = freezed}) {
+  $Res call({
+    Object? label = freezed,
+    Object? fullAddress = freezed,
+    Object? street = freezed,
+    Object? city = freezed,
+    Object? postcode = freezed,
+  }) {
     return _then(
       _value.copyWith(
             label: freezed == label
@@ -1830,6 +1845,18 @@ class _$OrderAddressCopyWithImpl<$Res, $Val extends OrderAddress>
             fullAddress: freezed == fullAddress
                 ? _value.fullAddress
                 : fullAddress // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            street: freezed == street
+                ? _value.street
+                : street // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            city: freezed == city
+                ? _value.city
+                : city // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            postcode: freezed == postcode
+                ? _value.postcode
+                : postcode // ignore: cast_nullable_to_non_nullable
                       as String?,
           )
           as $Val,
@@ -1846,7 +1873,13 @@ abstract class _$$OrderAddressImplCopyWith<$Res>
   ) = __$$OrderAddressImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? label, String? fullAddress});
+  $Res call({
+    String? label,
+    String? fullAddress,
+    String? street,
+    String? city,
+    String? postcode,
+  });
 }
 
 /// @nodoc
@@ -1862,7 +1895,13 @@ class __$$OrderAddressImplCopyWithImpl<$Res>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({Object? label = freezed, Object? fullAddress = freezed}) {
+  $Res call({
+    Object? label = freezed,
+    Object? fullAddress = freezed,
+    Object? street = freezed,
+    Object? city = freezed,
+    Object? postcode = freezed,
+  }) {
     return _then(
       _$OrderAddressImpl(
         label: freezed == label
@@ -1873,6 +1912,18 @@ class __$$OrderAddressImplCopyWithImpl<$Res>
             ? _value.fullAddress
             : fullAddress // ignore: cast_nullable_to_non_nullable
                   as String?,
+        street: freezed == street
+            ? _value.street
+            : street // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        city: freezed == city
+            ? _value.city
+            : city // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        postcode: freezed == postcode
+            ? _value.postcode
+            : postcode // ignore: cast_nullable_to_non_nullable
+                  as String?,
       ),
     );
   }
@@ -1881,7 +1932,13 @@ class __$$OrderAddressImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$OrderAddressImpl implements _OrderAddress {
-  const _$OrderAddressImpl({this.label, this.fullAddress});
+  const _$OrderAddressImpl({
+    this.label,
+    this.fullAddress,
+    this.street,
+    this.city,
+    this.postcode,
+  });
 
   factory _$OrderAddressImpl.fromJson(Map<String, dynamic> json) =>
       _$$OrderAddressImplFromJson(json);
@@ -1890,10 +1947,16 @@ class _$OrderAddressImpl implements _OrderAddress {
   final String? label;
   @override
   final String? fullAddress;
+  @override
+  final String? street;
+  @override
+  final String? city;
+  @override
+  final String? postcode;
 
   @override
   String toString() {
-    return 'OrderAddress(label: $label, fullAddress: $fullAddress)';
+    return 'OrderAddress(label: $label, fullAddress: $fullAddress, street: $street, city: $city, postcode: $postcode)';
   }
 
   @override
@@ -1903,12 +1966,17 @@ class _$OrderAddressImpl implements _OrderAddress {
             other is _$OrderAddressImpl &&
             (identical(other.label, label) || other.label == label) &&
             (identical(other.fullAddress, fullAddress) ||
-                other.fullAddress == fullAddress));
+                other.fullAddress == fullAddress) &&
+            (identical(other.street, street) || other.street == street) &&
+            (identical(other.city, city) || other.city == city) &&
+            (identical(other.postcode, postcode) ||
+                other.postcode == postcode));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, label, fullAddress);
+  int get hashCode =>
+      Object.hash(runtimeType, label, fullAddress, street, city, postcode);
 
   /// Create a copy of OrderAddress
   /// with the given fields replaced by the non-null parameter values.
@@ -1928,6 +1996,9 @@ abstract class _OrderAddress implements OrderAddress {
   const factory _OrderAddress({
     final String? label,
     final String? fullAddress,
+    final String? street,
+    final String? city,
+    final String? postcode,
   }) = _$OrderAddressImpl;
 
   factory _OrderAddress.fromJson(Map<String, dynamic> json) =
@@ -1937,6 +2008,12 @@ abstract class _OrderAddress implements OrderAddress {
   String? get label;
   @override
   String? get fullAddress;
+  @override
+  String? get street;
+  @override
+  String? get city;
+  @override
+  String? get postcode;
 
   /// Create a copy of OrderAddress
   /// with the given fields replaced by the non-null parameter values.

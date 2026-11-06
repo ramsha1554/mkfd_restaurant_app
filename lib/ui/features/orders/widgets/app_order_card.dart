@@ -21,6 +21,7 @@ class AppOrderCard extends StatelessWidget {
   final VoidCallback? onReject;
   final VoidCallback? onStartPreparing;
   final VoidCallback? onMarkReady;
+  final VoidCallback? onTap;
 
   const AppOrderCard({
     super.key,
@@ -31,6 +32,7 @@ class AppOrderCard extends StatelessWidget {
     this.onReject,
     this.onStartPreparing,
     this.onMarkReady,
+    this.onTap,
   });
 
   @override
@@ -43,6 +45,7 @@ class AppOrderCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacing.lg),
       borderColor: isNew ? AppColors.primary : null,
       borderWidth: isNew ? 1.5 : 1,
+      onTap: onTap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -122,8 +125,7 @@ class AppOrderCard extends StatelessWidget {
     final initial = parts.isEmpty
         ? 'C'
         : parts.last.substring(0, 1).toUpperCase();
-    final display =
-        parts.length > 1 ? '$first $initial.' : first;
+    final display = parts.length > 1 ? '$first $initial.' : first;
 
     return Row(
       children: [
@@ -215,10 +217,7 @@ class AppOrderCard extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.xs),
         ],
-        Text(
-          delivered ? 'PAYOUT' : 'SUBTOTAL',
-          style: AppTextStyles.eyebrow,
-        ),
+        Text(delivered ? 'PAYOUT' : 'SUBTOTAL', style: AppTextStyles.eyebrow),
         const Spacer(),
         Text(
           AppFormat.currency(delivered ? money.payout : money.subtotal),
@@ -239,44 +238,44 @@ class AppOrderCard extends StatelessWidget {
   Widget _actions() {
     return switch (order.status) {
       OrderStatus.placed => Row(
-          children: [
+        children: [
+          Expanded(
+            flex: 3,
+            child: AppPrimaryButton(
+              label: 'Accept',
+              icon: Icons.check_circle_outline,
+              height: 44,
+              isLoading: busy,
+              onPressed: enabled && !busy ? onAccept : null,
+            ),
+          ),
+          if (onReject != null) ...[
+            const SizedBox(width: AppSpacing.sm),
             Expanded(
-              flex: 3,
-              child: AppPrimaryButton(
-                label: 'Accept',
-                icon: Icons.check_circle_outline,
+              flex: 2,
+              child: AppOutlinedButton(
+                label: 'Reject',
                 height: 44,
-                isLoading: busy,
-                onPressed: enabled && !busy ? onAccept : null,
+                onPressed: enabled && !busy ? onReject : null,
               ),
             ),
-            if (onReject != null) ...[
-              const SizedBox(width: AppSpacing.sm),
-              Expanded(
-                flex: 2,
-                child: AppOutlinedButton(
-                  label: 'Reject',
-                  height: 44,
-                  onPressed: enabled && !busy ? onReject : null,
-                ),
-              ),
-            ],
           ],
-        ),
+        ],
+      ),
       OrderStatus.confirmed => AppPrimaryButton(
-          label: 'Start preparing',
-          icon: Icons.restaurant_outlined,
-          height: 44,
-          isLoading: busy,
-          onPressed: enabled && !busy ? onStartPreparing : null,
-        ),
+        label: 'Start preparing',
+        icon: Icons.restaurant_outlined,
+        height: 44,
+        isLoading: busy,
+        onPressed: enabled && !busy ? onStartPreparing : null,
+      ),
       OrderStatus.preparing => AppPrimaryButton(
-          label: 'Mark as ready',
-          icon: Icons.room_service_outlined,
-          height: 44,
-          isLoading: busy,
-          onPressed: enabled && !busy ? onMarkReady : null,
-        ),
+        label: 'Mark as ready',
+        icon: Icons.room_service_outlined,
+        height: 44,
+        isLoading: busy,
+        onPressed: enabled && !busy ? onMarkReady : null,
+      ),
       _ => const SizedBox.shrink(),
     };
   }

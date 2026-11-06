@@ -16,6 +16,8 @@ OrderStatus orderStatusFrom(String status) {
     'delivered' => OrderStatus.delivered,
     'cancelled' => OrderStatus.cancelled,
     'rejected' => OrderStatus.rejected,
+    'expired' => OrderStatus.expired,
+    'failed' => OrderStatus.failed,
     _ => OrderStatus.unknown,
   };
 }
@@ -25,27 +27,50 @@ OrderModel orderFixture({
   required String status,
   String? createdAt,
   String? customerName = 'Sample Customer',
+  String? customerPhone,
+  OrderAddress? deliveryAddress,
   String? driverName,
+  String? driverPhone,
+  bool? driverWaiting,
   double subtotal = 10,
+  double? commissionRate,
+  double? commissionAmount,
+  String? paymentMethod,
+  String? paymentStatus,
+  String? specialInstructions,
+  String? acceptanceExpiresAt,
+  List<OrderItem>? items,
 }) {
   return OrderModel(
     id: id,
     orderNumber: id,
-    customer: OrderCustomer(name: customerName),
-    driver: driverName == null ? null : OrderDriver(name: driverName),
-    items: [
-      OrderItem(
-        name: 'Item',
-        price: subtotal,
-        quantity: 1,
-        itemTotal: subtotal,
-      ),
-    ],
+    customer: OrderCustomer(name: customerName, phone: customerPhone),
+    driver: driverName == null && driverPhone == null
+        ? null
+        : OrderDriver(name: driverName, phone: driverPhone),
+    deliveryAddress: deliveryAddress,
+    items:
+        items ??
+        [
+          OrderItem(
+            name: 'Item',
+            price: subtotal,
+            quantity: 1,
+            itemTotal: subtotal,
+          ),
+        ],
     subtotal: subtotal,
     total: subtotal,
+    commissionRate: commissionRate,
+    commissionAmount: commissionAmount,
+    paymentMethod: paymentMethod,
+    paymentStatus: paymentStatus,
+    specialInstructions: specialInstructions,
+    acceptanceExpiresAt: acceptanceExpiresAt,
     status: orderStatusFrom(status),
     rawStatus: status,
     createdAt: createdAt,
+    driverWaiting: driverWaiting,
   );
 }
 

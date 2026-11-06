@@ -133,6 +133,9 @@ class OrderAddress with _$OrderAddress {
   const factory OrderAddress({
     String? label,
     String? fullAddress,
+    String? street,
+    String? city,
+    String? postcode,
   }) = _OrderAddress;
 
   factory OrderAddress.fromJson(Map<String, dynamic> json) =>
@@ -192,7 +195,8 @@ Map<String, dynamic>? _normalizeCustomer(Map<String, dynamic> json) {
   final user = _asMap(json['user']);
   final raw = _asMap(json['customer']) ?? user;
   final name = _string(raw?['name']) ?? _string(json['customerName']);
-  final phone = _string(raw?['phone']) ??
+  final phone =
+      _string(raw?['phone']) ??
       _string(json['customerPhone']) ??
       _string(user?['phone']);
   final id = _string(raw?['_id']) ?? _string(raw?['id']);
@@ -207,13 +211,16 @@ Map<String, dynamic>? _normalizeDriver(Map<String, dynamic> json) {
     raw = <String, dynamic>{'_id': driverRaw.trim()};
   }
   final user = _asMap(raw?['user']);
-  final id = _string(raw?['_id']) ??
+  final id =
+      _string(raw?['_id']) ??
       _string(raw?['id']) ??
       (driverRaw is String ? _string(driverRaw) : null);
-  final name = _string(raw?['name']) ??
+  final name =
+      _string(raw?['name']) ??
       _string(user?['name']) ??
       _string(json['driverName']);
-  final phone = _string(raw?['phone']) ??
+  final phone =
+      _string(raw?['phone']) ??
       _string(user?['phone']) ??
       _string(json['driverPhone']);
   if (id == null && name == null && phone == null) return null;
@@ -230,12 +237,12 @@ List<Map<String, dynamic>>? _normalizeItems(Object? value) {
     final menu = _asMap(menuRaw);
     final price = _num(item['price']);
     final quantity = _integer(item['quantity']);
-    final itemTotal = _num(item['itemTotal']) ??
+    final itemTotal =
+        _num(item['itemTotal']) ??
         (price != null && quantity != null ? price * quantity : null);
     items.add(<String, dynamic>{
-      'menuItemId': _identifier(menuRaw) ??
-          _string(menu?['_id']) ??
-          _string(menu?['id']),
+      'menuItemId':
+          _identifier(menuRaw) ?? _string(menu?['_id']) ?? _string(menu?['id']),
       'name': _string(item['name']) ?? _string(menu?['name']),
       'price': price,
       'quantity': quantity,
@@ -269,14 +276,44 @@ Map<String, dynamic>? _normalizeAddress(Object? value) {
   if (value is String) {
     final address = _string(value);
     if (address == null) return null;
-    return <String, dynamic>{'label': null, 'fullAddress': address};
+    return <String, dynamic>{
+      'label': null,
+      'fullAddress': address,
+      'street': null,
+      'city': null,
+      'postcode': null,
+    };
   }
   final raw = _asMap(value);
   if (raw == null) return null;
   final label = _string(raw['label']);
   final fullAddress = _string(raw['fullAddress']);
-  if (label == null && fullAddress == null) return null;
-  return <String, dynamic>{'label': label, 'fullAddress': fullAddress};
+  final street = _firstNonEmpty([
+    raw['street'],
+    raw['addressLine1'],
+    raw['addressLine'],
+    raw['line1'],
+  ]);
+  final city = _firstNonEmpty([raw['city'], raw['town']]);
+  final postcode = _firstNonEmpty([
+    raw['postcode'],
+    raw['postalCode'],
+    raw['zip'],
+  ]);
+  if (label == null &&
+      fullAddress == null &&
+      street == null &&
+      city == null &&
+      postcode == null) {
+    return null;
+  }
+  return <String, dynamic>{
+    'label': label,
+    'fullAddress': fullAddress,
+    'street': street,
+    'city': city,
+    'postcode': postcode,
+  };
 }
 
 OrderStatus? _parseStatus(String? raw) {

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/animations/app_durations.dart';
 import '../../../../core/utils/app_format.dart';
+import '../../../../core/utils/navigation.dart';
 import '../../../../data/models/order.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
@@ -27,6 +28,7 @@ import '../providers/orders_state.dart';
 import '../widgets/app_order_card.dart';
 import '../widgets/order_filter_bar.dart';
 import '../widgets/reject_order_sheet.dart';
+import 'order_detail_view.dart';
 
 class OrdersTabView extends ConsumerStatefulWidget {
   const OrdersTabView({super.key});
@@ -151,11 +153,11 @@ class _OrdersTabViewState extends ConsumerState<OrdersTabView>
         : page.isLoading && page.orders.isEmpty;
     final errorMessage = state.filter.isActive
         ? (state.status == OrdersLoadStatus.error && state.activeOrders.isEmpty
-            ? state.errorMessage
-            : null)
+              ? state.errorMessage
+              : null)
         : (page.errorMessage != null && page.orders.isEmpty
-            ? page.errorMessage
-            : null);
+              ? page.errorMessage
+              : null);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -192,7 +194,8 @@ class _OrdersTabViewState extends ConsumerState<OrdersTabView>
                   ] else if (state.isStale) ...[
                     const SizedBox(height: AppSpacing.md),
                     const AppInfoBanner(
-                      message: 'Some orders may be out of date. Pull to refresh.',
+                      message:
+                          'Some orders may be out of date. Pull to refresh.',
                       icon: Icons.sync_problem_outlined,
                       tone: AppInfoBannerTone.info,
                     ),
@@ -201,10 +204,7 @@ class _OrdersTabViewState extends ConsumerState<OrdersTabView>
                 ],
               ),
             ),
-            OrderFilterBar(
-              state: state,
-              onSelected: notifier.selectFilter,
-            ),
+            OrderFilterBar(state: state, onSelected: notifier.selectFilter),
             const SizedBox(height: AppSpacing.md),
             if (loading)
               ..._skeletons()
@@ -237,15 +237,20 @@ class _OrdersTabViewState extends ConsumerState<OrdersTabView>
                     order: order,
                     busy: state.inFlightIds.contains(order.id),
                     enabled: !offline,
+                    onTap: order.id == null
+                        ? null
+                        : () => Navigator.of(context).push(
+                            slideRightFadeRoute(
+                              OrderDetailView(orderId: order.id!),
+                            ),
+                          ),
                     onAccept: order.id == null
                         ? null
                         : () => _run(() => notifier.accept(order.id!)),
-                    onReject:
-                        order.id == null ? null : () => _reject(order),
+                    onReject: order.id == null ? null : () => _reject(order),
                     onStartPreparing: order.id == null
                         ? null
-                        : () =>
-                            _run(() => notifier.startPreparing(order.id!)),
+                        : () => _run(() => notifier.startPreparing(order.id!)),
                     onMarkReady: order.id == null
                         ? null
                         : () => _run(() => notifier.markReady(order.id!)),

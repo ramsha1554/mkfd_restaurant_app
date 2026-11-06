@@ -15,9 +15,10 @@ abstract final class AppFormat {
   );
 
   static final DateFormat _date = DateFormat('dd MMM yyyy', 'en_GB');
-  static final DateFormat _dateTime =
-      DateFormat('dd MMM yyyy, HH:mm', 'en_GB');
+  static final DateFormat _dateTime = DateFormat('dd MMM yyyy, HH:mm', 'en_GB');
   static final DateFormat _time = DateFormat('HH:mm', 'en_GB');
+  static final DateFormat _dayMonth = DateFormat('d MMM', 'en_GB');
+  static final DateFormat _time12 = DateFormat('h:mm a', 'en_GB');
 
   /// Format a price — always £, e.g. `£12.50`.
   static String currency(num? value) {
@@ -56,6 +57,28 @@ abstract final class AppFormat {
     try {
       final d = DateTime.parse(iso).toLocal();
       return _time.format(d);
+    } catch (_) {
+      return iso;
+    }
+  }
+
+  /// Short day and month — e.g. `4 Nov`.
+  static String dayMonth(String? iso) {
+    if (iso == null || iso.isEmpty) return '—';
+    try {
+      final d = DateTime.parse(iso).toLocal();
+      return _dayMonth.format(d);
+    } catch (_) {
+      return iso;
+    }
+  }
+
+  /// Local 12-hour time — e.g. `2:15 PM`.
+  static String time12(String? iso) {
+    if (iso == null || iso.isEmpty) return '—';
+    try {
+      final d = DateTime.parse(iso).toLocal();
+      return _time12.format(d);
     } catch (_) {
       return iso;
     }

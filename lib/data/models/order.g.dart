@@ -174,10 +174,16 @@ _$OrderAddressImpl _$$OrderAddressImplFromJson(Map<String, dynamic> json) =>
     _$OrderAddressImpl(
       label: json['label'] as String?,
       fullAddress: json['fullAddress'] as String?,
+      street: json['street'] as String?,
+      city: json['city'] as String?,
+      postcode: json['postcode'] as String?,
     );
 
 Map<String, dynamic> _$$OrderAddressImplToJson(_$OrderAddressImpl instance) =>
     <String, dynamic>{
       'label': instance.label,
       'fullAddress': instance.fullAddress,
+      'street': instance.street,
+      'city': instance.city,
+      'postcode': instance.postcode,
     };
