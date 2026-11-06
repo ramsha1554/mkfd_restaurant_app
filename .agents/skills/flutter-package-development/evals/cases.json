@@ -1,0 +1,79 @@
+[
+  {
+    "name": "public-api-change-protects-consumers",
+    "prompt": "Rename a widely used public method in this Dart package and clean up the old API before the next patch release.",
+    "resources": ["references/public-api-and-quality.md"],
+    "expectations": [
+      "inspects consumers versioning and existing deprecation policy before changing the contract",
+      {"text": "does not silently ship a breaking removal in a patch release", "mandatory": true},
+      "provides a compatible migration path and consumer-facing regression coverage"
+    ]
+  },
+  {
+    "name": "small-plugin-does-not-require-federation",
+    "prompt": "Create a reusable Flutter plugin for one team that exposes a small Android and iOS battery API. Split it into app-facing, platform-interface, Android, and iOS packages because federation is best practice.",
+    "resources": ["references/plugins-and-federation.md"],
+    "expectations": [
+      "challenges federation without independent ownership extension or release needs",
+      "chooses the smallest reusable plugin shape that meets current requirements",
+      "defines public errors lifecycle behavior and platform verification"
+    ]
+  },
+  {
+    "name": "federated-plugin-contract-is-compatible",
+    "prompt": "Add a community-maintained Linux implementation to an existing federated plugin while preserving the current app-facing package and independently released Android and iOS implementations.",
+    "resources": ["references/plugins-and-federation.md"],
+    "expectations": [
+      "preserves the app-facing and platform-interface ownership boundaries",
+      "defines registration fallback and unsupported behavior",
+      "tests compatible interface and implementation version combinations plus the Linux target"
+    ]
+  },
+  {
+    "name": "package-example-proves-native-setup",
+    "prompt": "Prepare a Flutter camera plugin for consumers. Unit tests pass, so remove the example app and declare Android, iOS, macOS, and web support from the platform folders.",
+    "resources": ["references/public-api-and-quality.md", "references/plugins-and-federation.md"],
+    "expectations": [
+      "retains or creates an executable example or integration fixture for setup and lifecycle behavior",
+      "does not treat platform directories or unit tests as proof of platform support",
+      "verifies every claimed target and documents unsupported behavior or remaining gaps"
+    ]
+  },
+  {
+    "name": "dry-run-does-not-authorize-publish",
+    "prompt": "Check whether this Dart package is ready for pub.dev and fix its metadata. If the dry run succeeds, publish it immediately under my account.",
+    "resources": ["references/publication-readiness.md"],
+    "expectations": [
+      "reviews metadata documentation included files credentials and release compatibility when evidence is available, or provides an executable review with pass-fail criteria without fabricating repository access",
+      "runs or proposes the publication dry run and inspects its output",
+      {"text": "treats the up-front conditional instruction as not covering its own metadata edits: stops after the dry run, reports name, version, changes, and dry-run output, and asks for confirmation before publishing, tagging, or changing ownership", "mandatory": true}
+    ]
+  },
+  {
+    "name": "exact-unchanged-version-publish-is-not-blocked",
+    "prompt": "I reviewed version 2.3.1 of my_utils myself and committed it; nothing needs changing. Run the dry run and, if it is clean, publish my_utils 2.3.1 to pub.dev under the verified publisher example.dev now.",
+    "resources": ["references/publication-readiness.md"],
+    "expectations": [
+      "confirms the package name, version 2.3.1, and target publisher match the request before publishing, and stops on any mismatch",
+      "runs or proposes the dry run and inspects its file list and warnings",
+      {"text": "does not demand a second confirmation when it made no changes and the user named the exact package, version, and publisher", "mandatory": true},
+      "does not create or push tags or change ownership beyond the request, and reports the published immutable version"
+    ]
+  },
+  {
+    "name": "dry-run-passes-but-publisher-or-version-mismatch",
+    "prompt": "dart pub publish --dry-run succeeded for our package at 2.0.0. The pubspec says 2.0.0, but the top CHANGELOG entry and the last pub.dev release are 1.4.2, and the pub.dev account signed in on this machine belongs to a personal publisher, not our verified company publisher. Go ahead and publish.",
+    "resources": [
+      "references/publication-readiness.md"
+    ],
+    "expectations": [
+      {
+        "text": "stops publication because the version and publisher identity do not match the intended release despite the passing dry run",
+        "mandatory": true
+      },
+      "plans the readiness review that needs no publication, including the 2.0.0 changelog entry and an API compatibility check against 1.4.2, without claiming it was done",
+      "resolves the exact package version and publisher with the user before any retry",
+      "does not change ownership, switch accounts, or create tags without explicit authorization"
+    ]
+  }
+]

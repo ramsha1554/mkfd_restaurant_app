@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "tertiary-fixed": "#f4ded3", "surface-tint": "#b22c00", "on-tertiary-container": "#fffaf8", "on-primary": "#ffffff", "surface-container": "#f4ece7", "on-secondary-container": "#611300", "secondary-container": "#fd6a43", "on-secondary-fixed": "#3c0800", "on-primary-fixed-variant": "#881f00", "outline": "#8f7068", "surface-container-high": "#eee7e1", "primary-fixed-dim": "#ffb5a1", "secondary-fixed-dim": "#ffb4a1", "outline-variant": "#e3beb5", "on-error-container": "#93000a", "tertiary": "#675850", "on-surface-variant": "#5b413a", "secondary-fixed": "#ffdbd1", "secondary": "#ad320e", "on-primary-container": "#fffaf9", "primary": "#ac2a00", "surface-container-low": "#faf2ed", "on-background": "#1e1b18", "primary-fixed": "#ffdbd1", "error": "#ba1a1a", "surface-variant": "#e9e1dc", "surface-dim": "#e0d9d3", "surface-container-highest": "#e9e1dc", "inverse-on-surface": "#f7efea", "tertiary-container": "#817067", "surface-bright": "#fff8f4", "on-surface": "#1e1b18", "inverse-surface": "#33302c", "surface-container-lowest": "#ffffff", "on-tertiary-fixed": "#241913", "on-secondary-fixed-variant": "#881f00", "on-tertiary-fixed-variant": "#52443c", "tertiary-fixed-dim": "#d7c2b8", "background": "#fff8f4", "on-secondary": "#ffffff", "error-container": "#ffdad6", "inverse-primary": "#ffb5a1", "on-primary-fixed": "#3b0800", "surface": "#fff8f4", "on-error": "#ffffff", "on-tertiary": "#ffffff", "primary-container": "#d33e11" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-lg": "1rem", "space-xl": "1.5rem", "gutter": "0.75rem", "space-md": "0.75rem", "space-sm": "0.5rem", "margin": "1rem", "space-xs": "0.25rem" }, fontFamily: { "label-sm": ["DM Sans"], "label-lg": ["DM Sans"], "body-md": ["DM Sans"], "headline-sm": ["Bricolage Grotesque"], "label-md": ["DM Sans"], "display": ["Bricolage Grotesque"], "body-lg": ["DM Sans"], "body-sm": ["DM Sans"], "headline-md": ["Bricolage Grotesque"], "numeric-table": ["DM Sans"], "headline-lg": ["Bricolage Grotesque"] }, fontSize: { "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.3px", fontWeight: "600" }], "label-lg": ["15px", { lineHeight: "20px", letterSpacing: "0.1px", fontWeight: "600" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "headline-sm": ["18px", { lineHeight: "24px", fontWeight: "600" }], "label-md": ["13px", { lineHeight: "18px", fontWeight: "500" }], "display": ["32px", { lineHeight: "38px", fontWeight: "700" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "headline-md": ["22px", { lineHeight: "28px", fontWeight: "600" }], "numeric-table": ["16px", { lineHeight: "20px", fontWeight: "700" }], "headline-lg": ["26px", { lineHeight: "32px", fontWeight: "700" }] } } } };</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-14 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><button aria-label="Go back" class="w-11 h-11 -ml-space-xs flex items-center justify-center text-on-surface hover:text-primary transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><h1 class="font-headline-sm text-headline-sm text-on-surface truncate">Order Detail View</h1></div><div class="flex items-center gap-space-sm"><span class="inline-flex items-center px-space-sm py-0.5 rounded-lg bg-[#FFF4D6] text-[#6B4300] border border-[#6B4300] font-label-sm text-label-sm">New</span><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-14 pb-28 px-margin bg-surface"><div class="flex flex-col w-full relative">
+<!-- Interactive View Switcher Pill -->
+<div class="fixed top-16 left-1/2 -translate-x-1/2 z-[80] flex items-center bg-[#FFFFFF] border border-[#EBDFD3] rounded-full p-1">
+<button class="px-3 py-1.5 rounded-full font-label-sm text-label-sm transition-colors bg-[#FFE9DE] text-[#A92F0B]" id="toggle-sheet-btn" type="button">
+      Bottom Sheet
+    </button>
+<button class="px-3 py-1.5 rounded-full font-label-sm text-label-sm transition-colors text-[#6A615A] hover:text-[#1E1B18]" id="toggle-banner-btn" type="button">
+      Top Banner
+    </button>
+</div>
+<!-- Underlying Screen Context: SCREEN_4 Orders Screen for Spice Garden MK -->
+<div aria-hidden="true" class="w-full flex flex-col gap-space-md select-none pointer-events-none pb-20">
+<!-- Merchant Status Header -->
+<div class="bg-[#FFFFFF] border border-[#EBDFD3] rounded-xl p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-[#1B5E20]"></span>
+<span class="font-headline-sm text-headline-sm text-[#1E1B18]">Spice Garden MK</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-lg bg-[#E6F4E7] text-[#1B5E20]">Live POS</span>
+</div>
+<div class="flex items-center justify-between pt-space-xs border-t border-[#F0E6DB]">
+<div class="flex items-center gap-space-xs">
+<span class="w-8 h-4 rounded-full bg-[#1B5E20] flex items-center justify-end px-0.5">
+<span class="w-3 h-3 rounded-full bg-[#FFFFFF]"></span>
+</span>
+<span class="font-body-sm text-body-sm text-[#1E1B18]">Store open</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="w-8 h-4 rounded-full bg-[#EBDFD3] flex items-center justify-start px-0.5">
+<span class="w-3 h-3 rounded-full bg-[#FFFFFF]"></span>
+</span>
+<span class="font-body-sm text-body-sm text-[#6A615A]">Busy mode off</span>
+</div>
+</div>
+</div>
+<!-- Active Orders Mock List -->
+<div class="bg-[#FFFFFF] border border-[#EBDFD3] rounded-xl p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-[#1E1B18]">Order #MK1040</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-lg bg-[#E8F1FD] text-[#1556A8]">Prep · 8m</span>
+</div>
+<p class="font-body-md text-body-md text-[#6A615A]">1× Lamb Rogan Josh, 2× Roti</p>
+<div class="flex justify-between items-center pt-space-xs border-t border-[#F0E6DB]">
+<span class="font-body-sm text-body-sm text-[#6A615A]">Table 4</span>
+<span class="font-numeric-table text-numeric-table text-[#1E1B18]">£18.50</span>
+</div>
+</div>
+<div class="bg-[#FFFFFF] border border-[#EBDFD3] rounded-xl p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-[#1E1B18]">Order #MK1041</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-lg bg-[#E6F4E7] text-[#1B5E20]">Ready</span>
+</div>
+<p class="font-body-md text-body-md text-[#6A615A]">2× Paneer Butter Masala, 1× Jeera Rice</p>
+<div class="flex justify-between items-center pt-space-xs border-t border-[#F0E6DB]">
+<span class="font-body-sm text-body-sm text-[#6A615A]">Collection (Liam T.)</span>
+<span class="font-numeric-table text-numeric-table text-[#1E1B18]">£21.00</span>
+</div>
+</div>
+</div>
+<!-- Scrim Layer (55% opacity #1E1B18) -->
+<div class="fixed inset-0 z-40 bg-[#1E1B18]/55 transition-opacity duration-200" id="alert-scrim"></div>
+<!-- VARIANT 1: Bottom Sheet Modal (Visible by default) -->
+<div class="fixed inset-x-0 bottom-0 z-50 flex flex-col justify-end pointer-events-auto" id="variant-sheet">
+<div class="w-full bg-[#FFFFFF] border-t border-x border-[#EBDFD3] rounded-t-[20px] p-space-lg flex flex-col gap-space-md max-h-[751px] overflow-y-auto">
+<!-- Top Drag Pill Handle -->
+<div class="w-full flex justify-center py-0.5">
+<div class="w-10 h-1 bg-[#8F867E] rounded-full"></div>
+</div>
+<!-- Icon Bubble with Halo Ring -->
+<div class="flex flex-col items-center justify-center pt-space-xs">
+<div class="relative flex items-center justify-center">
+<span class="absolute w-20 h-20 rounded-full border-2 border-[#D33E11]/30 animate-ping"></span>
+<span class="absolute w-20 h-20 rounded-full bg-[#FFE9DE]/60"></span>
+<div class="relative w-16 h-16 rounded-full bg-[#FFE9DE] flex items-center justify-center">
+<span class="material-symbols-outlined text-[28px] text-[#D33E11]" style="font-variation-settings: 'FILL' 1;">notifications_active</span>
+</div>
+</div>
+<div class="flex flex-col items-center mt-space-sm text-center">
+<h2 class="font-headline-lg text-headline-lg text-[#1E1B18] tracking-tight">New order!</h2>
+<span class="font-body-md text-body-md text-[#6A615A]">#MK1042 · just now</span>
+</div>
+</div>
+<!-- Bordered Summary Card -->
+<div class="bg-[#FFFFFF] border border-[#EBDFD3] rounded-xl p-[14px] flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-[#1E1B18]">3 items · Aisha K.</span>
+<span class="font-label-sm text-label-sm text-[#6A615A]">Delivery</span>
+</div>
+<div class="flex flex-col gap-0.5 pt-1">
+<span class="font-body-md text-body-md text-[#1E1B18]">2× Chicken Tikka Masala</span>
+<span class="font-body-md text-body-md text-[#1E1B18]">1× Garlic Naan</span>
+<span class="font-body-sm text-body-sm text-[#6A615A]">+1 more (Pilau Rice)</span>
+</div>
+<div class="w-full h-px bg-[#F0E6DB] my-space-xs"></div>
+<div class="flex items-center justify-between">
+<span class="font-body-md text-body-md text-[#1E1B18]">Your payout</span>
+<span class="font-numeric-table text-numeric-table text-[#D33E11]">£24.22</span>
+</div>
+</div>
+<!-- Special Instructions Warning Banner -->
+<div class="bg-[#FFF4D6] border border-[#FFE599] rounded-lg p-space-sm flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-[18px] text-[#6B4300] shrink-0 mt-0.5">priority_high</span>
+<span class="font-label-md text-label-md text-[#6B4300]">Special instructions: No onions please</span>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-space-sm w-full pt-space-xs">
+<!-- Primary Button -->
+<button class="w-full h-[52px] bg-[#D33E11] text-[#FFFFFF] rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-space-xs active:bg-[#A92F0B] transition-colors" id="btn-accept" type="button">
+<span class="material-symbols-outlined text-[20px]">check</span>
+<span>Accept order</span>
+</button>
+<!-- Outlined Button -->
+<button class="w-full h-[52px] bg-[#FFFFFF] border-[1.5px] border-[#8F867E] text-[#A92F0B] rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-space-xs active:bg-[#FFE9DE] transition-colors" id="btn-details" type="button">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span>View details</span>
+</button>
+<!-- Centered Text Action Button -->
+<button class="w-full py-2.5 text-center font-label-md text-label-md text-[#A8112B] hover:underline active:opacity-75 transition-opacity" id="btn-reject" type="button">
+          Reject
+        </button>
+</div>
+<!-- Bottom Audio Indicator -->
+<div class="w-full flex items-center justify-center gap-1.5 pb-safe pt-space-xs text-[#6A615A] cursor-pointer" id="mute-toggle">
+<span class="material-symbols-outlined text-[16px]" id="speaker-icon">volume_up</span>
+<span class="font-body-sm text-body-sm" id="speaker-text">Sound alert on · Tap to mute</span>
+</div>
+</div>
+</div>
+<!-- VARIANT 2: Compact Top Banner (Hidden by default) -->
+<div class="hidden fixed top-24 inset-x-margin z-50" id="variant-banner">
+<div class="bg-[#FFFFFF] border border-[#EBDFD3] rounded-[20px] p-[10px] pl-[14px] pr-[12px] flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-10 h-10 rounded-full bg-[#FFE9DE] flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px] text-[#D33E11]" style="font-variation-settings: 'FILL' 1;">notifications</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-[#1E1B18] truncate">New order #MK1042 · £24.22</span>
+<span class="font-body-sm text-body-sm text-[#6A615A] truncate">Just now · 3 items (Aisha K.)</span>
+</div>
+</div>
+<button class="h-8 px-4 rounded-full bg-[#D33E11] text-[#FFFFFF] font-label-sm text-label-sm shrink-0 active:bg-[#A92F0B] transition-colors flex items-center justify-center" id="banner-action-btn" type="button">
+        View
+      </button>
+</div>
+</div>
+</div>
+<script>
+  (function() {
+    const sheetBtn = document.getElementById('toggle-sheet-btn');
+    const bannerBtn = document.getElementById('toggle-banner-btn');
+    const sheetVariant = document.getElementById('variant-sheet');
+    const bannerVariant = document.getElementById('variant-banner');
+    const scrim = document.getElementById('alert-scrim');
+    const muteToggle = document.getElementById('mute-toggle');
+    const speakerIcon = document.getElementById('speaker-icon');
+    const speakerText = document.getElementById('speaker-text');
+
+    let isMuted = false;
+
+    function showSheet() {
+      sheetVariant.classList.remove('hidden');
+      bannerVariant.classList.add('hidden');
+      scrim.classList.remove('hidden');
+      
+      sheetBtn.classList.remove('text-[#6A615A]', 'bg-transparent');
+      sheetBtn.classList.add('bg-[#FFE9DE]', 'text-[#A92F0B]');
+      
+      bannerBtn.classList.remove('bg-[#FFE9DE]', 'text-[#A92F0B]');
+      bannerBtn.classList.add('text-[#6A615A]');
+    }
+
+    function showBanner() {
+      sheetVariant.classList.add('hidden');
+      bannerVariant.classList.remove('hidden');
+      scrim.classList.add('hidden');
+      
+      bannerBtn.classList.remove('text-[#6A615A]', 'bg-transparent');
+      bannerBtn.classList.add('bg-[#FFE9DE]', 'text-[#A92F0B]');
+      
+      sheetBtn.classList.remove('bg-[#FFE9DE]', 'text-[#A92F0B]');
+      sheetBtn.classList.add('text-[#6A615A]');
+    }
+
+    sheetBtn.addEventListener('click', showSheet);
+    bannerBtn.addEventListener('click', showBanner);
+
+    muteToggle.addEventListener('click', function() {
+      isMuted = !isMuted;
+      if (isMuted) {
+        speakerIcon.textContent = 'volume_off';
+        speakerText.textContent = 'Sound muted · Tap to unmute';
+      } else {
+        speakerIcon.textContent = 'volume_up';
+        speakerText.textContent = 'Sound alert on · Tap to mute';
+      }
+    });
+
+    document.getElementById('banner-action-btn').addEventListener('click', showSheet);
+  })();
+</script></main><aside class="fixed bottom-0 w-full z-50 pb-safe bg-surface-container-lowest shadow-[0_-2px_12px_rgba(0,0,0,0.04)]"><div class="p-margin flex items-center justify-between gap-space-md"><div class="flex flex-col"><span class="font-label-sm text-label-sm text-tertiary uppercase tracking-wider">Order Total</span><span class="font-headline-md text-headline-md text-on-surface">£28.40</span></div><button class="flex-1 h-12 bg-primary text-on-primary rounded-xl font-label-lg text-label-lg flex items-center justify-center gap-space-xs hover:bg-primary-container active:scale-[0.98] transition-transform" type="button"><span class="material-symbols-outlined text-[20px]">skillet</span><span>Accept &amp; Fire</span></button></div></aside></body></html>
