@@ -25,6 +25,13 @@ abstract final class AppConfig {
         '${uri.hasPort ? ':${uri.port}' : ''}';
   }
 
+  /// OpenStreetMap raster tiles used by the registration map.
+  static const String osmTileUrl =
+      'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
+
+  /// Attribution required by the OpenStreetMap tile usage policy.
+  static const String osmAttribution = '© OpenStreetMap contributors';
+
   static const String appName = 'MK Foods Restaurant';
   static const String appVersion = '1.0.0';
   static const String packageName = 'mk_food_restaurant';

@@ -7,6 +7,7 @@ import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/order_repository.dart';
 import '../../data/repositories/restaurant_repository.dart';
 import '../../data/services/auth_storage_service.dart';
+import '../../data/services/geocoding_service.dart';
 import '../../data/services/phone_launcher.dart';
 
 final GetIt locator = GetIt.instance;
@@ -21,6 +22,10 @@ Future<void> setupLocator() async {
   locator.registerSingleton<ApiClient>(apiClient);
 
   locator.registerLazySingleton<PhoneLauncher>(() => const UrlPhoneLauncher());
+
+  locator.registerLazySingleton<GeocodingService>(
+    () => ApiGeocodingService(),
+  );
 
   locator.registerSingleton<AuthRepository>(AuthRepository(apiClient, storage));
 

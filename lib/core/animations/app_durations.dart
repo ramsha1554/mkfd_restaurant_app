@@ -34,6 +34,12 @@ abstract final class AppDurations {
   /// 15000ms — HTTP request timeout.
   static const Duration timeout = Duration(milliseconds: 15000);
 
+  /// 8000ms — third-party address lookup timeout.
+  static const Duration geocoding = Duration(seconds: 8);
+
+  /// 6000ms — third-party postcode lookup timeout.
+  static const Duration postcodeLookup = Duration(seconds: 6);
+
   /// 1000ms — order acceptance countdown tick.
   static const Duration countdown = Duration(seconds: 1);
 
