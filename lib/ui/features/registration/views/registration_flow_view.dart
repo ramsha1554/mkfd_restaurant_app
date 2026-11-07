@@ -9,6 +9,7 @@ import '../../../core/widgets/app_stepper.dart';
 import '../providers/registration_provider.dart';
 import 'register_location_step_view.dart';
 import 'register_pricing_step_view.dart';
+import 'register_review_step_view.dart';
 import 'register_step_one_view.dart';
 
 class RegistrationFlowView extends ConsumerWidget {
@@ -62,28 +63,10 @@ class RegistrationFlowView extends ConsumerWidget {
                 1 => RegisterStepOneView(onLogout: onLogout),
                 2 => const RegisterLocationStepView(),
                 3 => const RegisterPricingStepView(),
-                _ => const _ReviewPlaceholder(),
+                _ => const RegisterReviewStepView(),
               },
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _ReviewPlaceholder extends StatelessWidget {
-  const _ReviewPlaceholder();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: AppSpacing.screenPaddingAll,
-        child: Text(
-          'Review your details before submitting.',
-          textAlign: TextAlign.center,
-          style: AppTextStyles.bodySecondary,
         ),
       ),
     );
