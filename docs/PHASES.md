@@ -142,8 +142,6 @@ Living status, decisions and open questions — updated at the end of every phas
 
 ## Phase 4A — Orders (REST only) — ✅ Done
 
-## Phase 4B — Pickup verification & order detail — Planned
-
 **Phase 4A scope delivered:** owner order list backed by REST with a real active set (fan-out per status), server-side paginated history, live filter-chip counts, 30-second foreground polling, pull-to-refresh, optimistic per-status actions (accept, start preparing, mark ready, reject), reject-reason sheet, offline/stale banners, order-number badge on the Orders tab, and tests. Socket, push, sound, Live badge, order detail and pickup verification remain for Phase 4B/5.
 
 **Files added / changed:**
@@ -187,6 +185,55 @@ Living status, decisions and open questions — updated at the end of every phas
 - Pickup verification (`verify-pickup`) and the single-order detail screen are Phase 4B; the body key may be `code` or `pickupCode`.
 
 **Verification:** see Phase 4A report.
+
+## Phase 4B — Order detail and pickup verification — ✅ Done
+
+**Scope delivered:** order detail screen opened from any order card (pushed over the shell, no bottom nav, slide-right-fade), reading the order from the orders provider by id (active set and history) without a single-order GET; status-aware pinned action bar (reject/accept, start preparing, mark as ready, verify pickup); pickup verification sheet with a 4-digit code field; phone launcher behind a `PhoneLauncher` interface; driver call buttons wired on cards and detail; the missing ready-card verify action. REST only — no sockets, push, sound, Live badge or search.
+
+**Files added / changed:**
+- `pubspec.yaml`, `pubspec.lock` — `url_launcher ^6.3.3`
+- `android/app/src/main/AndroidManifest.xml` — `<queries>` tel `DIAL` intent
+- `ios/Runner/Info.plist` — `LSApplicationQueriesSchemes` `tel`
+- `lib/data/services/phone_launcher.dart` — `PhoneLauncher` interface + `UrlPhoneLauncher` (`tel:`, external mode, returns false when it cannot start)
+- `lib/core/di/locator.dart` — registers `PhoneLauncher`
+- `lib/ui/features/orders/providers/phone_launcher_provider.dart`, `lib/ui/features/orders/widgets/order_call_button.dart` — call button behind the interface
+- `lib/ui/features/auth/widgets/otp_code_field.dart` — `length` parameter (default 6), boxes and input follow it
+- `lib/data/api/api_endpoints.dart` — `orderVerifyPickup(id)`
+- `lib/data/repositories/order_repository.dart` — `verifyPickup(id, code)` → `PATCH /orders/:id/verify-pickup` with `{pickupCode}`
+- `lib/ui/features/orders/providers/orders_provider.dart` — `verifyPickup` through the shared in-flight action runner (applies a returned order, refreshes the active set when none is returned, returns the exact backend message)
+- `lib/ui/core/widgets/app_section_card.dart` — `AppCard` plus optional uppercase eyebrow
+- `lib/ui/core/widgets/app_info_banner.dart` — prominent variant with optional title/trailing
+- `lib/core/animations/app_durations.dart` — `countdown` (1s) and detail animation durations
+- `lib/ui/features/orders/widgets/pickup_sheet.dart` — `showVerifyPickupSheet`
+- `lib/ui/features/orders/views/order_detail_view.dart` — full detail screen, action bar and acceptance countdown
+- `lib/ui/features/orders/views/orders_tab_view.dart` — detail entry and pickup-sheet wiring
+- `lib/ui/features/orders/widgets/app_order_card.dart` — `onTap`, verify-pickup action, driver call button
+- `test/support/fake_phone_launcher.dart`, `test/support/order_fixtures.dart`, `test/ui/otp_code_field_test.dart`, `test/ui/order_detail_view_test.dart`, `test/ui/orders_provider_test.dart`
+- `docs/PHASES.md`, `docs/UI_ADDITIONS.md`, `docs/Restaurant.md`
+
+**Decisions:**
+- Detail reads from the provider only; the owner single-order GET is unconfirmed and unused. If the id is no longer in state, the screen shows `AppErrorState` "Order not found" with a retry that refreshes the lists and the app bar back arrow.
+- `verifyPickup` sends `pickupCode` (what the working website sends), not the contract's `code`. `pickupCode` is never parsed into UI state, displayed, logged or persisted; the owner types the code the driver reads out.
+- Earnings show only food subtotal, commission (API value or derived 15%) and payout. Total, delivery, driver and platform fees are never displayed as such.
+- Accepting from the detail screen keeps the screen open and updates the action bar from provider state; rejecting closes the sheet and pops the screen.
+- The server decides late acceptance: the countdown reaching zero shows "Time to respond has run out" while actions stay enabled.
+- Call buttons go through `PhoneLauncher`; a call that cannot start shows "Could not open the phone app".
+- Payment badge mapping: `cash` → "Cash"; `payment_link` + `paid` → "Paid online"; other `payment_link` states → "Online · <status>"; unknown methods show the raw value.
+- Commission and payout derive client-side from `orderMoney` until the backend returns explicit fields.
+
+**Snapped values:**
+- Customer address icon 16 (`AppIconSize.xs`) in `primary` (design says 16 primary).
+- Payout panel radius 12 (`AppRadius.rSm`) and padding 12 (`AppSpacing.md`).
+- Pickup-sheet body uses 14 `body` secondary instead of `bodySecondary` 12 (design says 14).
+- Pinned action bar and sheet buttons use the core defaults (52); card actions use 44. Detail reject/accept split 35/65.
+- All values use existing tokens; no raw hex, font size, weight or duration introduced.
+
+**Open questions / assumptions:**
+- Confirm the verify-pickup response returns the updated order; when it does not, the app refreshes the active set.
+- Confirm whether `commissionRate`, `commissionAmount`, `restaurantPayout`, `driverWaiting` and `driverArrived` become first-class API fields; the app derives them for now.
+- Pickup verification does not currently receive realtime updates (Phase 5); refresh and polling are the only reconciliation.
+
+**Verification:** see Phase 4B report.
 
 ## Phase 5 — Realtime & Alerts — Planned
 
