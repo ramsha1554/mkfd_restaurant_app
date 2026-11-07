@@ -14,16 +14,21 @@ import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../core/widgets/app_app_bar.dart';
 import '../../../core/widgets/app_badge.dart';
+import '../../../core/widgets/app_bottom_sheet.dart';
 import '../../../core/widgets/app_card.dart';
 import '../../../core/widgets/app_info_banner.dart';
 import '../../../core/widgets/app_offline_banner.dart';
 import '../../../core/widgets/app_section_card.dart';
 import '../../../core/widgets/app_snackbar.dart';
 import '../../../core/widgets/app_states.dart';
+import '../../../core/widgets/primary_button.dart';
+import '../../../core/widgets/secondary_button.dart';
 import '../providers/orders_provider.dart';
 import '../providers/orders_state.dart';
 import '../utils/order_money.dart';
 import '../widgets/order_call_button.dart';
+import '../widgets/pickup_sheet.dart';
+import '../widgets/reject_order_sheet.dart';
 
 class OrderDetailView extends ConsumerWidget {
   final String orderId;
@@ -48,6 +53,7 @@ class OrderDetailView extends ConsumerWidget {
     }
 
     final notifier = ref.read(ordersProvider.notifier);
+    final actionBar = _actionBar(context, ref, state, order, notifier);
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppAppBar(
@@ -57,6 +63,7 @@ class OrderDetailView extends ConsumerWidget {
           const SizedBox(width: AppSpacing.screenPadding),
         ],
       ),
+      bottomNavigationBar: actionBar,
       body: Column(
         children: [
           if (state.isOffline)
@@ -215,9 +222,9 @@ class OrderDetailView extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Icon(
-                  Icons.location_on_outlined,
-                  size: AppIconSize.sm,
-                  color: AppColors.primaryText,
+                  Icons.location_on,
+                  size: AppIconSize.xs,
+                  color: AppColors.primary,
                 ),
                 const SizedBox(width: AppSpacing.sm),
                 Expanded(
@@ -274,7 +281,12 @@ class OrderDetailView extends ConsumerWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('$quantity×', style: AppTextStyles.cardTitle),
+        Text(
+          '$quantity×',
+          style: AppTextStyles.cardTitle.copyWith(
+            color: AppColors.primaryText,
+          ),
+        ),
         const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: Column(
@@ -351,8 +363,7 @@ class OrderDetailView extends ConsumerWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Delivery and customer fees are not included in restaurant '
-            'payout.',
+            'Delivery and customer fees are not included in your payout.',
             style: AppTextStyles.bodySecondary,
           ),
         ],
@@ -512,9 +523,11 @@ class OrderDetailView extends ConsumerWidget {
   }
 
   String? _reason(OrderModel order) {
-    final reason =
-        order.cancellationReason?.trim() ?? order.rejectionReason?.trim();
-    return reason == null || reason.isEmpty ? null : reason;
+    final cancellation = order.cancellationReason?.trim();
+    if (cancellation != null && cancellation.isNotEmpty) return cancellation;
+    final rejection = order.rejectionReason?.trim();
+    if (rejection != null && rejection.isNotEmpty) return rejection;
+    return null;
   }
 
   String? _addressText(OrderAddress? address) {
@@ -553,6 +566,132 @@ class OrderDetailView extends ConsumerWidget {
     final number = order.orderNumber?.trim();
     if (number == null || number.isEmpty) return '#—';
     return number.startsWith('#') ? number : '#$number';
+  }
+
+  Widget? _actionBar(
+    BuildContext context,
+    WidgetRef ref,
+    OrdersState state,
+    OrderModel order,
+    OrdersNotifier notifier,
+  ) {
+    final busy = state.inFlightIds.contains(order.id);
+    final canAct = !state.isStale && !state.isOffline && !busy;
+
+    final Widget? content;
+    if (order.status == OrderStatus.placed) {
+      content = Row(
+        children: [
+          Expanded(
+            flex: 35,
+            child: AppOutlinedButton(
+              label: 'Reject',
+              icon: Icons.close,
+              onPressed: canAct ? () => _reject(context, ref, order) : null,
+            ),
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            flex: 65,
+            child: AppPrimaryButton(
+              label: 'Accept order',
+              icon: Icons.check_circle,
+              isLoading: busy,
+              onPressed: canAct
+                  ? () => _run(context, () => notifier.accept(order.id!))
+                  : null,
+            ),
+          ),
+        ],
+      );
+    } else if (order.status == OrderStatus.confirmed) {
+      content = AppPrimaryButton(
+        label: 'Start preparing',
+        icon: Icons.restaurant_outlined,
+        isLoading: busy,
+        onPressed: canAct
+            ? () => _run(context, () => notifier.startPreparing(order.id!))
+            : null,
+      );
+    } else if (order.status == OrderStatus.preparing) {
+      content = AppPrimaryButton(
+        label: 'Mark as ready',
+        icon: Icons.room_service_outlined,
+        isLoading: busy,
+        onPressed: canAct
+            ? () => _run(context, () => notifier.markReady(order.id!))
+            : null,
+      );
+    } else if (canVerifyPickup(order)) {
+      content = AppPrimaryButton(
+        label: 'Verify pickup code',
+        icon: Icons.pin_outlined,
+        isLoading: busy,
+        onPressed: canAct ? () => _verifyPickup(context, ref, order) : null,
+      );
+    } else {
+      content = null;
+    }
+
+    if (content == null) return null;
+
+    return Container(
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        border: Border(top: BorderSide(color: AppColors.cardBorder, width: 1)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: content,
+        ),
+      ),
+    );
+  }
+
+  Future<void> _run(
+    BuildContext context,
+    Future<String?> Function() action,
+  ) async {
+    final error = await action();
+    if (!context.mounted || error == null) return;
+    AppSnackbar.showError(context, error);
+  }
+
+  Future<void> _reject(
+    BuildContext context,
+    WidgetRef ref,
+    OrderModel order,
+  ) async {
+    final id = order.id;
+    if (id == null) return;
+    final rejected = await showAppSheet<bool>(
+      context: context,
+      title: 'Reject this order?',
+      builder: (_) => RejectOrderSheet(
+        onReject: (reason) =>
+            ref.read(ordersProvider.notifier).reject(id, reason),
+      ),
+    );
+    if (!context.mounted || rejected != true) return;
+    Navigator.of(context).pop();
+  }
+
+  Future<void> _verifyPickup(
+    BuildContext context,
+    WidgetRef ref,
+    OrderModel order,
+  ) async {
+    final id = order.id;
+    if (id == null) return;
+    final verified = await showVerifyPickupSheet(
+      context: context,
+      onVerify: (code) =>
+          ref.read(ordersProvider.notifier).verifyPickup(id, code),
+    );
+    if (!context.mounted || verified != true) return;
+    AppSnackbar.showSuccess(context, 'Pickup verified');
   }
 }
 

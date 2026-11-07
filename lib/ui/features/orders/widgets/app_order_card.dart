@@ -12,6 +12,7 @@ import '../../../core/widgets/app_info_banner.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../core/widgets/secondary_button.dart';
 import '../utils/order_money.dart';
+import 'order_call_button.dart';
 
 class AppOrderCard extends StatelessWidget {
   final OrderModel order;
@@ -21,6 +22,7 @@ class AppOrderCard extends StatelessWidget {
   final VoidCallback? onReject;
   final VoidCallback? onStartPreparing;
   final VoidCallback? onMarkReady;
+  final VoidCallback? onVerifyPickup;
   final VoidCallback? onTap;
 
   const AppOrderCard({
@@ -32,6 +34,7 @@ class AppOrderCard extends StatelessWidget {
     this.onReject,
     this.onStartPreparing,
     this.onMarkReady,
+    this.onVerifyPickup,
     this.onTap,
   });
 
@@ -183,6 +186,7 @@ class AppOrderCard extends StatelessWidget {
 
   Widget _driverBanner() {
     final driver = order.driver?.name?.trim();
+    final callButton = _driverCallButton;
     if (isDriverWaiting(order)) {
       return AppInfoBanner(
         message: driver == null || driver.isEmpty
@@ -190,6 +194,7 @@ class AppOrderCard extends StatelessWidget {
             : 'Driver is waiting — $driver',
         icon: Icons.two_wheeler,
         tone: AppInfoBannerTone.warning,
+        trailing: callButton,
       );
     }
     if (driver != null && driver.isNotEmpty) {
@@ -197,12 +202,23 @@ class AppOrderCard extends StatelessWidget {
         message: 'Driver assigned — $driver',
         icon: Icons.delivery_dining_outlined,
         tone: AppInfoBannerTone.info,
+        trailing: callButton,
       );
     }
     return const AppInfoBanner(
       message: 'Waiting for a driver to be assigned.',
       icon: Icons.hourglass_empty,
       tone: AppInfoBannerTone.info,
+    );
+  }
+
+  Widget? get _driverCallButton {
+    final phone = order.driver?.phone?.trim();
+    if (phone == null || phone.isEmpty) return null;
+    return OrderCallButton(
+      phone: phone,
+      size: 32,
+      semanticLabel: 'Call driver',
     );
   }
 
@@ -232,10 +248,19 @@ class AppOrderCard extends StatelessWidget {
   bool get _hasActions {
     return order.status == OrderStatus.placed ||
         order.status == OrderStatus.confirmed ||
-        order.status == OrderStatus.preparing;
+        order.status == OrderStatus.preparing ||
+        canVerifyPickup(order);
   }
 
   Widget _actions() {
+    if (canVerifyPickup(order)) {
+      return AppOutlinedButton(
+        label: 'Verify pickup code',
+        icon: Icons.pin_outlined,
+        height: 44,
+        onPressed: enabled && !busy ? onVerifyPickup : null,
+      );
+    }
     return switch (order.status) {
       OrderStatus.placed => Row(
         children: [

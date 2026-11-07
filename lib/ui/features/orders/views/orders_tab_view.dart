@@ -27,6 +27,7 @@ import '../providers/orders_provider.dart';
 import '../providers/orders_state.dart';
 import '../widgets/app_order_card.dart';
 import '../widgets/order_filter_bar.dart';
+import '../widgets/pickup_sheet.dart';
 import '../widgets/reject_order_sheet.dart';
 import 'order_detail_view.dart';
 
@@ -123,6 +124,18 @@ class _OrdersTabViewState extends ConsumerState<OrdersTabView>
             ref.read(ordersProvider.notifier).reject(id, reason),
       ),
     );
+  }
+
+  Future<void> _verifyPickup(OrderModel order) async {
+    final id = order.id;
+    if (id == null || ref.read(ordersProvider).isOffline) return;
+    final verified = await showVerifyPickupSheet(
+      context: context,
+      onVerify: (code) =>
+          ref.read(ordersProvider.notifier).verifyPickup(id, code),
+    );
+    if (!mounted || verified != true) return;
+    AppSnackbar.showSuccess(context, 'Pickup verified');
   }
 
   @override
@@ -254,6 +267,9 @@ class _OrdersTabViewState extends ConsumerState<OrdersTabView>
                     onMarkReady: order.id == null
                         ? null
                         : () => _run(() => notifier.markReady(order.id!)),
+                    onVerifyPickup: order.id == null
+                        ? null
+                        : () => _verifyPickup(order),
                   ),
                 ),
             if (!loading &&

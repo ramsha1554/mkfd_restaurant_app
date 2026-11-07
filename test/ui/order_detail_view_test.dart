@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mk_food_restaurant/core/error/app_error.dart';
 import 'package:mk_food_restaurant/data/models/order.dart';
 import 'package:mk_food_restaurant/ui/features/orders/providers/orders_provider.dart';
 import 'package:mk_food_restaurant/ui/features/orders/providers/phone_launcher_provider.dart';
@@ -258,6 +259,142 @@ void main() {
 
     expect(find.textContaining('Respond within'), findsNothing);
     expect(find.text('Time to respond has run out'), findsNothing);
+  });
+
+  testWidgets('placed order shows reject and accept actions', (tester) async {
+    await pumpDetail(
+      tester,
+      order: orderFixture(id: 'MK-20', status: 'placed'),
+    );
+
+    expect(find.text('Reject'), findsOneWidget);
+    expect(find.text('Accept order'), findsOneWidget);
+  });
+
+  testWidgets('accept keeps the screen open and updates the action', (
+    tester,
+  ) async {
+    final repo = await pumpDetail(
+      tester,
+      order: orderFixture(id: 'MK-21', status: 'placed'),
+    );
+
+    repo.actionResult = orderFixture(id: 'MK-21', status: 'confirmed');
+    await tester.tap(find.text('Accept order'));
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('#MK-21'), findsOneWidget);
+    expect(find.text('Start preparing'), findsOneWidget);
+    expect(find.text('Accept order'), findsNothing);
+  });
+
+  testWidgets('confirmed order shows the preparing action', (tester) async {
+    await pumpDetail(
+      tester,
+      order: orderFixture(id: 'MK-22', status: 'confirmed'),
+    );
+    expect(find.text('Start preparing'), findsOneWidget);
+  });
+
+  testWidgets('preparing order shows the ready action', (tester) async {
+    await pumpDetail(
+      tester,
+      order: orderFixture(id: 'MK-23', status: 'preparing'),
+    );
+    expect(find.text('Mark as ready'), findsOneWidget);
+  });
+
+  testWidgets('ready order shows pickup verification', (tester) async {
+    await pumpDetail(
+      tester,
+      order: orderFixture(id: 'MK-24', status: 'ready'),
+    );
+    expect(find.text('Verify pickup code'), findsOneWidget);
+  });
+
+  testWidgets('arrived order shows pickup verification', (tester) async {
+    await pumpDetail(
+      tester,
+      order: orderFixture(id: 'MK-25', status: 'arrived_at_restaurant'),
+    );
+    expect(find.text('Verify pickup code'), findsOneWidget);
+  });
+
+  testWidgets('delivered order has no action bar', (tester) async {
+    await pumpDetail(
+      tester,
+      order: orderFixture(id: 'MK-26', status: 'delivered'),
+    );
+
+    expect(find.text('Accept order'), findsNothing);
+    expect(find.text('Start preparing'), findsNothing);
+    expect(find.text('Mark as ready'), findsNothing);
+    expect(find.text('Verify pickup code'), findsNothing);
+  });
+
+  testWidgets('pickup sheet requires four digits and verifies', (tester) async {
+    final repo = await pumpDetail(
+      tester,
+      order: orderFixture(id: 'MK-27', status: 'ready'),
+    );
+
+    await tester.tap(find.text('Verify pickup code'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(find.text('Ask the driver for the 4-digit code.'), findsOneWidget);
+    final verifyButton = find.ancestor(
+      of: find.text('Verify pickup'),
+      matching: find.byType(ElevatedButton),
+    );
+    expect(tester.widget<ElevatedButton>(verifyButton).onPressed, isNull);
+
+    await tester.enterText(find.byType(TextField), '123');
+    await tester.pump();
+    expect(tester.widget<ElevatedButton>(verifyButton).onPressed, isNull);
+
+    repo.actionResult = orderFixture(id: 'MK-27', status: 'picked_up');
+    await tester.enterText(find.byType(TextField), '1234');
+    await tester.pump();
+    expect(tester.widget<ElevatedButton>(verifyButton).onPressed, isNotNull);
+
+    await tester.tap(find.text('Verify pickup'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(find.text('Pickup verified'), findsOneWidget);
+    expect(find.text('Ask the driver for the 4-digit code.'), findsNothing);
+    expect(find.text('Verify pickup code'), findsNothing);
+    await tester.pump(const Duration(seconds: 5));
+  });
+
+  testWidgets('pickup failure keeps the sheet open and clears the code', (
+    tester,
+  ) async {
+    final repo = await pumpDetail(
+      tester,
+      order: orderFixture(id: 'MK-28', status: 'ready'),
+    );
+
+    await tester.tap(find.text('Verify pickup code'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    repo.actionError = const ApiException(
+      statusCode: 400,
+      message: 'Invalid pickup code',
+    );
+    await tester.enterText(find.byType(TextField), '1111');
+    await tester.pump();
+    await tester.tap(find.text('Verify pickup'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(find.text('Invalid pickup code'), findsOneWidget);
+    expect(find.text('Ask the driver for the 4-digit code.'), findsOneWidget);
+    expect(find.text('1'), findsNothing);
+    await tester.pump(const Duration(seconds: 5));
   });
 
   testWidgets('shows not found and retries the list', (tester) async {
