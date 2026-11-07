@@ -11,6 +11,8 @@ import '../../../core/widgets/app_states.dart';
 import '../../../core/widgets/secondary_button.dart';
 import '../../auth/providers/auth_provider.dart';
 import '../../auth/views/welcome_view.dart';
+import '../../registration/providers/registration_provider.dart';
+import '../../registration/views/registration_flow_view.dart';
 import '../providers/restaurant_provider.dart';
 import '../providers/restaurant_state.dart';
 import '../providers/shell_provider.dart';
@@ -37,6 +39,7 @@ class _RestaurantGateViewState extends ConsumerState<RestaurantGateView> {
   Future<void> _logout() async {
     ref.invalidate(restaurantProvider);
     ref.invalidate(shellProvider);
+    ref.invalidate(registrationProvider);
     await ref.read(authProvider.notifier).logout();
     if (!mounted) return;
     Navigator.of(context).pushAndRemoveUntil(
@@ -47,6 +50,12 @@ class _RestaurantGateViewState extends ConsumerState<RestaurantGateView> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(registrationProvider, (previous, next) {
+      if ((previous?.submitted ?? false) == false && next.submitted) {
+        ref.read(restaurantProvider.notifier).load();
+      }
+    });
+
     final state = ref.watch(restaurantProvider);
 
     switch (state.status) {
@@ -66,13 +75,7 @@ class _RestaurantGateViewState extends ConsumerState<RestaurantGateView> {
           ),
         );
       case RestaurantLoadStatus.none:
-        return _StatusPlaceholder(
-          icon: Icons.storefront_outlined,
-          title: 'Set up your restaurant',
-          message:
-              'Registration is coming soon in this app. Use the web dashboard for now.',
-          onLogout: _logout,
-        );
+        return RegistrationFlowView(onLogout: _logout);
       case RestaurantLoadStatus.loaded:
         if (state.restaurant != null && state.isApproved) {
           return const AppShell();
@@ -84,7 +87,7 @@ class _RestaurantGateViewState extends ConsumerState<RestaurantGateView> {
             icon: Icons.hourglass_empty,
             title: 'Approval pending',
             message:
-                'Your restaurant is awaiting approval. Use the web dashboard for updates.',
+                "Your restaurant is under review. We'll let you know as soon as it's approved.",
             onLogout: _logout,
           );
         }
@@ -93,15 +96,15 @@ class _RestaurantGateViewState extends ConsumerState<RestaurantGateView> {
             icon: Icons.cancel_outlined,
             title: 'Restaurant rejected',
             message:
-                'Your restaurant application was not approved. Please contact support or use the web dashboard.',
+                'Your application was not approved. Please contact support if you think this is a mistake.',
             onLogout: _logout,
           );
         }
         return _StatusPlaceholder(
           icon: Icons.info_outline,
-          title: 'Awaiting approval',
+          title: 'Status unavailable',
           message:
-              'Your restaurant is not approved yet. Use the web dashboard for updates.',
+              'We could not confirm your restaurant status. Please try again shortly.',
           onLogout: _logout,
         );
     }
