@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"><meta content="mobile_stack" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700&amp;family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{width:100vw;margin:0;padding:0;background-color:#fff8f4;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "inverse-surface": "#33302c", "tertiary-fixed": "#f4ded3", "on-background": "#1e1b18", "on-secondary": "#ffffff", "on-primary-fixed-variant": "#881f00", "error": "#ba1a1a", "on-primary": "#ffffff", "surface-container-lowest": "#ffffff", "surface-container-highest": "#e9e1dc", "outline-variant": "#e3beb5", "on-tertiary-fixed-variant": "#52443c", "on-surface-variant": "#5b413a", "on-surface": "#1e1b18", "tertiary-fixed-dim": "#d7c2b8", "on-tertiary": "#ffffff", "background": "#fff8f4", "inverse-on-surface": "#f7efea", "secondary-fixed": "#ffdbd1", "on-secondary-container": "#611300", "primary-fixed-dim": "#ffb5a1", "on-tertiary-fixed": "#241913", "outline": "#8f7068", "surface-tint": "#b22c00", "tertiary": "#675850", "secondary": "#ad320e", "on-error-container": "#93000a", "surface": "#fff8f4", "secondary-fixed-dim": "#ffb4a1", "error-container": "#ffdad6", "tertiary-container": "#817067", "primary-fixed": "#ffdbd1", "inverse-primary": "#ffb5a1", "surface-container-low": "#faf2ed", "on-primary-container": "#fffaf9", "surface-variant": "#e9e1dc", "secondary-container": "#fd6a43", "surface-dim": "#e0d9d3", "surface-container": "#f4ece7", "on-secondary-fixed": "#3c0800", "on-tertiary-container": "#fffaf8", "primary": "#ac2a00", "primary-container": "#d33e11", "on-error": "#ffffff", "on-primary-fixed": "#3b0800", "on-secondary-fixed-variant": "#881f00", "surface-bright": "#fff8f4", "surface-container-high": "#eee7e1" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "gutter": "0.75rem", "space-xl": "1.5rem", "space-md": "0.75rem", "margin": "1rem", "space-xs": "0.25rem", "space-lg": "1rem", "space-sm": "0.5rem" }, fontFamily: { "headline-lg": ["Bricolage Grotesque"], "label-lg": ["DM Sans"], "label-sm": ["DM Sans"], "display": ["Bricolage Grotesque"], "body-sm": ["DM Sans"], "headline-sm": ["Bricolage Grotesque"], "body-lg": ["DM Sans"], "numeric-table": ["DM Sans"], "body-md": ["DM Sans"], "headline-md": ["Bricolage Grotesque"], "label-md": ["DM Sans"] }, fontSize: { "headline-lg": ["26px", { lineHeight: "32px", fontWeight: "700" }], "label-lg": ["15px", { lineHeight: "20px", letterSpacing: "0.1px", fontWeight: "600" }], "label-sm": ["11px", { lineHeight: "14px", letterSpacing: "0.3px", fontWeight: "600" }], "display": ["32px", { lineHeight: "38px", fontWeight: "700" }], "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }], "headline-sm": ["18px", { lineHeight: "24px", fontWeight: "600" }], "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }], "numeric-table": ["16px", { lineHeight: "20px", fontWeight: "700" }], "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }], "headline-md": ["22px", { lineHeight: "28px", fontWeight: "600" }], "label-md": ["13px", { lineHeight: "18px", fontWeight: "500" }] } } } }</script><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface font-body-md text-on-surface antialiased min-h-screen flex flex-col"><header class="fixed top-0 w-full z-50 pt-safe bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><button aria-label="Go back" class="w-12 h-12 -ml-2 rounded-full flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-colors" onclick="history.back()" type="button"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><h1 class="font-headline-sm text-headline-sm text-on-surface tracking-tight truncate">Set up your restaurant</h1></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 bg-surface"><div class="flex flex-col w-full pb-24">
+<!-- Progress Stepper -->
+<div class="px-margin pt-space-lg pb-space-md">
+<div class="flex items-center justify-between mb-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Step 2 of 4</span>
+<span class="font-label-sm text-label-sm font-semibold text-primary">Location Details</span>
+</div>
+<div class="grid grid-cols-4 gap-space-xs w-full h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full"></div>
+<div class="bg-primary-container h-full rounded-full"></div>
+<div class="bg-surface-container-highest h-full rounded-full"></div>
+<div class="bg-surface-container-highest h-full rounded-full"></div>
+</div>
+</div>
+<!-- Header Prompt -->
+<div class="px-margin pt-space-xs pb-space-md">
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">Where are you located?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Guests and delivery drivers will use this spot to find your kitchen.</p>
+</div>
+<!-- Search Section with Live Dropdown Simulation -->
+<div class="px-margin relative z-20 mb-space-lg">
+<label class="block font-label-md text-label-md text-on-surface mb-space-xs" for="address-search">Find address</label>
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 pl-space-md flex items-center pointer-events-none text-primary">
+<span class="material-symbols-outlined text-[22px]">search</span>
+</div>
+<input class="w-full h-[52px] pl-11 pr-10 rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md outline-none transition-all placeholder:text-outline border border-[#8F867E] focus:ring-2 focus:ring-primary-container" id="address-search" placeholder="Start typing your address or postcode" type="text" value="14 Silbury">
+<button aria-label="Clear address search" class="absolute inset-y-0 right-0 pr-space-md flex items-center text-outline hover:text-on-surface transition-colors" onclick="clearSearch()" type="button">
+<span class="material-symbols-outlined text-[20px]">cancel</span>
+</button>
+</div>
+<!-- Active Autocomplete Suggestions Card -->
+<div class="mt-space-xs w-full bg-surface-container-lowest rounded-xl border border-[#EBDFD3] overflow-hidden transition-all duration-200" id="suggestions-box">
+<div class="p-space-xs">
+<!-- Item 1: Selected -->
+<button class="w-full text-left p-space-md rounded-lg bg-surface-container-low flex items-start gap-space-md transition-colors" onclick="selectAddress('14 Silbury Boulevard, Central Milton Keynes, MK9 3QA', '14 Silbury Boulevard', 'Milton Keynes', 'MK9 3QA')" type="button">
+<div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5 text-primary">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-label-lg text-label-lg text-on-surface font-semibold truncate">14 Silbury Boulevard</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Central Milton Keynes, MK9 3QA</p>
+</div>
+<span class="material-symbols-outlined text-[18px] text-primary shrink-0 self-center">check</span>
+</button>
+<!-- Item 2 -->
+<button class="w-full text-left p-space-md rounded-lg hover:bg-surface-container-low flex items-start gap-space-md transition-colors" onclick="selectAddress('14 Silbury Arcade, Milton Keynes, MK9 3AG', '14 Silbury Arcade', 'Milton Keynes', 'MK9 3AG')" type="button">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center shrink-0 mt-0.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">near_me</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-body-md text-body-md text-on-surface font-medium truncate">14 Silbury Arcade</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Milton Keynes, MK9 3AG</p>
+</div>
+</button>
+<!-- Item 3 -->
+<button class="w-full text-left p-space-md rounded-lg hover:bg-surface-container-low flex items-start gap-space-md transition-colors" onclick="selectAddress('14 Silbury Court, Milton Keynes, MK9 3HQ', '14 Silbury Court', 'Milton Keynes', 'MK9 3HQ')" type="button">
+<div class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center shrink-0 mt-0.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">near_me</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-body-md text-body-md text-on-surface font-medium truncate">14 Silbury Court</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Milton Keynes, MK9 3HQ</p>
+</div>
+</button>
+</div>
+</div>
+</div>
+<!-- Interactive Map Card -->
+<div class="px-margin mb-space-lg relative z-10">
+<div class="bg-surface-container-lowest rounded-xl overflow-hidden border border-[#EBDFD3]">
+<!-- Map Visual Display -->
+<div class="relative w-full h-[180px] bg-surface-container-high overflow-hidden" data-location="Silbury Boulevard, Central Milton Keynes, UK">
+<div class="w-full h-full bg-cover bg-center" data-alt="A clean, calm graphic top-down cartographic street view map centered on Silbury Boulevard in Milton Keynes UK, highlighting structured roads, gentle green boulevards, and warm terracotta building parcels in soft natural tones" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBPF832nRDMDkQiaGYgV3jYs8epGq5nOxjkefxFfeDa1bf8jkSye1GkuuT1GYvaaep-16db5mF-IJ9HaVdJOGqmzHsMlTIzZEp2HPxSIxV2kp7JLB9e0y2bzEN4mORiZi-JhMRhtLbdDrps_S8FogUCDUUOxgkycO2tbEFvc8DErplie5PpzZ4SKauibM2_-P4GhTrO7m3Ic6iO3Cib-Xw2jc0ec5dopW_7GP9I5wk')"></div>
+<!-- Central Accent Marker -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="relative flex flex-col items-center animate-bounce">
+<span class="material-symbols-outlined text-primary text-[36px] drop-shadow-sm" style="font-variation-settings: 'FILL' 1;">location_on</span>
+<div class="w-2.5 h-1 bg-on-surface/40 rounded-full blur-[1px] mt-[-6px]"></div>
+</div>
+</div>
+<!-- Subtle Location Badge -->
+<div class="absolute top-space-sm left-space-sm bg-surface-container-lowest/90 backdrop-blur-sm px-2.5 py-1 rounded-md shadow-sm flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-secondary-container animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">MK9 3QA Pinpoint</span>
+</div>
+</div>
+<!-- Card Action Strip -->
+<div class="p-space-md bg-surface-container-lowest flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-outline text-[20px] shrink-0">touch_app</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Drag the pin to adjust your exact location</span>
+</div>
+<button class="h-10 px-3.5 rounded-xl bg-surface-container-low hover:bg-surface-container font-label-md text-label-md text-primary font-semibold flex items-center gap-1.5 shrink-0 transition-colors" id="adjust-map-btn" onclick="togglePinAdjust()" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span class="">Adjust</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Precise Address Form Fields -->
+<div class="px-margin flex flex-col gap-space-md">
+<!-- Street Field -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1" for="input-street">Street address</label>
+<input class="w-full h-[52px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md outline-none border border-[#8F867E] focus:ring-2 focus:ring-primary-container" id="input-street" type="text" value="14 Silbury Boulevard">
+</div>
+<!-- City & Postcode in Responsive Grid -->
+<div class="grid grid-cols-2 gap-gutter">
+<!-- City Field -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1" for="input-city">City</label>
+<input class="w-full h-[52px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md outline-none border border-[#8F867E] focus:ring-2 focus:ring-primary-container" id="input-city" type="text" value="Milton Keynes">
+</div>
+<!-- Postcode Field with Confirmation Tag -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1" for="input-postcode">Postcode</label>
+<input class="w-full h-[52px] px-space-md rounded-xl bg-surface-container-lowest text-on-surface font-numeric-table text-numeric-table uppercase outline-none border border-[#8F867E] focus:ring-2 focus:ring-primary-container" id="input-postcode" type="text" value="MK9 3QA">
+</div>
+</div>
+<!-- Live Postcode Validation Pill -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container-low w-fit text-[#1B5E20]">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm font-semibold tracking-wide">Valid UK postcode confirmed</span>
+</div>
+<!-- Country Read-Only Field -->
+<div>
+<div class="flex items-center justify-between mb-1">
+<label class="font-label-md text-label-md text-on-surface" for="input-country">Country / Region</label>
+<span class="font-label-sm text-label-sm text-outline">Fixed region</span>
+</div>
+<div class="relative w-full">
+<input class="w-full h-[52px] pl-space-md pr-10 rounded-xl bg-surface-container-high text-on-surface-variant font-body-md text-body-md cursor-not-allowed select-none outline-none border border-[#8F867E]" id="input-country" readonly="" tabindex="-1" type="text" value="United Kingdom">
+<div class="absolute inset-y-0 right-0 pr-space-md flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Tactile Operational Note -->
+
+<!-- Sticky Conversion Footer (Mobile Anchored) -->
+<div class="fixed bottom-0 left-0 right-0 bg-surface/90 backdrop-blur-md px-margin py-3 z-40 pb-safe shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
+<div class="max-w-md mx-auto w-full flex items-center gap-space-sm">
+<button class="w-full h-[52px] rounded-xl bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 transition-transform active:scale-[0.99]" id="continue-btn" onclick="submitLocationStep()" type="button"><span class="">Continue</span><span class="material-symbols-outlined text-[20px]">arrow_forward</span></button>
+</div>
+</div>
+</div>
+<script>
+  function selectAddress(fullText, street, city, postcode) {
+    const searchInput = document.getElementById('address-search');
+    const streetInput = document.getElementById('input-street');
+    const cityInput = document.getElementById('input-city');
+    const postcodeInput = document.getElementById('input-postcode');
+    const suggestionsBox = document.getElementById('suggestions-box');
+
+    if (searchInput) searchInput.value = fullText;
+    if (streetInput) streetInput.value = street;
+    if (cityInput) cityInput.value = city;
+    if (postcodeInput) postcodeInput.value = postcode;
+
+    if (suggestionsBox) {
+      suggestionsBox.style.opacity = '0';
+      setTimeout(() => {
+        suggestionsBox.classList.add('hidden');
+      }, 150);
+    }
+  }
+
+  function clearSearch() {
+    const searchInput = document.getElementById('address-search');
+    const suggestionsBox = document.getElementById('suggestions-box');
+    if (searchInput) {
+      searchInput.value = '';
+      searchInput.focus();
+    }
+    if (suggestionsBox) {
+      suggestionsBox.classList.remove('hidden');
+      suggestionsBox.style.opacity = '1';
+    }
+  }
+
+  function togglePinAdjust() {
+    const btn = document.getElementById('adjust-map-btn');
+    if (!btn) return;
+    const isEditing = btn.getAttribute('data-adjusting') === 'true';
+    if (!isEditing) {
+      btn.setAttribute('data-adjusting', 'true');
+      btn.classList.add('bg-primary-container', 'text-on-primary');
+      btn.classList.remove('bg-surface-container-low', 'text-primary');
+      btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span><span>Done</span>';
+    } else {
+      btn.setAttribute('data-adjusting', 'false');
+      btn.classList.remove('bg-primary-container', 'text-on-primary');
+      btn.classList.add('bg-surface-container-low', 'text-primary');
+      btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">tune</span><span>Adjust</span>';
+    }
+  }
+
+  function submitLocationStep() {
+    const btn = document.getElementById('continue-btn');
+    if (btn) {
+      btn.innerHTML = '<span class="material-symbols-outlined text-[20px] animate-spin">progress_activity</span><span>Saving Location...</span>';
+      setTimeout(() => {
+        btn.innerHTML = '<span class="material-symbols-outlined text-[20px]">check</span><span>Saved</span>';
+      }, 800);
+    }
+  }
+</script></main>
+
+</body></html>

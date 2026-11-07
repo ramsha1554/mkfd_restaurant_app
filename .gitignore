@@ -56,3 +56,5 @@ android/local.properties
 
 # Generated (committed per spec, but ignore ephemeral)
 .dart_tool/
+
+design/stitch_tmp/
