@@ -30,7 +30,7 @@ Base URLs:
 ## Restaurant
 
 - `GET /restaurants/my-restaurant` — `404` means owner has no restaurant yet; trigger into registration, not an error state.
-- `POST /restaurants` `{name, description, cuisineType: [string], phone, email, address: {street, city, postcode, country}, longitude, latitude, minimumOrder, deliveryFee, preparationTime, operatingHours: {monday…sunday: {isOpen, open: "HH:mm", close: "HH:mm"}}}`
+- `POST /restaurants` `{name, description, cuisineType: [string], phone, email, address: {street, city, postcode, country}, longitude, latitude, minimumOrder, preparationTime, operatingHours: {monday…sunday: {isOpen, open: "HH:mm", close: "HH:mm"}}}`
 - `PATCH /restaurants/:id` — partial update (confirm whether delivery fee and coordinates are accepted here too — §9 P8; only proven at creation)
 - `PATCH /restaurants/:id/status` — `{isOpen}` or `{isBusy}`
 - `POST /restaurants/:id/image` — multipart, one field per call: `logo` or `coverImage`, never both together
@@ -81,6 +81,12 @@ Payload carries `type` field; confirm exact values used for restaurant owner (§
 
 ---
 
+## Phase 2A registration notes
+
+- Send `longitude`/`latitude` at the top level, `address.country = "UK"`, `email = ""` when omitted, and **no `deliveryFee`** (the app never sends one at registration). Hours default to Mon-Sat `09:00-22:00` open and Sunday closed. Phone is normalised to local `07...`. Confirm the real success body and whether `status` starts as `pending`.
+- Address lookup services (no auth token): Photon `GET https://photon.komoot.io/api/?q=<q>&limit=6&lang=en&bbox=-8.65,49.9,1.77,60.86` (min 3 chars; keep results with street or postcode) and `GET https://photon.komoot.io/reverse?lon=<lng>&lat=<lat>&limit=1&lang=en`; postcodes.io `GET https://api.postcodes.io/postcodes/<postcode>` (404 = `not_found`). Timeouts 8s Photon / 6s postcodes.io, user agent `MKFoodsRestaurant/1.0`, OSM tile attribution required.
+- Document upload (`POST /restaurants/documents`) and approval screens remain Phase 2B.
+
 ## Defaults to pre-fill on registration
 
-City "Milton Keynes", country "UK", preparation time 30 min, minimum order 0, delivery fee 0, hours Monday–Saturday 09:00–22:00, Sunday closed. Currency always £, dates always `en_GB` — centralise both in one formatting utility, never inline.
+City "Milton Keynes", country "UK", preparation time 30 min, minimum order 0, hours Monday–Saturday 09:00–22:00, Sunday closed. Currency always £, dates always `en_GB` — centralise both in one formatting utility, never inline.

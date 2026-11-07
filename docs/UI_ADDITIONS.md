@@ -14,10 +14,14 @@ Components this app needs that `docs/UI_STANDARDS.md` does not define yet.
 - **Pickup sheet** — `lib/ui/features/orders/widgets/pickup_sheet.dart`. `showAppSheet` title "Verify pickup code" (`h2`), 14 secondary body, centred 4-box `OtpCodeField(length: 4)`, primary "Verify pickup" disabled until four digits with loading, and a "Cancel" text button. Failure keeps the sheet open, clears the boxes and shows the backend message; success closes it and confirms.
 - **Order detail screen** — `lib/ui/features/orders/views/order_detail_view.dart`. Order number app bar with status badge, header/customer/items/earnings/driver cards, prominent special-instructions and reason banners, acceptance countdown and a status-aware pinned action bar. Opened from any order card with no bottom nav.
 - **4-length code field** — `lib/ui/features/auth/widgets/otp_code_field.dart`. `OtpCodeField` gained a `length` parameter (default 6); the OTP screen keeps six digits while pickup verification uses four.
+- **`AppStepper`** — `lib/ui/core/widgets/app_stepper.dart`. Four-segment progress header for the registration flow: "Step N of 4" caption, an uppercase phase label, and 4px rounded segments that fill `primary` up to the current step. Semantics announce the current step and label.
+- **`AppTextField` registration extensions** — `lib/ui/core/widgets/app_text_field.dart`. Adds `isRequired` (renders `label *`), `prefix`/`suffix` widgets, `inputFormatters`, `minLines`, `hasError` (red border only), `locked`, `showValidCheck`, `onSubmitted`, `onEditingComplete` and `textCapitalization`. No new tokens or font sizes.
+- **Removable `AppFilterChip`** — `lib/ui/core/widgets/app_chip.dart`. Adds `trailingIcon` and `onTrailingTap`; the registration cuisine chips use a close icon with "Remove <label>" semantics.
+- **Registration flow** — `lib/ui/features/registration/`. Four steps (about, location, pricing, review), a pinned `RegistrationFooter` (surface bar, 1px top border, safe area), a postcode status line, an `AddressMapPreview`, and a full-screen `LocationMapView` with tap-to-move pin and debounced reverse geocoding. Uses `flutter_map` + OpenStreetMap tiles (no Google Maps key) with the required attribution.
+- **Restaurant gate registration entry** — `lib/ui/features/shell/views/restaurant_gate_view.dart`. `none` (404) opens the registration flow instead of a placeholder; a successful submit reloads the restaurant so the pending state appears automatically; pending/rejected/unknown copy no longer points at the web dashboard.
 
 ## Not defined yet
 
 - tabs — not defined
-- required-field marker — not defined
-- inline validation — not defined
+- inline validation — not defined (registration uses snackbar + red border; the postcode status line is the only inline message)
 - new-order alert overlay — not defined

@@ -93,7 +93,53 @@ Living status, decisions and open questions — updated at the end of every phas
 
 **Verification:** see Phase 1 report.
 
-## Phase 2 — Restaurant Registration & Compliance Documents — Planned
+## Phase 2A — Restaurant registration flow — Done
+
+**Scope delivered:** four-step registration shown by the restaurant gate when `GET /restaurants/my-restaurant` returns `404`. Step 1 captures name, phone (UK normalised to `07...`), email, cuisines and description. Step 2 searches addresses through Photon, validates postcodes through postcodes.io, lets the owner adjust a `flutter_map`/OSM pin full screen and reverse-describes the point. Step 3 captures minimum order (text + quick chips) and preparation time (5-120 slider). Step 4 reviews the draft, confirms terms and submits `POST /restaurants`; the gate reloads on success. No document upload or approval screens (Phase 2B).
+
+**Files added / changed:**
+- `pubspec.yaml`, `pubspec.lock` — `flutter_map ^8.3.2`, `latlong2 ^0.10.1` (no Google Maps, no geolocator, no location permission)
+- `android/app/src/main/AndroidManifest.xml` — `INTERNET` permission for OSM tiles in release
+- `lib/core/utils/uk_postcode.dart` — `isValidUkPostcode`, `normaliseUkPostcode`
+- `lib/data/services/geocoding_service.dart` — `GeocodingService` interface, `ApiGeocodingService`, `AddressSuggestion`, `PostcodeLookupResult`, `PostcodeLookupStatus`; own plain `Dio`, never the auth token
+- `lib/core/constants/app_config.dart` — `osmTileUrl`, `osmAttribution`
+- `lib/core/animations/app_durations.dart` — `geocoding`, `postcodeLookup`, `searchDebounce` (350ms), `postcodeDebounce` (400ms), `reverseDebounce` (500ms)
+- `lib/core/di/locator.dart` — registers `GeocodingService`
+- `lib/ui/core/widgets/app_stepper.dart` — four-segment registration header with step/total + label
+- `lib/ui/core/widgets/app_text_field.dart` — `isRequired`, `prefix`, `suffix`, `inputFormatters`, `minLines`, `hasError`, `locked`, `showValidCheck`, `onSubmitted`, `onEditingComplete`, `textCapitalization`
+- `lib/ui/core/widgets/app_chip.dart` — `trailingIcon` + `onTrailingTap` (removable "Remove <label>" semantics)
+- `lib/domain/models/restaurant_registration.dart` — exact `POST /restaurants` payload builder
+- `lib/ui/features/registration/utils/registration_validation.dart` — UK phone/postcode/email/name/cuisine/minimum-order/prep validators + `kSuggestedCuisines`
+- `lib/ui/features/registration/models/registration_draft.dart` — UI draft, defaults, `toRequest()`
+- `lib/ui/features/registration/providers/registration_state.dart`, `registration_provider.dart` — step state, debounced search/lookup with sequence guards, `selectAddress`, `describePoint`, per-step validation, submit
+- `lib/data/api/api_endpoints.dart` — `createRestaurant = '/restaurants'`
+- `lib/data/repositories/restaurant_repository.dart` — `createRestaurant(RestaurantRegistrationDraft)`
+- `lib/ui/features/registration/views/register_step_one_view.dart`, `register_location_step_view.dart`, `register_pricing_step_view.dart`, `register_review_step_view.dart`, `registration_flow_view.dart`, `location_map_view.dart`
+- `lib/ui/features/registration/widgets/registration_footer.dart`, `address_map_preview.dart`
+- `lib/ui/features/shell/views/restaurant_gate_view.dart` — `none` opens the flow; submitted value reloads the restaurant; pending/rejected/unknown copy updated; logout invalidates registration
+- Tests: `test/data/geocoding_service_test.dart`, `test/data/restaurant_registration_test.dart`, `test/ui/registration_provider_test.dart`, `test/ui/app_stepper_test.dart`, `test/ui/app_text_field_test.dart`
+- `docs/PHASES.md`, `docs/UI_ADDITIONS.md`, `docs/Restaurant.md`, `design/SCREENS.md`
+
+**Decisions:**
+- Address lookup uses Photon (`bbox` limited to Great Britain) and postcodes.io; both are unauthenticated third-party calls from a dedicated `Dio` with `MKFoodsRestaurant/1.0` user agent, never the owner token.
+- Postcodes are validated locally first (`invalid_format` without network), then 404 -> `not_found`, network/server -> `failed`. Success fills city (admin district else region), postcode, latitude and longitude.
+- The full-screen map satisfies reverse geocoding without owning the draft pin: `describePoint` only labels the point; the owner still confirms via "Use this location".
+- Payload uses top-level `longitude` and `latitude`, `address.country = "UK"`, empty email as `""`, and no `deliveryFee`. Hours default to Mon-Sat 09:00-22:00 open and Sunday closed.
+- Phone input keeps a fixed `+44` prefix badge but stores/validates the local UK form (`^0\d{9,10}$` after normalisation), matching the backend.
+- Validation uses `AppSnackbar.showError` + red field border, no inline error text; the step-2 postcode status line is the only inline exception.
+- Draft defaults: city "Milton Keynes", minimum order 0, preparation time 30 min.
+- The review step requires the terms/privacy checkbox before the submit button enables.
+
+**Open questions / assumptions:**
+- Confirm the real `POST /restaurants` success body and whether the backend recomputes `status` as `pending` immediately for the gate reload.
+- `phone`, `email`, `address.country` and the operating-hours keys are assumptions based on the Phase 0 contract; confirm against a captured response in `docs/api_samples/`.
+- Document upload and approval states remain Phase 2B.
+
+**Verification:** see Phase 2A report.
+
+## Phase 2B — Compliance documents & approval — Planned
+
+**Scope to deliver:** document upload and status screens for the five required document types, using `POST /restaurants/documents` and `GET /restaurants/my-documents`, plus the approval/rejection surfaces that follow registration. Start only after Phase 2A is reviewed.
 
 ## Phase 3 — App Shell & Store Controls — ✅ Done
 

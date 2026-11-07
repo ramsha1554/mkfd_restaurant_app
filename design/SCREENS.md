@@ -180,4 +180,15 @@ Categories (id, name, order), items (id, name, description, price, image, availa
 | D8 | Keep the "Kitchen ready?" tip in the earnings empty state? | Optional; low priority |
 
 ## H. Build order across phases
-Phase 3: `AppBottomNav`, `AppLiveBadge`, `AppSwitchRow`, shell with placeholder tabs. Phase 4: order card + list, detail, reject sheet, offline banner. Phase 5: alert sheet, banner, sound. Phase 7: menu list, item tile, delete dialog (+ item form to be designed). Phase 9: earnings, `AppBarChart`, empty state. Design still missing: registration wizard, documents, More hub, item form, opening hours, profile, settings.
+Phase 3: `AppBottomNav`, `AppLiveBadge`, `AppSwitchRow`, shell with placeholder tabs. Phase 4: order card + list, detail, reject sheet, offline banner. Phase 5: alert sheet, banner, sound. Phase 7: menu list, item tile, delete dialog (+ item form to be designed). Phase 9: earnings, `AppBarChart`, empty state. Design still missing: documents, More hub, item form, opening hours, profile, settings.
+
+## I. Phase 2A registration (implemented)
+
+Four-step wizard shown by the restaurant gate when `GET /restaurants/my-restaurant` returns `404`.
+
+1. **About** — `AppStepper` step 1/4, "Tell us about your restaurant" + storefront icon bubble. Required name, phone (fixed `+44` prefix, local `07...` hint, helper "Customers and drivers may call this number."), email, removable cuisine chips with suggestions and an add field, optional 200-character description. Footer `Continue` plus a `Log out` text button with confirmation.
+2. **Location** — debounced Photon address search (min 3 chars) with a suggestion list, required street/city/postcode fields, a postcodes.io validation status line (only inline message), and a 180px `AddressMapPreview`. Tapping the map opens `LocationMapView` full screen: tap to move the pin, debounced reverse label, attribution, and "Use this location".
+3. **Order rules** — minimum order with `£` prefix and quick chips (No minimum, £10, £15, £20), a 5-120 minute preparation slider (step 5), and an info banner that new stores default to Mon-Sat 09:00-22:00, Sunday closed.
+4. **Review** — summary cards for Restaurant, Location (with map preview), Pricing and timing, each with `Edit`; "Next requirement" info banner; terms/privacy checkbox; pinned `Submit for approval` button (disabled until accepted, spinner while submitting). Success shows "Application submitted" and the gate reloads to pending.
+
+Validation is snackbar + red border throughout; the postcode lookup line is the single inline exception. No document upload or approval screens yet (Phase 2B).
