@@ -12,6 +12,7 @@ abstract final class ApiEndpoints {
 
   // Restaurant
   static const String myRestaurant = '/restaurants/my-restaurant';
+  static const String createRestaurant = '/restaurants';
 
   static String restaurantStatus(String id) => '/restaurants/$id/status';
 

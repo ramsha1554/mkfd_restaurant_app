@@ -1,5 +1,6 @@
 import '../../core/error/app_error.dart';
 import '../../core/utils/app_log.dart';
+import '../../domain/models/restaurant_registration.dart';
 import '../api/api_client.dart';
 import '../api/api_endpoints.dart';
 import '../models/restaurant.dart';
@@ -22,6 +23,22 @@ class RestaurantRepository {
       rethrow;
     } catch (e, s) {
       AppLog.e('STORE', 'getMyRestaurant', 'failed', e, s);
+      rethrow;
+    }
+  }
+
+  Future<RestaurantModel?> createRestaurant(
+    RestaurantRegistrationDraft draft,
+  ) async {
+    try {
+      final envelope = await _client.post(
+        ApiEndpoints.createRestaurant,
+        data: draft.toJson(),
+      );
+      AppLog.i('STORE', 'createRestaurant', 'created');
+      return _restaurantFrom(envelope['data']);
+    } catch (e, s) {
+      AppLog.e('STORE', 'createRestaurant', 'failed', e, s);
       rethrow;
     }
   }

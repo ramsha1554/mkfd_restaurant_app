@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mk_food_restaurant/core/error/app_error.dart';
 import 'package:mk_food_restaurant/data/models/restaurant.dart';
 import 'package:mk_food_restaurant/data/repositories/restaurant_repository.dart';
+import 'package:mk_food_restaurant/domain/models/restaurant_registration.dart';
 import 'package:mk_food_restaurant/ui/features/shell/providers/restaurant_provider.dart';
 import 'package:mk_food_restaurant/ui/features/shell/providers/restaurant_state.dart';
 
@@ -26,6 +27,14 @@ class _FakeRestaurantRepository implements RestaurantRepository {
 
   @override
   Future<RestaurantModel?> getMyRestaurant() async {
+    if (error != null) throw error!;
+    return restaurant;
+  }
+
+  @override
+  Future<RestaurantModel?> createRestaurant(
+    RestaurantRegistrationDraft draft,
+  ) async {
     if (error != null) throw error!;
     return restaurant;
   }
