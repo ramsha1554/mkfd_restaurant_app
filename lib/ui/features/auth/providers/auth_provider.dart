@@ -53,12 +53,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
           status: AuthStatus.authenticated,
           user: user,
           phone: user.phone ?? _storage.phone,
+          countryCode: _storage.countryCode,
           isLoading: false,
         );
       } else {
         state = state.copyWith(
           status: AuthStatus.authenticated,
           phone: _storage.phone,
+          countryCode: _storage.countryCode,
           isLoading: false,
         );
       }
@@ -87,12 +89,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> requestOtp({
     required String phone,
     String role = 'customer',
+    String? countryCode,
   }) async {
     state = state.copyWith(
       isLoading: true,
       clearError: true,
       clearDebugOtp: true,
       phone: phone,
+      countryCode: countryCode,
     );
     try {
       final code = await _repo.requestOtp(phone: phone, role: role);
@@ -119,12 +123,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }) async {
     state = state.copyWith(isLoading: true, clearError: true);
     try {
-      final data = await _repo.verifyOtp(phone: phone, code: code);
+      final countryCode = state.countryCode ?? _storage.countryCode;
+      final data = await _repo.verifyOtp(
+        phone: phone,
+        code: code,
+        countryCode: countryCode,
+      );
       if (!mounted) return false;
       state = state.copyWith(
         status: AuthStatus.authenticated,
         user: data.user,
         phone: phone,
+        countryCode: countryCode,
         isLoading: false,
         clearError: true,
         clearDebugOtp: true,

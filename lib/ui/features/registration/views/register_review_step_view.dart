@@ -76,7 +76,7 @@ class _RegisterReviewStepViewState
                       ref.read(registrationProvider.notifier).goToStep(1),
                   rows: [
                     _ReviewRow(label: 'Name', value: draft.name),
-                    _ReviewRow(label: 'Phone', value: draft.phone),
+                    _ReviewRow(label: 'Phone', value: draft.displayPhone),
                     _ReviewRow(label: 'Email', value: draft.email),
                     _ReviewRow(
                       label: 'Cuisine',

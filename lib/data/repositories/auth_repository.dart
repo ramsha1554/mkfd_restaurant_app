@@ -32,6 +32,7 @@ class AuthRepository {
   Future<AuthData> verifyOtp({
     required String phone,
     required String code,
+    String? countryCode,
   }) async {
     final envelope = await _client.post(
       ApiEndpoints.verifyOtp,
@@ -102,11 +103,16 @@ class AuthRepository {
       await _storage.saveUserMeta(
         userId: user.id ?? '',
         phone: user.phone ?? phone,
+        countryCode: countryCode,
         isVerified: user.isVerified,
         isNewUser: user.isNewUser,
       );
     } else {
-      await _storage.saveUserMeta(userId: '', phone: phone);
+      await _storage.saveUserMeta(
+        userId: '',
+        phone: phone,
+        countryCode: countryCode,
+      );
     }
 
     return AuthData(

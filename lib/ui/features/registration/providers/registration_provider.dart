@@ -5,6 +5,7 @@ import '../../../../core/error/app_error.dart';
 import '../../../../core/utils/app_log.dart';
 import '../../../../core/utils/uk_postcode.dart';
 import '../../../../data/repositories/restaurant_repository.dart';
+import '../../../../data/services/auth_storage_service.dart';
 import '../../../../data/services/geocoding_service.dart';
 import '../models/registration_draft.dart';
 import '../utils/registration_validation.dart';
@@ -12,11 +13,26 @@ import 'registration_state.dart';
 
 final registrationProvider =
     StateNotifierProvider<RegistrationNotifier, RegistrationState>((ref) {
+  final storage = locator<AuthStorageService>();
   return RegistrationNotifier(
     locator<GeocodingService>(),
     locator<RestaurantRepository>(),
+    authPhone: storage.phone,
+    authCountryCode: storage.countryCode,
   );
 });
+
+RegistrationDraft _initialDraft(String? authPhone, String? authCountryCode) {
+  final phone = authPhone?.trim() ?? '';
+  var dialCode = authCountryCode?.trim() ?? '';
+  if (dialCode.isEmpty) dialCode = '+44';
+  return RegistrationDraft(
+    dialCode: dialCode,
+    phone: phone.isEmpty
+        ? ''
+        : normaliseNationalPhone(dialCode, phone),
+  );
+}
 
 class RegistrationNotifier extends StateNotifier<RegistrationState> {
   final GeocodingService _geocoding;
@@ -25,8 +41,14 @@ class RegistrationNotifier extends StateNotifier<RegistrationState> {
   int _searchSequence = 0;
   int _postcodeSequence = 0;
 
-  RegistrationNotifier(this._geocoding, this._repository)
-      : super(const RegistrationState());
+  RegistrationNotifier(
+    this._geocoding,
+    this._repository, {
+    String? authPhone,
+    String? authCountryCode,
+  }) : super(
+          RegistrationState(draft: _initialDraft(authPhone, authCountryCode)),
+        );
 
   void setName(String value) => _updateDraft((d) => d.copyWith(name: value));
 
@@ -94,7 +116,7 @@ class RegistrationNotifier extends StateNotifier<RegistrationState> {
 
   void setPreparationTime(int value) {
     _updateDraft(
-      (d) => d.copyWith(preparationTime: value.clamp(5, 180)),
+      (d) => d.copyWith(preparationTime: value.clamp(5, 60)),
     );
   }
 
@@ -214,7 +236,7 @@ class RegistrationNotifier extends StateNotifier<RegistrationState> {
   String? validateStepOne() {
     final draft = state.draft;
     return validateRestaurantName(draft.name) ??
-        validatePhone(draft.phone) ??
+        validatePhone(draft.dialCode, draft.phone) ??
         validateEmail(draft.email) ??
         validateCuisines(draft.cuisines);
   }

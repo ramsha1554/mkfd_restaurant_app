@@ -83,8 +83,8 @@ Payload carries `type` field; confirm exact values used for restaurant owner (§
 
 ## Phase 2A registration notes
 
-- Send `longitude`/`latitude` at the top level, `address.country = "UK"`, `email = ""` when omitted, and **no `deliveryFee`** (the app never sends one at registration). Hours default to Mon-Sat `09:00-22:00` open and Sunday closed. Phone is normalised to local `07...`. Confirm the real success body and whether `status` starts as `pending`.
-- Address lookup services (no auth token): Photon `GET https://photon.komoot.io/api/?q=<q>&limit=6&lang=en&bbox=-8.65,49.9,1.77,60.86` (min 3 chars; keep results with street or postcode) and `GET https://photon.komoot.io/reverse?lon=<lng>&lat=<lat>&limit=1&lang=en`; postcodes.io `GET https://api.postcodes.io/postcodes/<postcode>` (404 = `not_found`). Timeouts 8s Photon / 6s postcodes.io, user agent `MKFoodsRestaurant/1.0`, OSM tile attribution required.
+- Send `longitude`/`latitude` at the top level, `address.country = "UK"`, `email = ""` when omitted, and **no `deliveryFee`** (the app never sends one at registration). Hours default to Mon-Sat `09:00-22:00` open and Sunday closed. Phone is sent as E.164 (`fullPhone` = dial code + national number, e.g. `+447…`); step 1 pre-fills the number from the auth session (`country_code` persisted at verify-otp). Confirm the real success body and whether `status` starts as `pending`.
+- Address lookup services (no auth token): Photon `GET https://photon.komoot.io/api/?q=<q>&limit=6&lang=en&bbox=-8.65,49.9,1.77,60.86` (min 3 chars; keep results with street or postcode) and `GET https://photon.komoot.io/reverse?lon=<lng>&lat=<lat>&limit=1&lang=en`; postcodes.io `GET https://api.postcodes.io/postcodes/<postcode>` (404 = `not_found`). Timeouts 8s Photon / 6s postcodes.io, user agent `MKFoodsRestaurant/1.0`. Map tiles render through Google Maps; keys are gitignored (`google_maps_api.xml` on Android, `Secrets.xcconfig` on iOS).
 - Document upload (`POST /restaurants/documents`) and approval screens remain Phase 2B.
 
 ## Defaults to pre-fill on registration

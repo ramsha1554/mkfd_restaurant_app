@@ -6,6 +6,7 @@ class AuthStorageService {
   static const _kRefreshToken = 'refresh_token';
   static const _kUserId = 'user_id';
   static const _kPhone = 'phone';
+  static const _kCountryCode = 'country_code';
   static const _kIsVerified = 'is_verified';
   static const _kIsNewUser = 'is_new_user';
 
@@ -37,17 +38,22 @@ class AuthStorageService {
 
   String? get userId => _prefs.getString(_kUserId);
   String? get phone => _prefs.getString(_kPhone);
+  String? get countryCode => _prefs.getString(_kCountryCode);
   bool get isVerified => _prefs.getBool(_kIsVerified) ?? false;
   bool get isNewUser => _prefs.getBool(_kIsNewUser) ?? false;
 
   Future<void> saveUserMeta({
     required String userId,
     required String phone,
+    String? countryCode,
     bool? isVerified,
     bool? isNewUser,
   }) async {
     await _prefs.setString(_kUserId, userId);
     await _prefs.setString(_kPhone, phone);
+    if (countryCode != null) {
+      await _prefs.setString(_kCountryCode, countryCode);
+    }
     if (isVerified != null) await _prefs.setBool(_kIsVerified, isVerified);
     if (isNewUser != null) await _prefs.setBool(_kIsNewUser, isNewUser);
   }
@@ -55,6 +61,7 @@ class AuthStorageService {
   Future<void> clearUserMeta() async {
     await _prefs.remove(_kUserId);
     await _prefs.remove(_kPhone);
+    await _prefs.remove(_kCountryCode);
     await _prefs.remove(_kIsVerified);
     await _prefs.remove(_kIsNewUser);
   }

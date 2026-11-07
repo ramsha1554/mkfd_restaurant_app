@@ -70,7 +70,7 @@ class _RegisterStepOneViewState extends ConsumerState<RegisterStepOneView> {
     final draft = ref.read(registrationProvider).draft;
 
     final nameError = validateRestaurantName(draft.name);
-    final phoneError = validatePhone(draft.phone);
+    final phoneError = validatePhone(draft.dialCode, draft.phone);
     final emailError = validateEmail(draft.email);
     final cuisineError = validateCuisines(draft.cuisines);
 
@@ -184,13 +184,15 @@ class _RegisterStepOneViewState extends ConsumerState<RegisterStepOneView> {
                 AppTextField(
                   label: 'Phone',
                   isRequired: true,
-                  hintText: '07123 456789',
+                  hintText: draft.dialCode == '+44'
+                      ? '07123 456789'
+                      : 'National number',
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
                   textInputAction: TextInputAction.next,
                   hasError: _phoneError,
-                  showValidCheck: isValidUkPhone(draft.phone),
-                  prefix: _UkPhonePrefix(),
+                  showValidCheck: isValidPhone(draft.dialCode, draft.phone),
+                  prefix: _DialCodePrefix(dialCode: draft.dialCode),
                   onChanged: (value) {
                     ref.read(registrationProvider.notifier).setPhone(value);
                     if (_phoneError) setState(() => _phoneError = false);
@@ -337,7 +339,11 @@ class _RegisterStepOneViewState extends ConsumerState<RegisterStepOneView> {
   }
 }
 
-class _UkPhonePrefix extends StatelessWidget {
+class _DialCodePrefix extends StatelessWidget {
+  final String dialCode;
+
+  const _DialCodePrefix({required this.dialCode});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -352,10 +358,8 @@ class _UkPhonePrefix extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('🇬🇧'),
-          const SizedBox(width: AppSpacing.xs),
           Text(
-            '+44',
+            dialCode,
             style: AppTextStyles.caption.copyWith(
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,

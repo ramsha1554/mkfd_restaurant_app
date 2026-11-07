@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../core/animations/app_durations.dart';
 import '../../../../core/utils/navigation.dart';
@@ -265,15 +265,13 @@ class _RegisterLocationStepViewState
                 Semantics(
                   button: true,
                   label: 'Adjust your exact location on the map',
-                  child: GestureDetector(
-                    onTap: _openMap,
-                    child: ClipRRect(
-                      borderRadius: AppRadius.rSm,
-                      child: AddressMapPreview(
-                        latitude: draft.latitude,
-                        longitude: draft.longitude,
-                        postcode: draft.postcode,
-                      ),
+                  child: ClipRRect(
+                    borderRadius: AppRadius.rSm,
+                    child: AddressMapPreview(
+                      latitude: draft.latitude,
+                      longitude: draft.longitude,
+                      postcode: draft.postcode,
+                      onTap: _openMap,
                     ),
                   ),
                 ),

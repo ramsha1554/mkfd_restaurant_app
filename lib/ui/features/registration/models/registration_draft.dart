@@ -4,6 +4,7 @@ import '../utils/registration_validation.dart';
 
 class RegistrationDraft {
   final String name;
+  final String dialCode;
   final String phone;
   final String email;
   final List<String> cuisines;
@@ -18,6 +19,7 @@ class RegistrationDraft {
 
   const RegistrationDraft({
     this.name = '',
+    this.dialCode = '+44',
     this.phone = '',
     this.email = '',
     this.cuisines = const [],
@@ -33,8 +35,14 @@ class RegistrationDraft {
 
   bool get hasCoordinates => latitude != null && longitude != null;
 
+  String get fullPhone => toE164Phone(dialCode, phone);
+
+  String get displayPhone =>
+      phone.trim().isEmpty ? dialCode : '$dialCode $phone';
+
   RegistrationDraft copyWith({
     String? name,
+    String? dialCode,
     String? phone,
     String? email,
     List<String>? cuisines,
@@ -50,6 +58,7 @@ class RegistrationDraft {
   }) {
     return RegistrationDraft(
       name: name ?? this.name,
+      dialCode: dialCode ?? this.dialCode,
       phone: phone ?? this.phone,
       email: email ?? this.email,
       cuisines: cuisines ?? this.cuisines,
@@ -74,7 +83,7 @@ class RegistrationDraft {
       cuisineTypes: List.unmodifiable(
         cuisines.map((c) => c.trim()).where((c) => c.isNotEmpty),
       ),
-      phone: normaliseUkPhone(phone),
+      phone: fullPhone,
       email: email.trim(),
       street: street.trim(),
       city: city.trim(),

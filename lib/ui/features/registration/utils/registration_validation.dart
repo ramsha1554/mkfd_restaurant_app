@@ -19,25 +19,34 @@ String? validateRestaurantName(String value) {
   return null;
 }
 
-String normaliseUkPhone(String value) {
-  var digits = value.replaceAll(RegExp(r'[^0-9]'), '');
-  if (digits.startsWith('44') && digits.length > 10) {
-    digits = '0${digits.substring(2)}';
-  } else if (digits.isNotEmpty &&
-      !digits.startsWith('0') &&
-      (digits.length == 10 || digits.length == 11)) {
-    digits = '0$digits';
+String normaliseNationalPhone(String dialCode, String value) {
+  final digits = value.replaceAll(RegExp(r'[^0-9]'), '');
+  final codeDigits = dialCode.replaceAll(RegExp(r'[^0-9]'), '');
+  var national = digits;
+  if (codeDigits.isNotEmpty && national.startsWith(codeDigits)) {
+    national = national.substring(codeDigits.length);
   }
-  return digits;
+  if (dialCode == '+44' && national.startsWith('0')) {
+    national = national.substring(1);
+  }
+  return national;
 }
 
-bool isValidUkPhone(String value) {
-  return RegExp(r'^0\d{9,10}$').hasMatch(normaliseUkPhone(value));
+String toE164Phone(String dialCode, String value) {
+  return '$dialCode${normaliseNationalPhone(dialCode, value)}';
 }
 
-String? validatePhone(String value) {
+bool isValidPhone(String dialCode, String value) {
+  final national = normaliseNationalPhone(dialCode, value);
+  if (dialCode == '+44') return RegExp(r'^7\d{9}$').hasMatch(national);
+  return national.length >= 7 && national.length <= 12;
+}
+
+String? validatePhone(String dialCode, String value) {
   if (value.trim().isEmpty) return 'Enter your phone number.';
-  if (!isValidUkPhone(value)) return 'Enter a valid UK phone number.';
+  if (!isValidPhone(dialCode, value)) {
+    return 'Enter a valid phone number.';
+  }
   return null;
 }
 
@@ -84,8 +93,8 @@ String? validateMinimumOrder(double value) {
 }
 
 String? validatePreparationTime(int value) {
-  if (value < 5 || value > 180) {
-    return 'Preparation time must be between 5 and 180 minutes.';
+  if (value < 5 || value > 60) {
+    return 'Preparation time must be between 5 and 60 minutes.';
   }
   return null;
 }

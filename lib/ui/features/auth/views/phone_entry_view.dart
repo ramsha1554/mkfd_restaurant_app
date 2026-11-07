@@ -65,7 +65,10 @@ class _PhoneEntryViewState extends ConsumerState<PhoneEntryView> {
     if (!_formKey.currentState!.validate()) return;
 
     final phone = _e164;
-    await ref.read(authProvider.notifier).requestOtp(phone: phone);
+    await ref.read(authProvider.notifier).requestOtp(
+          phone: phone,
+          countryCode: _country.dialCode,
+        );
 
     if (!mounted) return;
     final state = ref.read(authProvider);

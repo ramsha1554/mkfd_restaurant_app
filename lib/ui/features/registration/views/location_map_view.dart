@@ -1,12 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../core/animations/app_durations.dart';
-import '../../../../core/constants/app_config.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/theme/app_radius.dart';
@@ -87,32 +85,24 @@ class _LocationMapViewState extends ConsumerState<LocationMapView> {
           Expanded(
             child: Stack(
               children: [
-                FlutterMap(
-                  options: MapOptions(
-                    initialCenter: _point,
-                    initialZoom: 16,
-                    onTap: (_, point) => _movePin(point),
+                GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: _point,
+                    zoom: 16,
                   ),
-                  children: [
-                    TileLayer(
-                      urlTemplate: AppConfig.osmTileUrl,
-                      userAgentPackageName: AppConfig.packageName,
+                  onTap: _movePin,
+                  markers: {
+                    Marker(
+                      markerId: const MarkerId('restaurant-location'),
+                      position: _point,
+                      icon: BitmapDescriptor.defaultMarkerWithHue(
+                        BitmapDescriptor.hueOrange,
+                      ),
                     ),
-                    MarkerLayer(
-                      markers: [
-                        Marker(
-                          point: _point,
-                          width: 44,
-                          height: 44,
-                          child: const Icon(
-                            Icons.location_on,
-                            size: 44,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                  },
+                  zoomControlsEnabled: false,
+                  mapToolbarEnabled: false,
+                  myLocationButtonEnabled: false,
                 ),
                 Positioned(
                   top: AppSpacing.md,
@@ -135,27 +125,6 @@ class _LocationMapViewState extends ConsumerState<LocationMapView> {
                       child: Text(
                         'Tap the map to move the pin.',
                         style: AppTextStyles.caption,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: AppSpacing.xs,
-                  bottom: AppSpacing.xs,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.xs,
-                      vertical: AppSpacing.xs,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.surface.withValues(alpha: 0.85),
-                      borderRadius: AppRadius.rXs,
-                    ),
-                    child: Text(
-                      AppConfig.osmAttribution,
-                      style: AppTextStyles.eyebrow.copyWith(
-                        color: AppColors.textSecondary,
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),

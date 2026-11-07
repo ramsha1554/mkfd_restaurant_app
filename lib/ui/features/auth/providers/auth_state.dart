@@ -11,6 +11,7 @@ class AuthState {
   final AuthStatus status;
   final User? user;
   final String? phone;
+  final String? countryCode;
   final bool isLoading;
   final String? errorMessage;
   final String? debugOtp;
@@ -19,6 +20,7 @@ class AuthState {
     this.status = AuthStatus.initial,
     this.user,
     this.phone,
+    this.countryCode,
     this.isLoading = false,
     this.errorMessage,
     this.debugOtp,
@@ -30,11 +32,13 @@ class AuthState {
     AuthStatus? status,
     User? user,
     String? phone,
+    String? countryCode,
     bool? isLoading,
     String? errorMessage,
     String? debugOtp,
     bool clearUser = false,
     bool clearPhone = false,
+    bool clearCountryCode = false,
     bool clearError = false,
     bool clearDebugOtp = false,
   }) {
@@ -42,6 +46,9 @@ class AuthState {
       status: status ?? this.status,
       user: clearUser ? null : (user ?? this.user),
       phone: clearPhone ? null : (phone ?? this.phone),
+      countryCode: clearCountryCode
+          ? null
+          : (countryCode ?? this.countryCode),
       isLoading: isLoading ?? this.isLoading,
       errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
       debugOtp: clearDebugOtp ? null : (debugOtp ?? this.debugOtp),
@@ -54,5 +61,5 @@ class AuthState {
 
   @override
   String toString() =>
-      'AuthState(status: $status, phone: $phone, loading: $isLoading, error: $errorMessage, user: $user, debugOtp: $debugOtp)';
+      'AuthState(status: $status, phone: $phone, countryCode: $countryCode, loading: $isLoading, error: $errorMessage, user: $user, debugOtp: $debugOtp)';
 }

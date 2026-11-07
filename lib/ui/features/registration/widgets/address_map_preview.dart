@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import '../../../../core/constants/app_config.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/theme/app_radius.dart';
@@ -15,6 +13,7 @@ class AddressMapPreview extends StatelessWidget {
   final double height;
   final String postcode;
   final bool showPostcodeChip;
+  final VoidCallback? onTap;
 
   const AddressMapPreview({
     super.key,
@@ -23,6 +22,7 @@ class AddressMapPreview extends StatelessWidget {
     this.height = 180,
     this.postcode = '',
     this.showPostcodeChip = true,
+    this.onTap,
   });
 
   @override
@@ -58,34 +58,28 @@ class AddressMapPreview extends StatelessWidget {
       height: height,
       child: Stack(
         children: [
-          FlutterMap(
-            options: MapOptions(
-              initialCenter: point,
-              initialZoom: 16,
-              interactionOptions: const InteractionOptions(
-                flags: InteractiveFlag.none,
-              ),
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: AppConfig.osmTileUrl,
-                userAgentPackageName: AppConfig.packageName,
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                    point: point,
-                    width: 40,
-                    height: 40,
-                    child: const Icon(
-                      Icons.location_on,
-                      size: 40,
-                      color: AppColors.primary,
-                    ),
+          Positioned.fill(
+            child: GoogleMap(
+              initialCameraPosition: CameraPosition(target: point, zoom: 16),
+              markers: {
+                Marker(
+                  markerId: const MarkerId('restaurant-preview'),
+                  position: point,
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                    BitmapDescriptor.hueOrange,
                   ),
-                ],
-              ),
-            ],
+                ),
+              },
+              liteModeEnabled: true,
+              zoomControlsEnabled: false,
+              scrollGesturesEnabled: false,
+              zoomGesturesEnabled: false,
+              rotateGesturesEnabled: false,
+              tiltGesturesEnabled: false,
+              compassEnabled: false,
+              mapToolbarEnabled: false,
+              myLocationButtonEnabled: false,
+            ),
           ),
           if (showPostcodeChip && postcode.trim().isNotEmpty)
             Positioned(
@@ -109,27 +103,13 @@ class AddressMapPreview extends StatelessWidget {
                 ),
               ),
             ),
-          Positioned(
-            left: AppSpacing.xs,
-            bottom: AppSpacing.xs,
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.xs,
-                vertical: AppSpacing.xs,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.surface.withValues(alpha: 0.85),
-                borderRadius: AppRadius.rXs,
-              ),
-              child: Text(
-                AppConfig.osmAttribution,
-                style: AppTextStyles.eyebrow.copyWith(
-                  color: AppColors.textSecondary,
-                  fontWeight: FontWeight.w500,
-                ),
+          if (onTap != null)
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: onTap,
               ),
             ),
-          ),
         ],
       ),
     );

@@ -91,7 +91,7 @@ class _RegisterPricingStepViewState
 
     final state = ref.watch(registrationProvider);
     final draft = state.draft;
-    final preparation = draft.preparationTime.clamp(5, 120).toInt();
+    final preparation = draft.preparationTime.clamp(5, 60).toInt();
 
     return Column(
       children: [
@@ -211,12 +211,12 @@ class _RegisterPricingStepViewState
                   child: Slider(
                     value: preparation.toDouble(),
                     min: 5,
-                    max: 120,
-                    divisions: 23,
+                    max: 60,
+                    divisions: 11,
                     label: '$preparation min',
                     onChanged: (value) {
                       final stepped =
-                          ((value / 5).round() * 5).clamp(5, 120).toInt();
+                          ((value / 5).round() * 5).clamp(5, 60).toInt();
                       ref
                           .read(registrationProvider.notifier)
                           .setPreparationTime(stepped);
@@ -231,7 +231,7 @@ class _RegisterPricingStepViewState
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('5 min', style: AppTextStyles.caption),
-                      Text('120 min', style: AppTextStyles.caption),
+                      Text('60 min', style: AppTextStyles.caption),
                     ],
                   ),
                 ),

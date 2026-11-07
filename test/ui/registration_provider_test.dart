@@ -187,7 +187,7 @@ void main() {
 
   test('submit moves to the failing step', () async {
     notifier.setName('Spice Garden');
-    notifier.setPhone('07123456789');
+    notifier.setPhone('+44 7123 456789');
     notifier.setEmail('hello@spicegarden.co.uk');
     notifier.addCuisine('Indian');
 
@@ -208,7 +208,7 @@ void main() {
     expect(notifier.state.isSubmitting, isFalse);
 
     final created = repository.created!;
-    expect(created.phone, '07123456789');
+    expect(created.phone, '+447123456789');
     expect(created.email, 'hello@spicegarden.co.uk');
     expect(created.postcode, 'MK9 3QA');
     expect(created.cuisineTypes, ['Indian']);
