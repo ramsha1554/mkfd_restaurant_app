@@ -40,6 +40,15 @@ abstract final class AppDurations {
   /// 6000ms — third-party postcode lookup timeout.
   static const Duration postcodeLookup = Duration(seconds: 6);
 
+  /// 350ms — address search debounce.
+  static const Duration searchDebounce = Duration(milliseconds: 350);
+
+  /// 400ms — postcode lookup debounce.
+  static const Duration postcodeDebounce = Duration(milliseconds: 400);
+
+  /// 500ms — reverse-geocode debounce while moving the map pin.
+  static const Duration reverseDebounce = Duration(milliseconds: 500);
+
   /// 1000ms — order acceptance countdown tick.
   static const Duration countdown = Duration(seconds: 1);
 
