@@ -10,6 +10,8 @@ class AppFilterChip extends StatelessWidget {
   final bool selected;
   final VoidCallback? onTap;
   final IconData? icon;
+  final IconData? trailingIcon;
+  final VoidCallback? onTrailingTap;
 
   const AppFilterChip({
     super.key,
@@ -17,6 +19,8 @@ class AppFilterChip extends StatelessWidget {
     required this.selected,
     this.onTap,
     this.icon,
+    this.trailingIcon,
+    this.onTrailingTap,
   });
 
   @override
@@ -50,6 +54,25 @@ class AppFilterChip extends StatelessWidget {
               label,
               style: AppTextStyles.caption.copyWith(color: fg, fontWeight: weight),
             ),
+            if (trailingIcon != null) ...[
+              const SizedBox(width: 4),
+              Semantics(
+                button: true,
+                label: 'Remove $label',
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    HapticFeedback.selectionClick();
+                    onTrailingTap?.call();
+                  },
+                  child: SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: Icon(trailingIcon, size: 15, color: fg),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
